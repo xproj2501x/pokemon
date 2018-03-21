@@ -1,21 +1,11 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Definitions
+// Imports
 ////////////////////////////////////////////////////////////////////////////////
-/**
- * Enum for experience growth
- * @readonly
- * @enum {int}
- */
-const GROWTH = {
-  ERRATIC: 0x00,
-  FLUCTUATING: 0x01,
-  FAST: 0x02,
-  MEDIUM_FAST: 0x03,
-  MEDIUM_SLOW: 0x04,
-  SLOW: 0x05
-};
+import BASE_STATS from './base-stats';
+import EVOLUTION_TABLES from './evolution-tables';
+import LEVEL_UP_LEARNSETS from './level-up-learnsets';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default GROWTH;
+export default {BASE_STATS, EVOLUTION_TABLES, LEVEL_UP_LEARNSETS};
