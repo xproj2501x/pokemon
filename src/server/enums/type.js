@@ -8,7 +8,7 @@
  */
 const TYPE = {
   NORMAL: 0x00,
-  FIGHT: 0x01,
+  FIGHTING: 0x01,
   FLYING: 0x02,
   POISON: 0x03,
   GROUND: 0x04,
