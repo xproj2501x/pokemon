@@ -1,0 +1,30 @@
+////////////////////////////////////////////////////////////////////////////////
+// Definitions
+////////////////////////////////////////////////////////////////////////////////
+/**
+ * Enum for evolution methods
+ * @readonly
+ * @enum {int}
+ */
+const EVOLUTION_METHOD = {
+  FRIENDSHIP: 0x01,
+  FRIENDSHIP_DAY: 0x02,
+  FRIENDSHIP_NIGHT: 0x03,
+  LEVEL: 0x04,
+  TRADE: 0x05,
+  TRADE_ITEM: 0x06,
+  ITEM: 0x07,
+  LEVEL_ATTACK_GREATER: 0x08,
+  LEVEL_ATTACK_EQUAL: 0x09,
+  LEVEL_ATTACK_LOWER: 0x0A,
+  LEVEL_PID1: 0x0B,
+  LEVEL_PID2: 0x0C,
+  LEVEL_SPAWN1: 0x0D,
+  LEVEL_SPAWN2: 0x0E,
+  BEAUTY: 0x0F,
+};
+
+////////////////////////////////////////////////////////////////////////////////
+// Exports
+////////////////////////////////////////////////////////////////////////////////
+export default EVOLUTION_METHOD;
