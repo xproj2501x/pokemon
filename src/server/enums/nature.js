@@ -20,7 +20,7 @@ const NATURE = {
   TIMID: 0x0A,
   HASTY: 0x0B,
   SERIOUS: 0x0C,
-  JOLLY:0x0D,
+  JOLLY: 0x0D,
   NAIVE: 0x0E,
   MODEST: 0x0F,
   MILD: 0x10,
