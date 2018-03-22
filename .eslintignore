@@ -15,6 +15,7 @@
 # Ignore anything NPM anywhere
 **/node_modules
 **/npm_*
+**/server/data/*.js
 
 # Distributables are obfuscated and minified
 **/dist
