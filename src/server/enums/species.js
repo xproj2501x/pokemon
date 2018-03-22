@@ -7,7 +7,7 @@
  * @enum {int}
  */
 const SPECIES = {
-  MISSING_NO: 0x000,
+  UNKNOWN: 0x000,
   BULBASAUR: 0x001,
   IVYSAUR: 0x002,
   VENUSAUR: 0x003,
