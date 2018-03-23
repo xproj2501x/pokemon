@@ -812,6 +812,7 @@ const SPECIES = [
   "MARSHADOW",
   "POIPOLE",
   "NAGANADEL",
+  "STAKATAKA",
   "BLACEPHALON",
   "ZERAORA"
 ];
