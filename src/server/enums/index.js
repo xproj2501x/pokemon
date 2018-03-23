@@ -17,5 +17,5 @@ import TYPE from './type';
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default {ABILITY, BODY_COLOR, EGG_GROUP, EVOLUTION_METHOD, GROWTH, ITEM, MOVE, MOVE_CATEGORY, NATURE, POCKET,
+export {ABILITY, BODY_COLOR, EGG_GROUP, EVOLUTION_METHOD, GROWTH, ITEM, MOVE, MOVE_CATEGORY, NATURE, POCKET,
   SPECIES, TYPE};
