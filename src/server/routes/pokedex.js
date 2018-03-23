@@ -2,17 +2,29 @@
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
 import {Router} from 'express';
-
+import {BASE_STATS} from '../data';
+import {SPECIES} from '../strings';
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
-const ROUTES = Router();
+const POKEDEX_ROUTER = Router();
 
-ROUTES.get('/', (req, res) => {
-  res.json({success: true});
-});
+POKEDEX_ROUTER.route('/')
+  .get((req, res) => {
+    let out = {};
+
+    for (let index in BASE_STATS) {
+      out[SPECIES[index]] = BASE_STATS[index];
+    }
+    res.json({data: out});
+  });
+
+POKEDEX_ROUTER.route('/:id')
+  .get((req, res) => {
+    res.json({message: 'pokedex/:id route'});
+  });
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default ROUTES;
+export default POKEDEX_ROUTER;

@@ -7,7 +7,7 @@ import {TYPE, ITEM, GROWTH, EGG_GROUP, ABILITY, BODY_COLOR} from '../enums'
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * Data set for base stats
+ * Data set for pokemon base stats
  * @readonly
  */
 const BASE_STATS = [
