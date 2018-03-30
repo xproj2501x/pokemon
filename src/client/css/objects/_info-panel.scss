@@ -1,0 +1,15 @@
+.o-info-panel {
+  height: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  z-index: 0;
+
+  &--collapsed {
+    display: none;
+  }
+
+  > .c-action-bar {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
