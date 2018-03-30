@@ -7,7 +7,7 @@
  * @enum {int}
  */
 const SPECIES = {
-  MISSING_NO: 0x000,
+  UNKNOWN: 0x000,
   BULBASAUR: 0x001,
   IVYSAUR: 0x002,
   VENUSAUR: 0x003,
@@ -812,8 +812,9 @@ const SPECIES = {
   MARSHADOW: 0x322,
   POIPOLE: 0x333,
   NAGANADEL: 0x334,
-  BLACEPHALON: 0x335,
-  ZERAORA: 0x336
+  STAKATAKA: 0x335,
+  BLACEPHALON: 0x336,
+  ZERAORA: 0x337
 };
 
 ////////////////////////////////////////////////////////////////////////////////

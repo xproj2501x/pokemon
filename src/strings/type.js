@@ -1,11 +1,34 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Imports
+// Definitions
 ////////////////////////////////////////////////////////////////////////////////
-import BASE_STATS from './base-stats';
-import EVOLUTION_TABLES from './evolution-tables';
-import LEVEL_UP_LEARNSETS from './level-up-learnsets';
+/**
+ * Strings for type names
+ * @readonly
+ * @type {Array}
+ */
+const TYPE = [
+  "NORMAL",
+  "FIGHTING",
+  "FLYING",
+  "POISON",
+  "GROUND",
+  "ROCK",
+  "BUG",
+  "GHOST",
+  "STEEL",
+  "UNKNOWN",
+  "FIRE",
+  "WATER",
+  "GRASS",
+  "ELECTRIC",
+  "PSYCHIC",
+  "ICE",
+  "DRAGON",
+  "DARK",
+  "FAIRY"
+];
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default {BASE_STATS, EVOLUTION_TABLES, LEVEL_UP_LEARNSETS};
+export default TYPE;

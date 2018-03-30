@@ -1,0 +1,9 @@
+/*! Section Component Styles */
+
+.c-section {
+  padding-top: $gutter;
+}
+
+.c-section:last-child {
+  margin-bottom: $gutter;
+}

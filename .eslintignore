@@ -22,7 +22,8 @@
 
 #
 # Webapp
-#
+**/server/data/*.js
+**/server/strings/*.js
 
 # WARN: Do NOT lint this file (see file for explanation)
 web/webpack.config.js
