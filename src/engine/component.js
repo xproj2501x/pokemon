@@ -91,7 +91,7 @@ class Component {
   /**
    * Static factory method
    * @static
-   * @param {string} id - The identifier for the parent entity.
+   * @param {int} id - The identifier for the parent entity.
    * @param {object} state - The initial state of the component.
    * @return {Component}
    */
