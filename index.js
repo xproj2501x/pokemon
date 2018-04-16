@@ -10,6 +10,7 @@ import ROUTES from './src/server/routes';
 const APP = express();
 const HTTP = require('http').Server(APP);
 const IO = require('socket.io')(HTTP);
+const ENGINE = Engine.create();
 
 APP.use(express.static(__dirname + '/dist'));
 APP.use('/api', ROUTES);
