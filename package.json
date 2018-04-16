@@ -31,10 +31,6 @@
     "express": "latest",
     "mongoose": "latest",
     "morgan": "latest",
-    "prop-types": "latest",
-    "react": "latest",
-    "react-dom": "latest",
-    "react-router-dom": "latest",
     "socket.io": "latest"
   },
   "devDependencies": {
