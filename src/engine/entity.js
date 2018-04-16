@@ -31,7 +31,7 @@ class Entity {
   /**
    * A collection of components attached to the entity.
    * @private
-   * @type {object}
+   * @type {Array}
    */
   _components;
 
@@ -54,7 +54,7 @@ class Entity {
    */
   constructor(id) { // eslint-disable-line id-length
     this._id = id;
-    this._components = {};
+    this._components = [];
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -80,16 +80,6 @@ class Entity {
   }
 
   /**
-   * Gets a component of the specified type.
-   * @param {string} type - The component type.
-   * @return {Component}
-   */
-  getComponent(type) {
-    if (!this.hasComponent(type)) throw new Error(`Component type ${type} not attached to game object ${this.id}`);
-    return this._components[type];
-  }
-
-  /**
    * Detaches a component from the entity.
    * @param {string} type - The component type.
    */
@@ -108,9 +98,7 @@ class Entity {
    * @return {Entity}
    */
   static create(id) { // eslint-disable-line id-length
-    if (!id) {
-      throw new Error('foo');
-    }
+    if (!id) throw new Error(`Error: entity id cannot be null`);
     return new Entity(id);
   }
 }

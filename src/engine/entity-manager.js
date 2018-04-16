@@ -11,6 +11,11 @@
 import Entity from './entity';
 
 ////////////////////////////////////////////////////////////////////////////////
+// Definitions
+////////////////////////////////////////////////////////////////////////////////
+const MAX_ENTITIES = 255;
+
+////////////////////////////////////////////////////////////////////////////////
 // Class
 ////////////////////////////////////////////////////////////////////////////////
 /**
@@ -22,6 +27,12 @@ class EntityManager {
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
+  /**
+   * @private
+   * @type {Logger}
+   */
+  _logger;
+
   /**
    * @private
    * @type {int}
@@ -43,22 +54,37 @@ class EntityManager {
    * EntityManager
    * @constructor
    */
-  constructor() {
-    this._nextId = -1;
+  constructor(logService) {
+    this._logger = logService.register(this.constructor.name);
+    this._nextId = 0;
     this._entities = [];
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
-  createEntity() {
+  /**
+   * Creates a new entity and returns the identifier.
+   * @public
+   * @return {int} The identifier for the entity.
+   */
+  create() {
+    if (this._nextId > MAX_ENTITIES) throw new Error(`Error: Entity limit exceeded the maximum of ${MAX_ENTITIES}`);
+    const ENTITY = Entity.create(this._nextId);
 
+    this._entities[this._nextId] = ENTITY;
+    this._nextId++;
+    return ENTITY.id;
   }
 
-  destroyEntity() {
-
+  /**
+   * Destroys the entity for the specified identifier.
+   * @public
+   * @param {int} id - The identifier for the entity.
+   */
+  destroy(id) {
+    this._entities[id] = null;
   }
-
 
   //////////////////////////////////////////////////////////////////////////////
   // Static Methods
@@ -66,9 +92,10 @@ class EntityManager {
   /**
    * Static factory method
    * @static
+   * @param {LogService} logService -
    * @return {EntityManager}
    */
-  static create() {
+  static create(logService) {
     return new EntityManager();
   }
 }

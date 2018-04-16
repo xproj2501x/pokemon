@@ -1,14 +1,15 @@
 /**
- * Engine
+ * Log Service
  * ===
  *
- * @module engine
+ * @module logService
  */
 
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
-import {FRAME_DURATION} from './constants';
+import Log from './log';
+import Logger from './logger';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
@@ -18,112 +19,71 @@ import {FRAME_DURATION} from './constants';
 // Class
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * Engine
+ * LogService
  * @class
  */
-class Engine {
+class LogService {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
   /**
    * @private
-   * @type {Logger}
+   * @type {Log}
    */
-  _logger;
+  _log;
 
   /**
    * @private
-   * @type {SystemManager}
+   * @type {Array}
    */
-  _systemManager;
-
-  /**
-   * @private
-   * @type {Boolean}
-   */
-  _isRunning;
-
-  /**
-   * @private
-   * @type {int}
-   */
-  _time;
-
-  /**
-   * @private
-   * @type {int}
-   */
-  _lastTick;
+  _loggers;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
 
   /**
-   * Engine
+   * LogService
    * @constructor
    */
-  constructor() {
-    this._isRunning = false;
-    this._time = 0;
+  constructor(log) {
+    this._loggers = [];
+    this._log = log;
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Starts the engine for the simulation.
+   * Registers a new logger with the service
+   * @param context
+   * @return {Logger}
    */
-  start() {
-    this._isRunning = true;
-    this._lastTick = Date.now();
-    this._tick();
-  }
+  register(context) {
+    const LOGGER = Logger.create(context, this._log);
 
+    this._loggers.push(LOGGER);
+    return LOGGER;
+  }
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   *
-   * @private
-   */
-  _tick() {
-    let delta = 0;
-
-    while (this._isRunning) {
-      const CURRENT_TIME = Date.now();
-
-      delta += CURRENT_TIME - this._lastTick;
-      this._lastTick = CURRENT_TIME;
-
-      while (delta >= FRAME_DURATION) {
-        this._time += FRAME_DURATION;
-        this._systemManager.update(delta);
-        delta -= FRAME_DURATION;
-      }
-      this._render(delta / FRAME_DURATION);
-    }
-  }
-
-  _render(interpolation) {
-
-  }
 
   //////////////////////////////////////////////////////////////////////////////
   // Static Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Static factory method.
-   * @static
-   * @return {Engine}
+   * Static factory method
+   * @return {LogService}
    */
   static create() {
-    return new Engine();
+    const LOG = Log.create();
+    return new LogService(LOG);
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default Engine;
+export default LogService;
