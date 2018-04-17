@@ -1,14 +1,14 @@
 /**
- * Engine
+ * Event System
  * ===
  *
- * @module engine
+ * @module inputSystem
  */
 
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
-import {FRAME_DURATION, MAX_FRAME_SKIP} from './constants';
+import System from '../../engine/system';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
@@ -18,112 +18,132 @@ import {FRAME_DURATION, MAX_FRAME_SKIP} from './constants';
 // Class
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * Engine
+ * EventSystem
  * @class
+ * @implements System
  */
-class Engine {
+class EventSystem extends System {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
   /**
    * @private
-   * @type {Logger}
+   * @type {MessageService}
    */
-  _logger;
+  _messageService;
 
   /**
    * @private
-   * @type {SystemManager}
-   */
-  _systemManager;
-
-  /**
-   * @private
-   * @type {Boolean}
-   */
-  _isRunning;
-
-  /**
-   * @private
-   * @type {int}
+   * @type {number}
    */
   _time;
 
   /**
    * @private
-   * @type {int}
+   * @type {Array}
    */
-  _lastTick;
+  _events;
+
+  /**
+   * @private
+   * @type {Array}
+   */
+  _eventTimes;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
 
   /**
-   * Engine
+   * EventSystem
    * @constructor
    */
   constructor() {
-    this._isRunning = false;
+    super();
     this._time = 0;
+    this._events = [];
+    this._eventTimes = [];
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Starts the engine for the simulation.
+   * Updates the state
    */
-  start() {
-    this._isRunning = true;
-    this._lastTick = Date.now();
-    this._tick();
+  update() {
+    this._time++;
+    this.publish();
   }
 
-  //////////////////////////////////////////////////////////////////////////////
-  // Private Methods
-  //////////////////////////////////////////////////////////////////////////////
   /**
-   *
-   * @private
+   * Adds an event to the queue
+   * @param {object} event
    */
-  _tick() {
-    let delta = 0;
+  add(event) {
+    const TIME = this._time + event.time;
+    let index = this._events.length;
 
-    while (this._isRunning) {
-      const CURRENT_TIME = Date.now();
-
-      delta += CURRENT_TIME - this._lastTick;
-      this._lastTick = CURRENT_TIME;
-
-      while (delta >= FRAME_DURATION) {
-        this._time += FRAME_DURATION;
-        this._systemManager.update(delta);
-        delta -= FRAME_DURATION;
+    for (let idx = 0; idx < this._eventTimes.length; idx++) {
+      if (this._eventTimes[idx] > TIME) {
+        index = idx;
+        break;
       }
-      this._render(delta / FRAME_DURATION);
+    }
+    this._events.splice(index, 0, event);
+    this._eventTimes.splice(index, 0, TIME);
+  }
+
+  /**
+   * Gets the next event in the queue for processing.
+   *
+   */
+  get() {
+    if (!this._events.length) return null;
+    this._eventTimes.shift();
+    return this._events.shift();
+  }
+
+  /**
+   * Publishes all events for the current time
+   */
+  publish() {
+    while (this._eventTimes[0] === this._time) {
+      const EVENT = this.get();
+
+      if (EVENT.repeat) {
+        this.add(EVENT);
+      }
     }
   }
 
-  _render(interpolation) {
-
+  /**
+   * Clears the events and eventTimes queues.
+   */
+  clear() {
+    this._events = [];
+    this._eventTimes = [];
   }
+  //////////////////////////////////////////////////////////////////////////////
+  // Private Methods
+  //////////////////////////////////////////////////////////////////////////////
+
 
   //////////////////////////////////////////////////////////////////////////////
   // Static Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Static factory method.
+   * Static factory method
    * @static
-   * @return {Engine}
+   * @return {EventSystem}
    */
   static create() {
-    return new Engine();
+    return new EventSystem();
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default Engine;
+export default EventSystem;

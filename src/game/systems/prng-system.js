@@ -1,129 +1,135 @@
 /**
- * Engine
+ * PRNG System
  * ===
  *
- * @module engine
+ * @module prngSystem
  */
 
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
-import {FRAME_DURATION, MAX_FRAME_SKIP} from './constants';
+import System from '../../engine/system';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
+/**
+ * The maximum length for a seed value.
+ * @constant
+ * @type {number}
+ */
+const MAX_LENGTH = 64;
+
+/**
+ * The multiplier used when generating a new seed.
+ * @type {number}
+ */
+const MULTIPLIER = 0x5D588B656C078965;
+
+/**
+ * The addend used when generating a new seed.
+ * @type {number}
+ */
+const ADDEND = 0x0000000000269EC3;
+
+/**
+ *
+ * @constant
+ * @enum {number}
+ */
+const FORMAT = {
+  BIN: 2,
+  DEC: 10,
+  HEX: 16
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * Engine
+ * PRNGSystem
  * @class
+ * @implements System
  */
-class Engine {
+class PRNGSystem extends System {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
   /**
+   * The seed value for the pseudo random number generator.
    * @private
-   * @type {Logger}
+   * @type {string}
    */
-  _logger;
-
-  /**
-   * @private
-   * @type {SystemManager}
-   */
-  _systemManager;
-
-  /**
-   * @private
-   * @type {Boolean}
-   */
-  _isRunning;
-
-  /**
-   * @private
-   * @type {int}
-   */
-  _time;
-
-  /**
-   * @private
-   * @type {int}
-   */
-  _lastTick;
+  _seed;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
 
   /**
-   * Engine
+   * PRNGSystem
    * @constructor
+   * @param {string} initialSeed - The initial value for the prng seed.
    */
-  constructor() {
-    this._isRunning = false;
-    this._time = 0;
+  constructor(initialSeed) {
+    super();
+    this._seed = initialSeed;
+    this._advanceSeed();
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Starts the engine for the simulation.
+   * Updates the state
    */
-  start() {
-    this._isRunning = true;
-    this._lastTick = Date.now();
-    this._tick();
+  update() {
+    this._advanceSeed();
+  }
+
+  /**
+   * Generates a 32 bit pseudo random number and advances the seed one step.
+   * @return {string}
+   */
+  getLinearValue() {
+    const RESULT = this._seed.substr(0, 32);
+
+    this._advanceSeed();
+    return RESULT;
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   *
+   * Advances the seed value using a linear congruential formula.
    * @private
    */
-  _tick() {
-    let delta = 0;
+  _advanceSeed() {
+    const RESULT = MULTIPLIER * parseInt(this._seed, FORMAT.BIN) + ADDEND;
+    const RESULT_BIN = RESULT.toString(FORMAT.BIN);
 
-    while (this._isRunning) {
-      const CURRENT_TIME = Date.now();
-
-      delta += CURRENT_TIME - this._lastTick;
-      this._lastTick = CURRENT_TIME;
-
-      while (delta >= FRAME_DURATION) {
-        this._time += FRAME_DURATION;
-        this._systemManager.update(delta);
-        delta -= FRAME_DURATION;
-      }
-      this._render(delta / FRAME_DURATION);
-    }
-  }
-
-  _render(interpolation) {
-
+    this._seed = RESULT_BIN.substr(0, RESULT_BIN.length - MAX_LENGTH);;
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Static Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Static factory method.
+   * Static factory method
    * @static
-   * @return {Engine}
+   * @param {number} time - a timestamp passed used to generate the initial seed.
+   * @return {PRNGSystem}
    */
-  static create() {
-    return new Engine();
+  static create(time) {
+    const INITIAL_SEED = (Date.now() - time).toString(FORMAT.BIN);
+
+    return new PRNGSystem(INITIAL_SEED);
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default Engine;
+export default PRNGSystem;

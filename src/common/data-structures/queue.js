@@ -1,129 +1,100 @@
 /**
- * Engine
+ * Queue
  * ===
  *
- * @module engine
+ * @module queue
  */
 
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
-////////////////////////////////////////////////////////////////////////////////
-import {FRAME_DURATION, MAX_FRAME_SKIP} from './constants';
-
-////////////////////////////////////////////////////////////////////////////////
-// Definitions
 ////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * Engine
+ * Queue
  * @class
  */
-class Engine {
+class Queue {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * @private
-   * @type {Logger}
+   * @readonly
+   * @return {int} The length of the stack.
    */
-  _logger;
+  get length() {
+    return this._data.length;
+  }
 
   /**
    * @private
-   * @type {SystemManager}
+   * @type {Array}
    */
-  _systemManager;
-
-  /**
-   * @private
-   * @type {Boolean}
-   */
-  _isRunning;
-
-  /**
-   * @private
-   * @type {int}
-   */
-  _time;
-
-  /**
-   * @private
-   * @type {int}
-   */
-  _lastTick;
+  _data;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
 
   /**
-   * Engine
+   * Queue
    * @constructor
    */
   constructor() {
-    this._isRunning = false;
-    this._time = 0;
+    this._data = [];
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Starts the engine for the simulation.
+   * Enqueues an element at the end of the queue.
+   * @param {object} element - The element to be enqueued.
    */
-  start() {
-    this._isRunning = true;
-    this._lastTick = Date.now();
-    this._tick();
+  enqueue(element) {
+    this._data.push(element);
   }
 
-  //////////////////////////////////////////////////////////////////////////////
-  // Private Methods
-  //////////////////////////////////////////////////////////////////////////////
   /**
-   *
-   * @private
+   * Dequeues an element from the front of the queue.
+   * @return {object} The dequeued element.
    */
-  _tick() {
-    let delta = 0;
-
-    while (this._isRunning) {
-      const CURRENT_TIME = Date.now();
-
-      delta += CURRENT_TIME - this._lastTick;
-      this._lastTick = CURRENT_TIME;
-
-      while (delta >= FRAME_DURATION) {
-        this._time += FRAME_DURATION;
-        this._systemManager.update(delta);
-        delta -= FRAME_DURATION;
-      }
-      this._render(delta / FRAME_DURATION);
-    }
+  dequeue() {
+    return this._data.shift();
   }
 
-  _render(interpolation) {
+  /**
+   * Returns the first element in the queue without removing it.
+   * @return {object} The first element in the queue.
+   */
+  peek() {
+    return this._data[0];
+  }
 
+  /**
+   * Resets the queue.
+   */
+  clear() {
+    this._data = [];
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Static Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Static factory method.
+   * Static factory method
    * @static
-   * @return {Engine}
+   * @return {Queue} - A new queue object.
    */
   static create() {
-    return new Engine();
+    return new Queue();
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default Engine;
+export default Queue;
