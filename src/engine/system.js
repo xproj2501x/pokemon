@@ -28,7 +28,7 @@ class System {
   _logger;
   _messageService;
   _componentManager;
-  
+
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
@@ -48,7 +48,7 @@ class System {
    * Updates the state
    */
   update() {
-    throw new Error('Error: update method called from system base class');
+    throw new Error('Error: update method called from System base class');
   }
 
   //////////////////////////////////////////////////////////////////////////////

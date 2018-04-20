@@ -50,16 +50,24 @@ class StateManager {
   /**
    * StateManager
    * @constructor
+   * @param {object} states - A collection of states for the simulation.
+   * @param {string} initialState - The name of the initial state.
    */
-  constructor() {
-
+  constructor(states, initialState) {
+    this._states = states;
+    this._currentState = this._states[initialState];
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
+  /**
+   *
+   * @param {number} input
+   */
   update(input) {
-    this._currentState.update(input);
+    if (this._currentState.locked) return;
+    this._currentState.handleInput(input);
     if (this._currentState.nextState) {
       const NEXT_STATE = this._states[this._currentState.nextState];
 
@@ -77,7 +85,21 @@ class StateManager {
    */
   _changeState(nextState) {
     this._previousState = this._currentState.name;
+    this._currentState.exit();
     this._currentState = nextState;
+    this._currentState.enter();
+  }
+
+  //////////////////////////////////////////////////////////////////////////////
+  // Private Methods
+  //////////////////////////////////////////////////////////////////////////////
+  /**
+   * Static factory method
+   * @return {StateManager}
+   */
+  static create(configuration) {
+
+    return new StateManager(states, initialState);
   }
 }
 

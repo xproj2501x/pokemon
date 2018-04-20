@@ -96,7 +96,6 @@ class Engine {
 
       delta += CURRENT_TIME - this._lastTick;
       this._lastTick = CURRENT_TIME;
-
       while (delta >= FRAME_DURATION) {
         this._time += FRAME_DURATION;
         this._systemManager.update(delta);

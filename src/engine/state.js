@@ -32,10 +32,16 @@ class State {
   _name;
 
   /**
-   * @private
-   * @type {string}
+   * @protected
+   * @type {?string}
    */
   _nextState;
+
+  /**
+   * @protected
+   * @type {boolean}
+   */
+  _locked;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
@@ -57,27 +63,43 @@ class State {
   }
 
   /**
+   * @readonly
+   * @return {boolean}
+   */
+  get locked() {
+    return this._locked;
+  }
+
+  /**
    * State
    * @constructor
+   * @param {string} name - The name of the state.
    */
-  constructor() {
-
+  constructor(name) {
+    this._name = name;
+    this._locked = false;
+    this._nextState = null;
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
-  update(input) {
-
+  /**
+   *
+   * @param {number} input
+   */
+  handleInput(input) {
+    throw new Error('Error: handleInput method called from State base class');
   }
 
   enter() {
-
+    throw new Error('Error: enter method called from State base class');
   }
 
   exit() {
-
+    throw new Error('Error: exit method called from State base class');
   }
+
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
