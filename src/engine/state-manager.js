@@ -1,14 +1,13 @@
 /**
- * Engine
+ * State Manager
  * ===
  *
- * @module engine
+ * @module stateManager
  */
 
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
-import {FRAME_DURATION, MAX_FRAME_SKIP} from './constants';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
@@ -18,67 +17,62 @@ import {FRAME_DURATION, MAX_FRAME_SKIP} from './constants';
 // Class
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * Engine
+ * StateManager
  * @class
  */
-class Engine {
+class StateManager {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
   /**
    * @private
-   * @type {Logger}
+   * @type {object}
    */
-  _logger;
+  _states;
 
   /**
    * @private
-   * @type {SystemManager}
+   * @type {State}
    */
-  _systemManager;
+  _currentState;
 
   /**
    * @private
-   * @type {Boolean}
+   * @type {string}
    */
-  _isRunning;
-
-  /**
-   * @private
-   * @type {int}
-   */
-  _time;
-
-  /**
-   * @private
-   * @type {int}
-   */
-  _lastTick;
+  _previousState;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
 
   /**
-   * Engine
+   * StateManager
    * @constructor
+   * @param {object} states - A collection of states for the simulation.
+   * @param {string} initialState - The name of the initial state.
    */
-  constructor() {
-    this._isRunning = false;
-    this._time = 0;
+  constructor(states, initialState) {
+    this._states = states;
+    this._currentState = this._states[initialState];
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Starts the engine for the simulation.
+   *
+   * @param {number} input
    */
-  start() {
-    this._isRunning = true;
-    this._lastTick = Date.now();
-    this._tick();
+  update(input) {
+    if (this._currentState.locked) return;
+    this._currentState.handleInput(input);
+    if (this._currentState.nextState) {
+      const NEXT_STATE = this._states[this._currentState.nextState];
+
+      this._changeState(NEXT_STATE);
+    }
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -86,43 +80,30 @@ class Engine {
   //////////////////////////////////////////////////////////////////////////////
   /**
    *
+   * @param {State} nextState
    * @private
    */
-  _tick() {
-    let delta = 0;
-
-    while (this._isRunning) {
-      const CURRENT_TIME = Date.now();
-
-      delta += CURRENT_TIME - this._lastTick;
-      this._lastTick = CURRENT_TIME;
-      while (delta >= FRAME_DURATION) {
-        this._time += FRAME_DURATION;
-        this._systemManager.update(delta);
-        delta -= FRAME_DURATION;
-      }
-      this._render(delta / FRAME_DURATION);
-    }
-  }
-
-  _render(interpolation) {
-
+  _changeState(nextState) {
+    this._previousState = this._currentState.name;
+    this._currentState.exit();
+    this._currentState = nextState;
+    this._currentState.enter();
   }
 
   //////////////////////////////////////////////////////////////////////////////
-  // Static Methods
+  // Private Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Static factory method.
-   * @static
-   * @return {Engine}
+   * Static factory method
+   * @return {StateManager}
    */
-  static create() {
-    return new Engine();
+  static create(configuration) {
+
+    return new StateManager(states, initialState);
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default Engine;
+export default StateManager;

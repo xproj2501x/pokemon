@@ -1,14 +1,14 @@
 /**
- * Engine
+ * Input System
  * ===
  *
- * @module engine
+ * @module inputSystem
  */
 
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
-import {FRAME_DURATION, MAX_FRAME_SKIP} from './constants';
+import System from '../../engine/system';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
@@ -18,111 +18,56 @@ import {FRAME_DURATION, MAX_FRAME_SKIP} from './constants';
 // Class
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * Engine
+ * InputSystem
  * @class
+ * @implements System
  */
-class Engine {
+class InputSystem extends System {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   * @private
-   * @type {Logger}
-   */
-  _logger;
-
-  /**
-   * @private
-   * @type {SystemManager}
-   */
-  _systemManager;
-
-  /**
-   * @private
-   * @type {Boolean}
-   */
-  _isRunning;
-
-  /**
-   * @private
-   * @type {int}
-   */
-  _time;
-
-  /**
-   * @private
-   * @type {int}
-   */
-  _lastTick;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
 
   /**
-   * Engine
+   * InputSystem
    * @constructor
    */
   constructor() {
-    this._isRunning = false;
-    this._time = 0;
+    super();
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Starts the engine for the simulation.
+   * Updates the state
    */
-  start() {
-    this._isRunning = true;
-    this._lastTick = Date.now();
-    this._tick();
+  update() {
+
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   *
-   * @private
-   */
-  _tick() {
-    let delta = 0;
-
-    while (this._isRunning) {
-      const CURRENT_TIME = Date.now();
-
-      delta += CURRENT_TIME - this._lastTick;
-      this._lastTick = CURRENT_TIME;
-      while (delta >= FRAME_DURATION) {
-        this._time += FRAME_DURATION;
-        this._systemManager.update(delta);
-        delta -= FRAME_DURATION;
-      }
-      this._render(delta / FRAME_DURATION);
-    }
-  }
-
-  _render(interpolation) {
-
-  }
 
   //////////////////////////////////////////////////////////////////////////////
   // Static Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Static factory method.
+   * Static factory method
    * @static
-   * @return {Engine}
+   * @return {InputSystem}
    */
   static create() {
-    return new Engine();
+    return new InputSystem();
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default Engine;
+export default InputSystem;

@@ -1,8 +1,8 @@
 /**
- * System
+ * State
  * ===
  *
- * @module system
+ * @module state
  */
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -17,39 +17,89 @@
 // Class
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * System
+ * State
  * @interface
  */
-class System {
+class State {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
-  _logger;
-  _messageService;
-  _componentManager;
+  /**
+   * @private
+   * @type {string}
+   */
+  _name;
+
+  /**
+   * @protected
+   * @type {?string}
+   */
+  _nextState;
+
+  /**
+   * @protected
+   * @type {boolean}
+   */
+  _locked;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
+  /**
+   * @readonly
+   * @return {string}
+   */
+  get name() {
+    return this._name;
+  }
 
   /**
-   * System
-   * @constructor
+   * @readonly
+   * @return {string}
    */
-  constructor() {
-
+  get nextState() {
+    return this._nextState;
   }
-  
+
+  /**
+   * @readonly
+   * @return {boolean}
+   */
+  get locked() {
+    return this._locked;
+  }
+
+  /**
+   * State
+   * @constructor
+   * @param {string} name - The name of the state.
+   */
+  constructor(name) {
+    this._name = name;
+    this._locked = false;
+    this._nextState = null;
+  }
+
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Updates the state
+   *
+   * @param {number} input
    */
-  update() {
-    throw new Error('Error: update method called from System base class');
+  handleInput(input) {
+    throw new Error('Error: handleInput method called from State base class');
   }
+
+  enter() {
+    throw new Error('Error: enter method called from State base class');
+  }
+
+  exit() {
+    throw new Error('Error: exit method called from State base class');
+  }
+
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
@@ -59,4 +109,4 @@ class System {
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default System;
+export default State;

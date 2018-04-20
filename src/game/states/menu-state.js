@@ -1,14 +1,16 @@
 /**
- * Engine
+ * Menu State
  * ===
  *
- * @module engine
+ * @module menuState
  */
 
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
-import {FRAME_DURATION, MAX_FRAME_SKIP} from './constants';
+import State from '../../engine/state';
+import {KEYBOARD} from '../../engine/constants';
+import {STATE} from './constants';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
@@ -18,111 +20,58 @@ import {FRAME_DURATION, MAX_FRAME_SKIP} from './constants';
 // Class
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * Engine
+ * MenuState
  * @class
+ * @implements State
  */
-class Engine {
+class MenuState extends State {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   * @private
-   * @type {Logger}
-   */
-  _logger;
-
-  /**
-   * @private
-   * @type {SystemManager}
-   */
-  _systemManager;
-
-  /**
-   * @private
-   * @type {Boolean}
-   */
-  _isRunning;
-
-  /**
-   * @private
-   * @type {int}
-   */
-  _time;
-
-  /**
-   * @private
-   * @type {int}
-   */
-  _lastTick;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
 
   /**
-   * Engine
+   * MenuState
    * @constructor
    */
   constructor() {
-    this._isRunning = false;
-    this._time = 0;
+    super(STATE.MENU);
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   * Starts the engine for the simulation.
-   */
-  start() {
-    this._isRunning = true;
-    this._lastTick = Date.now();
-    this._tick();
+  handleInput(input) {
+    this._locked = true;
+    switch (input) {
+      case KEYBOARD.ENTER:
+      case KEYBOARD.SPACE:
+        this._nextState = STATE.PLAY;
+        break;
+      case KEYBOARD.KEY_H:
+        break;
+    }
+    this._locked = false;
+  }
+
+  enter() {
+
+  }
+
+  exit() {
+    this._nextState = null;
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   *
-   * @private
-   */
-  _tick() {
-    let delta = 0;
-
-    while (this._isRunning) {
-      const CURRENT_TIME = Date.now();
-
-      delta += CURRENT_TIME - this._lastTick;
-      this._lastTick = CURRENT_TIME;
-      while (delta >= FRAME_DURATION) {
-        this._time += FRAME_DURATION;
-        this._systemManager.update(delta);
-        delta -= FRAME_DURATION;
-      }
-      this._render(delta / FRAME_DURATION);
-    }
-  }
-
-  _render(interpolation) {
-
-  }
-
-  //////////////////////////////////////////////////////////////////////////////
-  // Static Methods
-  //////////////////////////////////////////////////////////////////////////////
-  /**
-   * Static factory method.
-   * @static
-   * @return {Engine}
-   */
-  static create() {
-    return new Engine();
-  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default Engine;
+export default MenuState;
