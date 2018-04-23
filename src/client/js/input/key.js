@@ -1,89 +1,117 @@
 /**
- * Display
+ * Key
  * ===
  *
- * @module display
+ * @module key
  */
 
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
-import UUID from '../../../common/utilities/uuid';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
-const ID_PREFIX = 'display-';
+const KEY_DOWN = 'keydown';
+const KEY_UP = 'keyup';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * Display
+ * Key
  * @class
  */
-class Display {
+class Key {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
   /**
    * @private
-   * @type {string}
+   * @type {number}
    */
-  _id;
+  _code;
 
   /**
    * @private
-   * @type {HTMLElement}
+   * @type {boolean}
    */
-  _container;
+  _isDown;
 
   /**
    * @private
-   * @type {Array}
+   * @type {boolean}
    */
-  _widgets;
+  _altDown;
+
+  /**
+   * @private
+   * @type {boolean}
+   */
+  _ctrlDown;
+
+  /**
+   * @private
+   * @type {boolean}
+   */
+  _shiftDown;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
 
-  get id() {
-    return this._id;
-  }
-
-  get container() {
-    return this._container;
-  }
-
   /**
-   * Display
+   * Key
    * @constructor
-   * @param {string} id - The id of the HTML element.
-   * @param {HTMLElement} container - The HTML element for the display.
+   * @param {number} code - The key code for the key.
+   * @param {?KeyboardEvent} - The keyboard event if there was one.
    */
-  constructor(id, container) {
-    this._id = id;
-    this._container = container;
+  constructor(code, event) {
+    this._code = code;
+    if (event) {
+      this.update(event);
+    }
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
-  add() {
+  update(event) {
+    event.preventDefault();
+    if (this._code !== event.keyCode) throw new Error('Error: Invalid key code for event');
 
+    if (event.type === KEY_DOWN) {
+      this._altDown = event.altKey;
+      this._ctrlDown = event.ctrlKey;
+      this._shiftDown = event.shiftKey;
+      if (this._isDown) {
+
+      } else {
+        this._isDown = true;
+      }
+    } else if (event.type === KEY_UP) {
+      this._reset();
+    }
   }
-
-  remove() {
-
-  }
-
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
   //////////////////////////////////////////////////////////////////////////////
+  _onKeyDown() {
 
+  }
+
+  onKeyUp() {
+
+  }
+  
+  _reset() {
+    this._isDown = false;
+    this._altDown = false;
+    this._ctrlDown = false;
+    this._shiftDown = false;
+  }
 
   //////////////////////////////////////////////////////////////////////////////
   // Static Methods
@@ -91,21 +119,14 @@ class Display {
   /**
    * Static factory method.
    * @static
-   * @param {object} configuration -
-   * @return {Display}
+   * @return {Key}
    */
-  static create(zIndex) {
-    const ID = ID_PREFIX + UUID.create();
-    const CONTAINER = document.createElement('div');
-
-    CONTAINER.id = ID;
-    CONTAINER.style.zIndex = `${zIndex}`;
-    CONTAINER.classList.toggle('o-display');
-    return new Display(ID, CONTAINER);
+  static create() {
+    return new Key();
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default Display;
+export default Key;

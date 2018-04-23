@@ -1,37 +1,32 @@
 /**
- * Display
+ * Display Manager
  * ===
  *
- * @module display
+ * @module displayManager
  */
 
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
-import UUID from '../../../common/utilities/uuid';
+import Display from './display';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
-const ID_PREFIX = 'display-';
+const ID = 'game-display';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * Display
+ * DisplayManager
  * @class
  */
-class Display {
+class DisplayManager {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   * @private
-   * @type {string}
-   */
-  _id;
 
   /**
    * @private
@@ -43,42 +38,37 @@ class Display {
    * @private
    * @type {Array}
    */
-  _widgets;
+  _displays;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
 
-  get id() {
-    return this._id;
-  }
-
-  get container() {
-    return this._container;
-  }
-
   /**
-   * Display
+   * DisplayManager
    * @constructor
-   * @param {string} id - The id of the HTML element.
-   * @param {HTMLElement} container - The HTML element for the display.
+   * @param {HTMLElement} element -
    */
-  constructor(id, container) {
-    this._id = id;
-    this._container = container;
+  constructor(element) {
+    this._container = element;
+    this._displays = [];
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
   add() {
+    const Z_INDEX = this._displays.length;
+    const DISPLAY = Display.create(Z_INDEX);
+    const ELEMENT = DISPLAY.container;
 
+    this._displays.push(DISPLAY);
+    this._container.appendChild(ELEMENT);
   }
 
   remove() {
 
   }
-
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
@@ -91,21 +81,17 @@ class Display {
   /**
    * Static factory method.
    * @static
-   * @param {object} configuration -
-   * @return {Display}
+   * @param {string} id - The id of the parent element for the display manager.
+   * @return {DisplayManager}
    */
-  static create(zIndex) {
-    const ID = ID_PREFIX + UUID.create();
-    const CONTAINER = document.createElement('div');
+  static create(id) {
+    const CONTAINER = document.getElementById(id);
 
-    CONTAINER.id = ID;
-    CONTAINER.style.zIndex = `${zIndex}`;
-    CONTAINER.classList.toggle('o-display');
-    return new Display(ID, CONTAINER);
+    return new DisplayManager(CONTAINER);
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default Display;
+export default DisplayManager;

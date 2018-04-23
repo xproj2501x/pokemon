@@ -1,84 +1,66 @@
 /**
- * Display
+ * Keyboard
  * ===
  *
- * @module display
+ * @module keyboard
  */
 
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
-import UUID from '../../../common/utilities/uuid';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
-const ID_PREFIX = 'display-';
+const KEY_DOWN = 'keydown';
+const KEY_UP = 'keyup';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * Display
+ * Keyboard
  * @class
  */
-class Display {
+class Keyboard {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
   /**
    * @private
-   * @type {string}
-   */
-  _id;
-
-  /**
-   * @private
-   * @type {HTMLElement}
-   */
-  _container;
-
-  /**
-   * @private
    * @type {Array}
    */
-  _widgets;
+  _keys;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
 
-  get id() {
-    return this._id;
-  }
-
-  get container() {
-    return this._container;
-  }
-
   /**
-   * Display
+   * Keyboard
    * @constructor
-   * @param {string} id - The id of the HTML element.
-   * @param {HTMLElement} container - The HTML element for the display.
    */
-  constructor(id, container) {
-    this._id = id;
-    this._container = container;
+  constructor() {
+    this._keys = [];
+    document.addEventListener(KEY_DOWN, (event) => this.onKeyDown(event));
+    document.addEventListener(KEY_UP, (event) => this.onKeyUp(event));
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
-  add() {
+  onKeyDown(event) {
+    const KEY_CODE = event.keyCode;
 
+    if (this._keys[KEY_CODE]) {
+
+    }
   }
 
-  remove() {
-
+  onKeyUp(event) {
+    event.preventDefault();
   }
-
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
@@ -91,21 +73,14 @@ class Display {
   /**
    * Static factory method.
    * @static
-   * @param {object} configuration -
-   * @return {Display}
+   * @return {Keyboard}
    */
-  static create(zIndex) {
-    const ID = ID_PREFIX + UUID.create();
-    const CONTAINER = document.createElement('div');
-
-    CONTAINER.id = ID;
-    CONTAINER.style.zIndex = `${zIndex}`;
-    CONTAINER.classList.toggle('o-display');
-    return new Display(ID, CONTAINER);
+  static create() {
+    return new Keyboard();
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default Display;
+export default Keyboard;
