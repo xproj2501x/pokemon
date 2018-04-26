@@ -27,6 +27,18 @@ class SystemManager {
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
   /**
+   * @private
+   * @type {Logger}
+   */
+  _logger;
+
+  /**
+   * @private
+   * @type {MessageService}
+   */
+  _messageService;
+
+  /**
    * Collection of systems registered for the simulation.
    * @private
    * @type {Array}
@@ -40,8 +52,13 @@ class SystemManager {
   /**
    * SystemManager
    * @constructor
+   * @param {LogService} logService
+   * @param {MessageService} messageService
+   * @param {Array} systems
    */
-  constructor() {
+  constructor(logService, messageService, systems) {
+    this._logger = logService.register(this.constructor.name);
+    this._messageService = messageService;
     this._systems = [];
   }
 
@@ -66,8 +83,8 @@ class SystemManager {
   // Static Methods
   //////////////////////////////////////////////////////////////////////////////
 
-  static create() {
-    return new SystemManager();
+  static create(logService, messageService, systems) {
+    return new SystemManager(logService, messageService, systems);
   }
 }
 

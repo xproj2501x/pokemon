@@ -1,89 +1,111 @@
 /**
- * Log Service
+ * Display
  * ===
  *
- * @module logService
+ * @module display
  */
 
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
-import Log from './log';
-import Logger from './logger';
+import UUID from '../common/utilities/uuid';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
+const ID_PREFIX = 'display-';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * LogService
+ * Display
  * @class
  */
-class LogService {
+class Display {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
   /**
    * @private
-   * @type {Log}
+   * @type {string}
    */
-  _log;
+  _id;
+
+  /**
+   * @private
+   * @type {HTMLElement}
+   */
+  _container;
 
   /**
    * @private
    * @type {Array}
    */
-  _loggers;
+  _widgets;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
 
+  get id() {
+    return this._id;
+  }
+
+  get container() {
+    return this._container;
+  }
+
   /**
-   * LogService
+   * Display
    * @constructor
+   * @param {string} id - The id of the HTML element.
+   * @param {HTMLElement} container - The HTML element for the display.
    */
-  constructor(log) {
-    this._loggers = [];
-    this._log = log;
+  constructor(id, container) {
+    this._id = id;
+    this._container = container;
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   * Registers a new logger with the service
-   * @param {string} context - The context of the instance registering with the logger
-   * @return {Logger}
-   */
-  register(context) {
-    const LOGGER = Logger.create(context, this._log);
+  add() {
 
-    this._loggers.push(LOGGER);
-    return LOGGER;
   }
+
+  remove() {
+
+  }
+
+
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
   //////////////////////////////////////////////////////////////////////////////
+
 
   //////////////////////////////////////////////////////////////////////////////
   // Static Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Static factory method
-   * @return {LogService}
+   * Static factory method.
+   * @static
+   * @param {object} configuration -
+   * @return {Display}
    */
-  static create() {
-    const LOG = Log.create();
-    return new LogService(LOG);
+  static create(zIndex) {
+    const ID = ID_PREFIX + UUID.create();
+    const CONTAINER = document.createElement('div');
+
+    CONTAINER.id = ID;
+    CONTAINER.style.zIndex = `${zIndex}`;
+    CONTAINER.classList.toggle('o-display');
+    return new Display(ID, CONTAINER);
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default LogService;
+export default Display;

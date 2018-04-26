@@ -23,43 +23,11 @@ class BinarySpacePartition {
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
-  _prng;
-
-  /**
-   * @private
-   * @type {object}
-   */
-  _rootContainer;
-
-  /**
+    /**
    * @private
    * @type {Array}
    */
   _partitions;
-
-  /**
-   * @private
-   * @type {Vector2}
-   */
-  _minimumSize;
-
-  /**
-   * @private
-   * @type {Vector2}
-   */
-  _maximumSize;
-
-  /**
-   * @private
-   * @type {number}
-   */
-  _iterations;
-
-  /**
-   * @private
-   * @type {number}
-   */
-  _splitConstraint;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
@@ -70,7 +38,7 @@ class BinarySpacePartition {
    * @constructor
    */
   constructor() {
-    _prng = PRNG.create();
+
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -80,35 +48,28 @@ class BinarySpacePartition {
    *
    * @param {object} options -
    */
-  generate(options) {
-    const PARENT_CONTAINER = {
-      size: options.size,
-      position: Vector2.create(0, 0)
-    };
+  generate(width, height, iterations) {
+    const PARENT_CONTAINER = {x: 0, y: 0, width: width, height: height};
 
-    this._minimumSize = options.minimumSize || Vector2.create(3, 3);
-    this._maximumSize = options.maximumSize || Vector2.create(10, 10);
-    this._iterations = options.iterations || 5;
-    this._splitContraint = options.splitContraint || Math.random() * 0.5;
-    this._partitions = [];
-    this._splitContainer(PARENT_CONTAINER, options.iterations);
+    this._splitContainer(PARENT_CONTAINER, iterations);
+    return this._partitions;
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
   //////////////////////////////////////////////////////////////////////////////
   _splitContainer(container, iteration) {
-    if ((container.size.x > this._minimumSize.x) && (container.size.y > this._minimumSize.y)) {
-      const DIFFERENCE = container.size.x - container.size.y;
-      const AXIS = (DIFFERENCE > 0) ? 0 : ((DIFFERENCE < 0) ? 1 : Math.floor(this._prng.generateUniform() * (1 - 0 + 1) + 0))
-      const MINIMUM_SPLIT_POSITION = AXIS ? (container.position.y + this._minimumSize.y) : (container.position.x + this._minimumSize.x);
-      const MAXIMUM_SPLIT_POSITION = AXIS ? (container.size.y - this._minimumSize.y) : (container.size.x - this._minimumSize.x);
+    if (iteration > 0) {
+      const DIFFERENCE = container.width - container.height;
 
-
-
+    } else {
+      this._partitions.push(container);
     }
   }
 
+  _random(min, max){
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
   //////////////////////////////////////////////////////////////////////////////
   // Static Methods
   //////////////////////////////////////////////////////////////////////////////

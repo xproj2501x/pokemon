@@ -95,7 +95,7 @@ class DiamondSquare {
   _setCell(xPosition, yPosition, value) {
     const INDEX = xPosition + (yPosition * this._size);
 
-    this._map[INDEX] = value;
+    this._map[INDEX] = this._map[INDEX] || value;
   }
 
   /**

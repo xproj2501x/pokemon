@@ -27,7 +27,7 @@ class StateManager {
   //////////////////////////////////////////////////////////////////////////////
   /**
    * @private
-   * @type {object}
+   * @type {Array}
    */
   _states;
 
@@ -50,10 +50,12 @@ class StateManager {
   /**
    * StateManager
    * @constructor
-   * @param {object} states - A collection of states for the simulation.
+   * @param {LogService} logService -
+   * @param {MessageService} messageService -
+   * @param {Array} states - A collection of states for the simulation.
    * @param {string} initialState - The name of the initial state.
    */
-  constructor(states, initialState) {
+  constructor(logService, messageService, states, initialState) {
     this._states = states;
     this._currentState = this._states[initialState];
   }

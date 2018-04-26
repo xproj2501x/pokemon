@@ -78,12 +78,12 @@ class BinaryNode {
     return this._leftChild;
   }
 
-  /**
-   * @readonly
-   * @return {BinaryNode}
-   */
-  get rightChild() {
-    return this._rightChild;
+  set leftChild(node) {
+    this._leftChild = node;
+  }
+
+  set rightChild(node) {
+    this._rightChild = node;
   }
 
   /**
@@ -123,7 +123,7 @@ class BinaryNode {
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
   remove() {
-    s
+
   }
 
   //////////////////////////////////////////////////////////////////////////////
