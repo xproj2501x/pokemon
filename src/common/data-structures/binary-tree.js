@@ -46,7 +46,7 @@ class BinaryTree {
    * @param {int} key -
    * @param {object} data -
    */
-  insertNode(key, data) {
+  insert(key, data) {
     const NEW_NODE = BinaryNode.create(key, data);
 
     if (!this._root) {
@@ -60,18 +60,20 @@ class BinaryTree {
    *
    * @param {int} key -
    * @param {BinaryNode} currentNode -
-   * @return {object}
+   * @return {BinaryNode}
    */
-  getNode(key, currentNode = null) {
+  find(key, currentNode = null) {
     currentNode = currentNode || this._root;
     if (key === currentNode.key) {
-      return currentNode.data;
-    } else if (key > currentNode.key && currentNode.leftChild) {
-
+      return currentNode;
+    } else if (key > currentNode.key) {
+      return this.find(key, currentNode.leftChild);
+    } else {
+      return this.find(key, currentNode.rightChild);
     }
   }
 
-  removeNode(key) {
+  remove(key) {
 
   }
 
