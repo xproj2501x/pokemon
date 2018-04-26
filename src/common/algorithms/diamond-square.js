@@ -51,6 +51,13 @@ class DiamondSquare {
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
+  /**
+   *
+   * @param {number} size -
+   * @param {number} roughness -
+   * @param {number} seed -
+   * @return {Array}
+   */
   build(size, roughness, seed) {
     this._size = Math.pow(2, size) + 1;
     this._map = new Array(this._size * this._size);
@@ -91,6 +98,9 @@ class DiamondSquare {
     this._map[INDEX] = value;
   }
 
+  /**
+   * @private
+   */
   _build() {
     let height = this._roughness;
 
@@ -100,6 +110,12 @@ class DiamondSquare {
     }
   }
 
+  /**
+   *
+   * @private
+   * @param {number} side
+   * @param {number} height
+   */
   _runSquareStep(side, height) {
     const HALF = Math.floor(side / 2);
 
@@ -117,6 +133,12 @@ class DiamondSquare {
     }
   }
 
+  /**
+   *
+   * @private
+   * @param {number} side
+   * @param {number} height
+   */
   _runDiamondStep(side, height) {
     const HALF = Math.floor(side / 2);
 
@@ -135,6 +157,11 @@ class DiamondSquare {
     }
   }
 
+  /**
+   *
+   * @private
+   * @param {Array} points
+   */
   _calculateAverage(points) {
     let sum = 0;
     let count = 0;

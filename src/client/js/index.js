@@ -2,14 +2,19 @@
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
 import '../css/_site.scss';
-import Game from '../../game/';
-import DiamonSquare from '../../common/algorithms/diamond-square';
+import BinarySpacePartition from '../../common/algorithms/bsp';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
-const DIAMOND_SQUARE = DiamonSquare.create();
-const MAP = DIAMOND_SQUARE.build(2);
+const BSP = new BinarySpacePartition();
+const MAP = BSP.build({
+  size: {
+    x: 400,
+    y: 400
+  },
+  iterations: 7
+});
 
 console.log(MAP);
 

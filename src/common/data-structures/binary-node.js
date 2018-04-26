@@ -21,29 +21,93 @@ class BinaryNode {
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
+  /**
+   * @private
+   * @type {number}
+   */
   _key;
+
+  /**
+   * @private
+   * @type {object}
+   */
   _data;
+
+  /**
+   * @private
+   * @type {BinaryNode}
+   */
   _parent;
+
+  /**
+   * @private
+   * @type {BinaryNode}
+   */
   _leftChild;
+
+  /**
+   * @private
+   * @type {BinaryNode}
+   */
   _rightChild;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
+  /**
+   * @readonly
+   * @return {number}
+   */
   get key() {
     return this._key;
   }
 
+  /**
+   * @readonly
+   * @return {object}
+   */
   get data() {
     return this._data;
   }
 
+  /**
+   * @readonly
+   * @return {BinaryNode}
+   */
   get leftChild() {
     return this._leftChild;
   }
 
+  /**
+   * @readonly
+   * @return {BinaryNode}
+   */
   get rightChild() {
     return this._rightChild;
+  }
+
+  /**
+   * @private
+   * @type {boolean}
+   */
+  get isRootNode() {
+    return this._parent === null;
+  }
+
+  /**
+   * @private
+   * @type {boolean}
+   */
+  get isRightNode() {
+    return this._parent.rightChild === this;
+  }
+
+  /**
+   * @private
+   * @type {boolean}
+   */
+  get isLeftNode() {
+    return this._parent.leftChild === this;
   }
 
   /**
@@ -59,7 +123,7 @@ class BinaryNode {
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
   remove() {
-
+    s
   }
 
   //////////////////////////////////////////////////////////////////////////////
