@@ -9,6 +9,10 @@
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
 import {FRAME_DURATION, MAX_FRAME_SKIP} from './constants';
+import EntityManager from './entity-manager';
+import StateManager from './state-manager';
+import SystemManager from './system-manager';
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
@@ -31,6 +35,24 @@ class Engine {
    * @type {Logger}
    */
   _logger;
+
+  /**
+   * @private
+   * @type {MessageService}
+   */
+  _messageService;
+
+  /**
+   * @private
+   * @type {EntityManager}
+   */
+  _entityManager;
+
+  /**
+   * @private
+   * @type {StateManager}
+   */
+  _stateManager;
 
   /**
    * @private
@@ -63,8 +85,9 @@ class Engine {
   /**
    * Engine
    * @constructor
+   * @param {object} configuration - The configuration for the simulation
    */
-  constructor() {
+  constructor(configuration) {
     this._isRunning = false;
     this._time = 0;
   }
@@ -115,10 +138,17 @@ class Engine {
   /**
    * Static factory method.
    * @static
+   * @param {object} configuration - The configuration for the simulation.
    * @return {Engine}
    */
-  static create() {
-    return new Engine();
+  static create(configuration) {
+    const ENTITY_MANAGER = EntityManager.create(configuration.logService, configuration.messageService);
+    const SYSTEM_MANAGER = SystemManager.create(configuration.logService, configuration.messageService,
+                                                configuration.systems);
+    const STATE_MANAGER = StateManager.create(configuration.logService, configuration.messageService,
+                                              configuration.states, configuration.initialState);
+
+    return new Engine(configuration);
   }
 }
 

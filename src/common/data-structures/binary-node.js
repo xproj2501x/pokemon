@@ -1,89 +1,147 @@
 /**
- * Log Service
+ * Binary Node
  * ===
  *
- * @module logService
+ * @module binaryNode
  */
 
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
-////////////////////////////////////////////////////////////////////////////////
-import Log from './log';
-import Logger from './logger';
-
-////////////////////////////////////////////////////////////////////////////////
-// Definitions
 ////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * LogService
+ * BinaryNode
  * @class
  */
-class LogService {
+class BinaryNode {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
   /**
    * @private
-   * @type {Log}
+   * @type {number}
    */
-  _log;
+  _key;
 
   /**
    * @private
-   * @type {Array}
+   * @type {object}
    */
-  _loggers;
+  _data;
+
+  /**
+   * @private
+   * @type {BinaryNode}
+   */
+  _parent;
+
+  /**
+   * @private
+   * @type {BinaryNode}
+   */
+  _leftChild;
+
+  /**
+   * @private
+   * @type {BinaryNode}
+   */
+  _rightChild;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
+  /**
+   * @readonly
+   * @return {number}
+   */
+  get key() {
+    return this._key;
+  }
 
   /**
-   * LogService
+   * @readonly
+   * @return {object}
+   */
+  get data() {
+    return this._data;
+  }
+
+  /**
+   * @readonly
+   * @return {BinaryNode}
+   */
+  get leftChild() {
+    return this._leftChild;
+  }
+
+  set leftChild(node) {
+    this._leftChild = node;
+  }
+
+  set rightChild(node) {
+    this._rightChild = node;
+  }
+
+  /**
+   * @private
+   * @type {boolean}
+   */
+  get isRootNode() {
+    return this._parent === null;
+  }
+
+  /**
+   * @private
+   * @type {boolean}
+   */
+  get isRightNode() {
+    return this._parent.rightChild === this;
+  }
+
+  /**
+   * @private
+   * @type {boolean}
+   */
+  get isLeftNode() {
+    return this._parent.leftChild === this;
+  }
+
+  /**
+   * BinaryNode
    * @constructor
    */
-  constructor(log) {
-    this._loggers = [];
-    this._log = log;
+  constructor(key, data) {
+    this._key = key;
+    this._data = data;
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   * Registers a new logger with the service
-   * @param {string} context - The context of the instance registering with the logger
-   * @return {Logger}
-   */
-  register(context) {
-    const LOGGER = Logger.create(context, this._log);
+  remove() {
 
-    this._loggers.push(LOGGER);
-    return LOGGER;
   }
-  //////////////////////////////////////////////////////////////////////////////
-  // Private Methods
-  //////////////////////////////////////////////////////////////////////////////
 
   //////////////////////////////////////////////////////////////////////////////
   // Static Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
    * Static factory method
-   * @return {LogService}
+   * @static
+   * @param {int} key -
+   * @param {object} data -
+   * @return {BinaryNode}
    */
-  static create() {
-    const LOG = Log.create();
-    return new LogService(LOG);
+  static create(key, data) {
+    return new BinaryNode(key, data);
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default LogService;
+export default BinaryNode;

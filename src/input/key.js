@@ -1,89 +1,132 @@
 /**
- * Log Service
+ * Key
  * ===
  *
- * @module logService
+ * @module key
  */
 
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
-import Log from './log';
-import Logger from './logger';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
+const KEY_DOWN = 'keydown';
+const KEY_UP = 'keyup';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * LogService
+ * Key
  * @class
  */
-class LogService {
+class Key {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
   /**
    * @private
-   * @type {Log}
+   * @type {number}
    */
-  _log;
+  _code;
 
   /**
    * @private
-   * @type {Array}
+   * @type {boolean}
    */
-  _loggers;
+  _isDown;
+
+  /**
+   * @private
+   * @type {boolean}
+   */
+  _altDown;
+
+  /**
+   * @private
+   * @type {boolean}
+   */
+  _ctrlDown;
+
+  /**
+   * @private
+   * @type {boolean}
+   */
+  _shiftDown;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
 
   /**
-   * LogService
+   * Key
    * @constructor
+   * @param {number} code - The key code for the key.
+   * @param {?KeyboardEvent} - The keyboard event if there was one.
    */
-  constructor(log) {
-    this._loggers = [];
-    this._log = log;
+  constructor(code, event) {
+    this._code = code;
+    if (event) {
+      this.update(event);
+    }
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   * Registers a new logger with the service
-   * @param {string} context - The context of the instance registering with the logger
-   * @return {Logger}
-   */
-  register(context) {
-    const LOGGER = Logger.create(context, this._log);
+  update(event) {
+    event.preventDefault();
+    if (this._code !== event.keyCode) throw new Error('Error: Invalid key code for event');
 
-    this._loggers.push(LOGGER);
-    return LOGGER;
+    if (event.type === KEY_DOWN) {
+      this._altDown = event.altKey;
+      this._ctrlDown = event.ctrlKey;
+      this._shiftDown = event.shiftKey;
+      if (this._isDown) {
+
+      } else {
+        this._isDown = true;
+      }
+    } else if (event.type === KEY_UP) {
+      this._reset();
+    }
   }
+
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
   //////////////////////////////////////////////////////////////////////////////
+  _onKeyDown() {
+
+  }
+
+  onKeyUp() {
+
+  }
+  
+  _reset() {
+    this._isDown = false;
+    this._altDown = false;
+    this._ctrlDown = false;
+    this._shiftDown = false;
+  }
 
   //////////////////////////////////////////////////////////////////////////////
   // Static Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Static factory method
-   * @return {LogService}
+   * Static factory method.
+   * @static
+   * @return {Key}
    */
   static create() {
-    const LOG = Log.create();
-    return new LogService(LOG);
+    return new Key();
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default LogService;
+export default Key;

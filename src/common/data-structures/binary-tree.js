@@ -1,89 +1,96 @@
 /**
- * Log Service
+ * Binary Tree
  * ===
  *
- * @module logService
+ * @module binaryTree
  */
 
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
-import Log from './log';
-import Logger from './logger';
-
-////////////////////////////////////////////////////////////////////////////////
-// Definitions
-////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class
 ////////////////////////////////////////////////////////////////////////////////
+import BinaryNode from './binary-node';
+
 /**
- * LogService
+ * BinaryTree
  * @class
  */
-class LogService {
-
+class BinaryTree {
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   * @private
-   * @type {Log}
-   */
-  _log;
-
-  /**
-   * @private
-   * @type {Array}
-   */
-  _loggers;
+  _root;
+  _size;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
 
   /**
-   * LogService
+   * BinaryTree
    * @constructor
    */
-  constructor(log) {
-    this._loggers = [];
-    this._log = log;
+  constructor() {
+    this._root = null;
+    this._size = 0;
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Registers a new logger with the service
-   * @param {string} context - The context of the instance registering with the logger
-   * @return {Logger}
+   * Inserts a new node into the binary tree.
+   * @param {int} key -
+   * @param {object} data -
    */
-  register(context) {
-    const LOGGER = Logger.create(context, this._log);
+  insert(key, data) {
+    const NEW_NODE = BinaryNode.create(key, data);
 
-    this._loggers.push(LOGGER);
-    return LOGGER;
+    if (!this._root) {
+      this._root = NEW_NODE;
+    } else {
+      return -1;
+    }
   }
-  //////////////////////////////////////////////////////////////////////////////
-  // Private Methods
-  //////////////////////////////////////////////////////////////////////////////
+
+  /**
+   *
+   * @param {int} key -
+   * @param {BinaryNode} currentNode -
+   * @return {BinaryNode}
+   */
+  find(key, currentNode = null) {
+    currentNode = currentNode || this._root;
+    if (key === currentNode.key) {
+      return currentNode;
+    } else if (key > currentNode.key) {
+      return this.find(key, currentNode.leftChild);
+    } else {
+      return this.find(key, currentNode.rightChild);
+    }
+  }
+
+  remove(key) {
+
+  }
 
   //////////////////////////////////////////////////////////////////////////////
   // Static Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
    * Static factory method
-   * @return {LogService}
+   * @static
+   * @return {BinaryTree}
    */
   static create() {
-    const LOG = Log.create();
-    return new LogService(LOG);
+    return new BinaryTree();
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default LogService;
+export default BinaryTree;

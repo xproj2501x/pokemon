@@ -35,6 +35,12 @@ class EntityManager {
 
   /**
    * @private
+   * @type {MessageService}
+   */
+  _messageService
+
+  /**
+   * @private
    * @type {int}
    */
   _nextId;
@@ -53,9 +59,12 @@ class EntityManager {
   /**
    * EntityManager
    * @constructor
+   * @param {LogService} logService
+   * @param {MessageService} messageService
    */
-  constructor(logService) {
+  constructor(logService, messageService) {
     this._logger = logService.register(this.constructor.name);
+    this._messageService = messageService;
     this._nextId = 0;
     this._entities = [];
   }
@@ -93,10 +102,11 @@ class EntityManager {
    * Static factory method
    * @static
    * @param {LogService} logService -
+   * @param {MessageService} messageService -
    * @return {EntityManager}
    */
-  static create(logService) {
-    return new EntityManager();
+  static create(logService, messageService) {
+    return new EntityManager(logService, messageService);
   }
 }
 
