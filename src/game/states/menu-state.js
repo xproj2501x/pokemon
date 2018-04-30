@@ -45,9 +45,9 @@ class MenuState extends State {
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
-  handleInput(input) {
+  run(event) {
     this._locked = true;
-    switch (input) {
+    switch (event) {
       case KEYBOARD.ENTER:
       case KEYBOARD.SPACE:
         this._nextState = STATE.PLAY;
@@ -55,20 +55,37 @@ class MenuState extends State {
       case KEYBOARD.KEY_H:
         break;
     }
-    this._locked = false;
   }
 
   enter() {
+    const CONTAINER = document.getElementById('game');
 
+    CONTAINER.innerHTML = `<i>MENU</i>`;
   }
 
   exit() {
+    const CONTAINER = document.getElementById('game');
+
     this._nextState = null;
+    this._locked = false;
+
+    CONTAINER.innerHTML = ``;
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
   //////////////////////////////////////////////////////////////////////////////
+
+  //////////////////////////////////////////////////////////////////////////////
+  // Static Methods
+  //////////////////////////////////////////////////////////////////////////////
+  /**
+   * Static factory method.
+   * @return {MenuState}
+   */
+  static create() {
+    return new MenuState();
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////

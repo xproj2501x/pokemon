@@ -6,9 +6,8 @@
  * @enum {string}
  */
 const STATE = {
-  MENU: 'menu',
-  LOG_IN: 'log in',
-  PLAY: 'play'
+  MENU: 'MENU',
+  PLAY: 'PLAY'
 };
 ////////////////////////////////////////////////////////////////////////////////
 // Exports

@@ -9,11 +9,11 @@
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
 import Entity from './entity';
+import {ENTITY_LIMIT} from './constants';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
-const MAX_ENTITIES = 255;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class
@@ -37,7 +37,7 @@ class EntityManager {
    * @private
    * @type {MessageService}
    */
-  _messageService
+  _messageService;
 
   /**
    * @private
@@ -66,19 +66,20 @@ class EntityManager {
     this._logger = logService.register(this.constructor.name);
     this._messageService = messageService;
     this._nextId = 0;
-    this._entities = [];
+    this._entities = new Array(ENTITY_LIMIT).fill(null);
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Creates a new entity and returns the identifier.
+   * Creates a new entity and returns its identity.
+   *
    * @public
-   * @return {int} The identifier for the entity.
+   * @return {int} The identity of the entity.
    */
-  create() {
-    if (this._nextId > MAX_ENTITIES) throw new Error(`Error: Entity limit exceeded the maximum of ${MAX_ENTITIES}`);
+  createEntity() {
+    if (this._nextId > ENTITY_LIMIT) throw new Error(`Error: Entity limit ${ENTITY_LIMIT} exceeded.`);
     const ENTITY = Entity.create(this._nextId);
 
     this._entities[this._nextId] = ENTITY;
@@ -87,12 +88,61 @@ class EntityManager {
   }
 
   /**
-   * Destroys the entity for the specified identifier.
+   * Destroys the entity with the the specified identity.
+   *
    * @public
-   * @param {int} id - The identifier for the entity.
+   * @param {int} id - The identity of the entity.
    */
-  destroy(id) {
+  destroyEntity(id) {
+    if (!this.hasEntity(id)) throw new Error(`Error: Entity id ${id} does not exist.`);
     this._entities[id] = null;
+  }
+
+  /**
+   *
+   * @public
+   * @param {int} id - The identity of the entity.
+   *
+   * @return {boolean}
+   */
+  hasEntity(id) {
+    return this._entities[id] !== null;
+  }
+
+  /**
+   *
+   * @public
+   * @param {int} id - The identity of the entity.
+   *
+   * @return {Entity}
+   */
+  getEntity(id) {
+    if (!this.hasEntity(id)) throw new Error(`Error: Entity id ${id} does not exist.`);
+    return this._entities[id];
+  }
+
+  /**
+   * Attaches a component to the specified entity.
+   *
+   * @param {int} id - The identity of the entity.
+   * @param {int} component - The type of the component to be attached.
+   */
+  attachComponent(id, component) {
+    const ENTITY = this.getEntity(id);
+
+    ENTITY.attachComponent(component);
+  }
+
+  /**
+   * Detaches a component from the specified entity.
+   *
+   * @param {int} id - The identity of the entity.
+   * @param {int} component - The type of the component to be detached.
+   */
+  detachComponent(id, component) {
+    const ENTITY = this.getEntity(id);
+
+    ENTITY.detachComponent(component);
   }
 
   //////////////////////////////////////////////////////////////////////////////

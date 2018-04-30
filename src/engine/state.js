@@ -86,10 +86,10 @@ class State {
   //////////////////////////////////////////////////////////////////////////////
   /**
    *
-   * @param {number} input
+   * @param {object} input
    */
-  handleInput(input) {
-    throw new Error('Error: handleInput method called from State base class');
+  run(event) {
+    throw new Error('Error: next method called from State base class');
   }
 
   enter() {
@@ -100,7 +100,9 @@ class State {
     throw new Error('Error: exit method called from State base class');
   }
 
-
+  render() {
+    throw new Error('Error: render method called from State base class');
+  }
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
   //////////////////////////////////////////////////////////////////////////////

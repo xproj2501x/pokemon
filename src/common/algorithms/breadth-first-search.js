@@ -1,85 +1,91 @@
 /**
- * Input Manager
+ * Breadth First Search
  * ===
  *
- * @module inputManager
+ * @module breadthFirstSearch
  */
 
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
-import Keyboard from './keyboard';
-import Mouse from './mouse';
+import Queue from '../data-structures/queue';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
-const KEY_DOWN = 'keydown';
-const KEY_UP = 'keyup';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class
 ////////////////////////////////////////////////////////////////////////////////
+
 /**
- * InputManager
+ * BreadthFirstSearch
  * @class
  */
-class InputManager {
+class BreadthFirstSearch {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   * @private
-   * @type {Logger}
-   */
-  _logger;
-
-  /**
-   * @private
-   * @type {MessageService}
-   */
-  _messageService;
+  _queue;
+  _visited;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
 
+
   /**
-   * InputManager
+   * BreadthFirstSearch
    * @constructor
    */
-  constructor(messageService) {
-    this._messageService = messageService;
-    document.addEventListener(KEY_DOWN, (event) => this.onInput(event));
+  constructor() {
+    this._queue = Queue.create();
+    this._visited = {};
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
-  onInput(event) {
-    event.preventDefault();
-    this._messageService.send({subject: 'INPUT_EVENT', body: event})
-  }
-  //////////////////////////////////////////////////////////////////////////////
-  // Private Methods
-  //////////////////////////////////////////////////////////////////////////////
+  /**
+   *
+   * @param {Graph} graph - The graph to be searched.
+   * @param {int} start - The key for the graph node to start with.
+   * @param {int} goal - The key for the graph node to end with.
+   */
+  search(graph, start, goal) {
+    this._visited[start] = true;
+    this._queue.enqueue(start);
+    while (this._queue.length) {
+      const KEY = this._queue.dequeue();
+      if (KEY === goal) break;
 
+      const NODE = graph.getNode(KEY);
+
+      NODE.edges.forEach((edge) => {
+        if (!(edge in this._visited)) {
+          this._queue.enqueue(edge);
+          this._visited[edge] = NODE;
+        }
+      });
+    }
+    return this._visited;
+  }
 
   //////////////////////////////////////////////////////////////////////////////
   // Static Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Static factory method.
+   * Static factory method
    * @static
-   * @return {InputManager}
+   * @return {BreadthFirstSearch}
    */
-  static create(messageService) {
-    return new InputManager(messageService);
+  static create() {
+    return new BreadthFirstSearch();
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default InputManager;
+export default BreadthFirstSearch;

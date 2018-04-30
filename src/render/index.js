@@ -36,18 +36,72 @@ class RenderManager {
    * RenderManager
    * @constructor
    */
-  constructor() {
-
+  constructor(canvas) {
+    this._canvas = canvas;
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
+  render(sprites) {
+    const CONTEXT = this._canvas.getContext('2d');
 
+    CONTEXT.save();
+    for (let idx = 0; idx < 513; idx++) {
+      for (let jdx = 0; jdx < 513; jdx++) {
+        const TILE = sprites[idx + (jdx * 513)];
+
+        switch(TILE) {
+          case 1 << 0:
+            CONTEXT.fillStyle = '#0000CD';
+            break;
+          case 1 << 1:
+            CONTEXT.fillStyle = '#4169E1';
+            break;
+          case 1 << 2:
+            CONTEXT.fillStyle = '#DEB887';
+            break;
+          case 1 << 3:
+            CONTEXT.fillStyle = '#606030';
+            break;
+          case 1 << 4:
+            CONTEXT.fillStyle = '#EF7347';
+            break;
+          case 1 << 5:
+            CONTEXT.fillStyle = '#809080';
+            break;
+          case 1 << 6:
+            CONTEXT.fillStyle = '#595959';
+            break;
+          case 1 << 7:
+            CONTEXT.fillStyle = '#FFFFFF';
+            break;
+        }
+        CONTEXT.fillRect(idx * 3, jdx * 3, 3, 3);
+      }
+    }
+    CONTEXT.restore();
+  }
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
   //////////////////////////////////////////////////////////////////////////////
+
+  //////////////////////////////////////////////////////////////////////////////
+  // Static Methods
+  //////////////////////////////////////////////////////////////////////////////
+  /**
+   * Static factory method
+   * @param {HTMLElement} container - The parent element of the canvas.
+   */
+  static create(container) {
+    const CANVAS = document.createElement('canvas');
+
+    CANVAS.height = 1539;
+    CANVAS.width = 1539;
+    container.appendChild(CANVAS);
+    return new RenderManager(CANVAS);
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -27,6 +27,18 @@ class StateManager {
   //////////////////////////////////////////////////////////////////////////////
   /**
    * @private
+   * @type {Logger}
+   */
+  _logger;
+
+  /**
+   * @private
+   * @type {MessageService}
+   */
+  _messageService;
+
+  /**
+   * @private
    * @type {Array}
    */
   _states;
@@ -50,14 +62,15 @@ class StateManager {
   /**
    * StateManager
    * @constructor
-   * @param {LogService} logService -
    * @param {MessageService} messageService -
    * @param {Array} states - A collection of states for the simulation.
    * @param {string} initialState - The name of the initial state.
    */
-  constructor(logService, messageService, states, initialState) {
+  constructor(messageService, states, initialState) {
+    this._messageService = messageService;
     this._states = states;
     this._currentState = this._states[initialState];
+    this._init();
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -65,11 +78,13 @@ class StateManager {
   //////////////////////////////////////////////////////////////////////////////
   /**
    *
-   * @param {number} input
+   * @param {object} message
    */
-  update(input) {
+  update(message) {
+    const KEY_CODE = message.body.keyCode;
+
     if (this._currentState.locked) return;
-    this._currentState.handleInput(input);
+    this._currentState.run(KEY_CODE);
     if (this._currentState.nextState) {
       const NEXT_STATE = this._states[this._currentState.nextState];
 
@@ -80,13 +95,17 @@ class StateManager {
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
   //////////////////////////////////////////////////////////////////////////////
+  _init() {
+    this._messageService.subscribe('INPUT_EVENT', (message) => this.update(message));
+    this._currentState.enter();
+  }
+
   /**
    *
    * @param {State} nextState
    * @private
    */
   _changeState(nextState) {
-    this._previousState = this._currentState.name;
     this._currentState.exit();
     this._currentState = nextState;
     this._currentState.enter();
@@ -96,12 +115,11 @@ class StateManager {
   // Private Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Static factory method
+   * Static factory method.
    * @return {StateManager}
    */
-  static create(configuration) {
-
-    return new StateManager(states, initialState);
+  static create(messageService, states, initialState) {
+    return new StateManager(messageService, states, initialState);
   }
 }
 

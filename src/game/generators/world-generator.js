@@ -1,101 +1,105 @@
 /**
- * Game
+ * World Generator
  * ===
  *
- * @module game
+ * @module worldGenerator
  */
 
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
-import LogService from '../common/services/log';
-import MessageService from '../common/services/message';
-import Engine from '../engine';
-import StateManager from '../engine/state-manager';
-import InputManager from '../input';
-import {STATE} from './states/constants';
-import MenuState from './states/menu-state';
-import PlayState from './states/play-state';
+import PRNG from '../../common/math/prng';
+import DiamondSquareHeightMap from '../../common/algorithms/diamond-square-height-map';
+import ElevationGenerator from './elevation-generator';
+import TemperatureGenerator from './temperature-generator';
+import PrecipitationGenerator from './precepitation-generator';
+import ErosionGenerator from './erosion-generator';
+import World from '../models/world';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
 
+
 ////////////////////////////////////////////////////////////////////////////////
 // Class
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * Game
+ * WorldGenerator
  * @class
  */
-class Game {
+class WorldGenerator {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
-  _logger;
-  _messageService;
   /**
-   * The engine for the simulation.
    * @private
-   * @type {Engine}
+   * @type {PRNG}
    */
-  _engine;
+  _prng;
 
-  _stateManager;
-  _inputManager;
+  /**
+   * @private
+   * @type {DiamondSquareHeightMap}
+   */
+  _diamondSquareHeightMap;
 
+  _elevationGenerator;
+  _precipitationGenerator;
+  _temperatureGenerator;
+  _erosionGenerator;
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
 
   /**
-   * Game
+   * WorldGenerator
    * @constructor
    */
   constructor() {
-    this._messageService = MessageService.create();
-    this._engine = Engine.create(this._messageService);
-    this._inputManager = InputManager.create(this._messageService)
-    this._init();
+    this._prng = PRNG.create();
+    this._diamondSquareHeightMap = DiamondSquareHeightMap.create();
+    this._elevationGenerator = ElevationGenerator.create(this._prng, this._diamondSquareHeightMap);
+    this._precipitationGenerator = PrecipitationGenerator.create(this._prng, this._diamondSquareHeightMap);
+    this._temperatureGenerator = TemperatureGenerator.create(this._prng, this._diamondSquareHeightMap);
+    this._erosionGenerator = ErosionGenerator.create(this._prng, this._diamondSquareHeightMap);
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Starts the simulation.
+   * @public
+   * @param {number} size - The size of the world to be generated.
    */
-  start() {
+  generate(size) {
+    const WORLD = World.create(null, 17);
 
+    WORLD.elevation = this._elevationGenerator.execute(WORLD);
+    WORLD.precipitation = this._precipitationGenerator.execute(WORLD);
+    WORLD.temperature = this._temperatureGenerator.execute(WORLD);
+    // WORLD.erosion = this._erosionGenerator.execute(WORLD);
+    return WORLD;
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
   //////////////////////////////////////////////////////////////////////////////
-  _init() {
-    const STATES = {
-      MENU: MenuState.create(),
-      PLAY: PlayState.create()
-    }
-
-    this._stateManager = StateManager.create(this._messageService, STATES, STATE.MENU)
-  }
 
   //////////////////////////////////////////////////////////////////////////////
   // Static Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Static factory method.
-   * @static
-   * @return {Game}
+   * Static factory method
+   * @return {WorldGenerator}
    */
   static create() {
-    return new Game();
+    return new WorldGenerator();
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default Game;
+export default WorldGenerator;

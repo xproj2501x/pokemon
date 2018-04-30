@@ -60,11 +60,22 @@ class Component {
    * Component
    * @constructor
    * @param {int} id - The identifier for the parent entity.
+   * @param {object} keys - The keys for the component state.
    * @param {object} state - The initial state of the component.
    */
-  constructor(id, state) { // eslint-disable-line id-length
+  constructor(id, keys, state) { // eslint-disable-line id-length
     if (!id) throw new Error(`The component id cannot be null`);
     if (!state) throw new Error(`The component state cannot be null`);
+    for (const KEY in keys) {
+      if (!state.hasOwnProperty(KEY)) {
+        throw new Error(`Error: Key ${KEY} missing from initial state.`);
+      }
+    }
+    for (const KEY in state) {
+      if (!keys.hasOwnProperty(KEY)) {
+        throw new Error(`Error: Key ${KEY} is not valid for the component type.`)
+      }
+    }
     this._id = id;
     this._state = state;
   }
@@ -83,20 +94,6 @@ class Component {
       }
     }
     this._state = Object.assign({}, this._state, state);
-  }
-
-  //////////////////////////////////////////////////////////////////////////////
-  // Static Methods
-  //////////////////////////////////////////////////////////////////////////////
-  /**
-   * Static factory method
-   * @static
-   * @param {int} id - The identifier for the parent entity.
-   * @param {object} state - The initial state of the component.
-   * @return {Component}
-   */
-  static create(id, state) { // eslint-disable-line id-length
-    return new Component(id, state);
   }
 }
 

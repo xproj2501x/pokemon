@@ -79,7 +79,7 @@ class MessageService {
     const SUBSCRIBERS = this._subscriptions[message.subject] || [];
 
     SUBSCRIBERS.forEach((subscriber) => {
-      subscriber.handleMessage(message);
+      subscriber(message);
     });
   }
 

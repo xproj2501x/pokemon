@@ -1,85 +1,100 @@
 /**
- * Input Manager
+ * Point2
  * ===
  *
- * @module inputManager
+ * @module point2
  */
 
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
-import Keyboard from './keyboard';
-import Mouse from './mouse';
-
-////////////////////////////////////////////////////////////////////////////////
-// Definitions
-////////////////////////////////////////////////////////////////////////////////
-const KEY_DOWN = 'keydown';
-const KEY_UP = 'keyup';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class
 ////////////////////////////////////////////////////////////////////////////////
+
 /**
- * InputManager
+ * Point2
  * @class
  */
-class InputManager {
+class Point2 {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * @private
-   * @type {Logger}
+   * The x coordinate for the vector.
+   * @protected
+   * @type {number}
    */
-  _logger;
+  _x;
 
   /**
-   * @private
-   * @type {MessageService}
+   * The y coordinate for the vector.
+   * @protected
+   * @type {number}
    */
-  _messageService;
+  _y;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
+  /**
+   * The x coordinate for the vector.
+   * @readonly
+   * @return {number}
+   */
+  get x() {
+    return this._x;
+  }
 
   /**
-   * InputManager
-   * @constructor
+   * The y coordinate for the vector.
+   * @readonly
+   * @return {number}
    */
-  constructor(messageService) {
-    this._messageService = messageService;
-    document.addEventListener(KEY_DOWN, (event) => this.onInput(event));
+  get y() {
+    return this._y;
+  }
+
+  /**
+   * Point2
+   * @constructor
+   * @param {number} x - The x coordinate for the vector.
+   * @param {number} y - The y coordinate for the vector.
+   */
+  constructor(x, y) {
+    this._x = x;
+    this._y = y;
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
-  onInput(event) {
-    event.preventDefault();
-    this._messageService.send({subject: 'INPUT_EVENT', body: event})
+  /**
+   * Creates a new copy of the vector.
+   * @return {Point2}
+   */
+  copy() {
+    return Point2.create(this._x, this._y);
   }
-  //////////////////////////////////////////////////////////////////////////////
-  // Private Methods
-  //////////////////////////////////////////////////////////////////////////////
-
 
   //////////////////////////////////////////////////////////////////////////////
   // Static Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Static factory method.
+   * Static factory method
    * @static
-   * @return {InputManager}
+   * @param {number} x - The x coordinate for the vector.
+   * @param {number} y - The y coordinate for the vector.
+   * @return {Point2}
    */
-  static create(messageService) {
-    return new InputManager(messageService);
+  static create(x, y) {
+    return new Point2(x, y);
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default InputManager;
+export default Point2;
