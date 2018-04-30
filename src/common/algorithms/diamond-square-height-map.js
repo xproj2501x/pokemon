@@ -1,14 +1,15 @@
 /**
- * Diamond Square
+ * Diamond Square Height Map
  * ===
  *
- * @module diamondSquare
+ * @module diamondSquareHeightMap
  */
 
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
 import PRNG from '../math/prng';
+import {isPowerOf2, scaleArray} from '../utilities/';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
@@ -18,10 +19,10 @@ import PRNG from '../math/prng';
 // Class
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * DiamondSquare
+ * DiamondSquareHeightMap
  * @class
  */
-class DiamondSquare {
+class DiamondSquareHeightMap {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
@@ -41,7 +42,7 @@ class DiamondSquare {
   //////////////////////////////////////////////////////////////////////////////
 
   /**
-   * DiamondSquare
+   * DiamondSquareHeightMap
    * @constructor
    */
   constructor() {
@@ -54,12 +55,13 @@ class DiamondSquare {
   /**
    *
    * @param {number} size -
-   * @param {number} roughness -
-   * @param {number} seed -
+   * @param {?number} roughness -
+   * @param {?number} seed -
    * @return {Array}
    */
-  build(size, roughness, seed) {
-    this._size = Math.pow(2, size) + 1;
+  build(size, roughness=null, seed=null) {
+    if (!isPowerOf2(size - 1)) throw Error(`Error: size ${size} is not a power of 2 + 1`);
+    this._size = size;
     this._map = new Array(this._size * this._size);
     this._roughness = roughness || Math.random();
     this._seed = seed || Math.random();
@@ -68,7 +70,7 @@ class DiamondSquare {
     this._setCell(this._size - 1, this._size - 1, this._seed);
     this._setCell(0, this._size - 1, this._seed);
     this._build();
-    return this._map;
+    return scaleArray(this._map);
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -95,7 +97,7 @@ class DiamondSquare {
   _setCell(xPosition, yPosition, value) {
     const INDEX = xPosition + (yPosition * this._size);
 
-    this._map[INDEX] = this._map[INDEX] || value;
+    this._map[INDEX] = value;
   }
 
   /**
@@ -121,13 +123,14 @@ class DiamondSquare {
 
     for (let idx = 0; idx < this._size - 1; idx += side) {
       for (let jdx = 0; jdx < this._size - 1; jdx += side) {
-        const AVERAGE  = this._calculateAverage([
+        const AVERAGE  = this._calculateValue([
           [idx, jdx],
           [idx + side, jdx + side],
           [idx, jdx + side],
           [idx + side, jdx]
-        ]);
+        ], height);
         const OFFSET = this._prng.generateNormal(0, height);
+
         this._setCell(idx + HALF, jdx + HALF, (AVERAGE + OFFSET));
       }
     }
@@ -142,14 +145,14 @@ class DiamondSquare {
   _runDiamondStep(side, height) {
     const HALF = Math.floor(side / 2);
 
-    for (let idx = 0; idx < this._size - 1; idx += HALF) {
+    for (let idx = 0; idx < this._size; idx += HALF) {
       for (let jdx = (idx + HALF) % side; jdx <= this._size - 1; jdx += side) {
-        const AVERAGE = this._calculateAverage([
+        const AVERAGE = this._calculateValue([
           [idx, jdx + HALF],
           [idx + HALF, jdx],
           [idx, jdx - HALF],
           [idx - HALF, jdx]
-        ]);
+        ], height);
         const OFFSET = this._prng.generateNormal(0, height);
 
         this._setCell(idx, jdx, AVERAGE + OFFSET);
@@ -161,8 +164,9 @@ class DiamondSquare {
    *
    * @private
    * @param {Array} points
+   * @param {number} height
    */
-  _calculateAverage(points) {
+  _calculateValue(points, height) {
     let sum = 0;
     let count = 0;
 
@@ -172,20 +176,43 @@ class DiamondSquare {
     });
     return sum / count;
   }
+
+  _scaleMap() {
+    const SIDE = this._size - 1;
+    let largest = -Infinity;
+    let smallest = Number.MAX_VALUE;
+
+    for (let idx = 0; idx < SIDE; idx++) {
+      for (let jdx = 0; jdx < SIDE; jdx++) {
+        const HEIGHT = this._getCell(idx, jdx);
+
+        if (HEIGHT > largest) largest = HEIGHT;
+        if (HEIGHT < smallest) smallest = HEIGHT;
+      }
+    }
+    const RANGE = largest - smallest;
+
+    for (let idx = 0; idx < SIDE; idx++) {
+      for (let jdx = 0; jdx < SIDE; jdx++) {
+        this._setCell(idx, jdx, (this._getCell(idx, jdx) - smallest) / RANGE);
+      }
+    }
+  }
+
   //////////////////////////////////////////////////////////////////////////////
   // Static Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
    * Static factory method.
    * @static
-   * @return {DiamondSquare}
+   * @return {DiamondSquareHeightMap}
    */
   static create() {
-    return new DiamondSquare();
+    return new DiamondSquareHeightMap();
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default DiamondSquare;
+export default DiamondSquareHeightMap;

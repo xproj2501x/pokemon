@@ -1,133 +1,124 @@
 /**
- * Engine
+ * Precipitation Generator
  * ===
  *
- * @module engine
+ * @module precipitationGenerator
  */
 
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
-import {FRAME_DURATION, MAX_FRAME_SKIP} from './constants';
+import {normalizeArray, getKeysSortedByValue} from '../../common/utilities';
+import Layer from '../models/layer';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
+const PRECIPITATION_LEVEL = {
+  ARID: 0,
+  SEMIARID: 1,
+  MODERATE: 2,
+  HUMID: 3,
+  RAINY: 4
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class
 ////////////////////////////////////////////////////////////////////////////////
+
 /**
- * Engine
+ * PrecipitationGenerator
  * @class
  */
-class Engine {
+class PrecipitationGenerator {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
   /**
    * @private
-   * @type {Logger}
+   * @type {PRNG}
    */
-  _logger;
+  _prng;
 
   /**
    * @private
-   * @type {MessageService}
+   * @type {DiamondSquareHeightMap}
    */
-  _messageService;
+  _diamondSquareHeightMap;
 
   /**
    * @private
-   * @type {Boolean}
+   * @type {World}
    */
-  _isRunning;
-
-  /**
-   * @private
-   * @type {int}
-   */
-  _time;
-
-  /**
-   * @private
-   * @type {int}
-   */
-  _lastTick;
+  _world;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
 
+
   /**
-   * Engine
+   * PrecipitationGenerator
    * @constructor
    */
-  constructor(messageService) {
-    this._messageService = messageService;
-    this._isRunning = false;
-    this._time = 0;
+  constructor(prng, diamondSquareHeightMap) {
+    this._prng = prng;
+    this._diamondSquareHeightMap = diamondSquareHeightMap;
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Starts the engine for the simulation.
+   * Generates an elevation layer for the world.
+   * @param {World} world
    */
-  start() {
-    this._isRunning = true;
-    this._lastTick = Date.now();
-    this._tick();
+  execute(world) {
+    if (world.precipitation) throw Error(`World ${world.id} already contains a layer for precipitation`);
+    this._world = world;
+
+    const ROUGHNESS = this._prng.generateFloatingPoint(0.0, 0.4);
+    const MAP = this._diamondSquareHeightMap.build(this._world.size, ROUGHNESS);
+    const KEYS = getKeysSortedByValue(PRECIPITATION_LEVEL);
+    const THRESHOLDS = this._generateThresholds();
+
+    return Layer.create(this._world.size, MAP, KEYS, THRESHOLDS);
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   *
-   * @private
-   */
-  _tick() {
-    while (this._isRunning) {
-      let delta = 0;
-      const CURRENT_TIME = Date.now();
+  _generateThresholds() {
+    const LENGTH = Object.keys(PRECIPITATION_LEVEL).length;
+    const PERCENTAGE = 1.00 / LENGTH;
+    let thresholds = new Array(LENGTH);
+    let cutoff, marker = 0;
 
-      delta = CURRENT_TIME - this._lastTick;
-      delta = delta > MAX_FRAME_SKIP ? MAX_FRAME_SKIP : delta;
-      while (delta >= FRAME_DURATION) {
-        this._update(delta);
-        this._time += FRAME_DURATION;
-        delta -= FRAME_DURATION;
-      }
-      this._render(delta / FRAME_DURATION);
+    for (let idx = 0; idx < LENGTH; idx++) {
+      do {
+        cutoff = this._prng.generateNormal(PERCENTAGE, 0.05);
+      } while (cutoff <= 0);
+      marker += cutoff;
+      thresholds[idx] = marker;
     }
-  }
-
-  _update(delta) {
-
-  }
-
-  _render(interpolation) {
-
+    return normalizeArray(thresholds);
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Static Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Static factory method.
+   * Static factory method
    * @static
-   * @return {Engine}
+   * @return {PrecipitationGenerator}
    */
-  static create(messageService) {
-
-    return new Engine(messageService);
+  static create(prng, diamondSquareHeightMap) {
+    return new PrecipitationGenerator(prng, diamondSquareHeightMap);
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default Engine;
+export default PrecipitationGenerator;

@@ -29,6 +29,10 @@ const FRAME_DURATION = MILLISECONDS / FPS;
  */
 const MAX_FRAME_SKIP = FRAME_DURATION * 5;
 
+const ENTITY_LIMIT = 255;
+
+const COMPONENT_LIMIT = 64;
+
 /**
  *
  * @enum {number}
@@ -134,7 +138,8 @@ const KEYBOARD = {
   CLOSE_BRACKET: 221,
   SINGLE_QUOTE: 222
 };
+
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export {MILLISECONDS, FPS, FRAME_DURATION, MAX_FRAME_SKIP, KEYBOARD};
+export {MILLISECONDS, FPS, FRAME_DURATION, MAX_FRAME_SKIP, ENTITY_LIMIT, COMPONENT_LIMIT, KEYBOARD};

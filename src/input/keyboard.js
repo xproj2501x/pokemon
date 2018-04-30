@@ -51,6 +51,7 @@ class Keyboard {
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
   onKeyDown(event) {
+    event.preventDefault();
     const KEY_CODE = event.keyCode;
 
     if (this._keys[KEY_CODE]) {

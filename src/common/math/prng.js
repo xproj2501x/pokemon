@@ -12,6 +12,35 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
+/**
+ * The maximum length for a seed value.
+ * @constant
+ * @type {number}
+ */
+const MAX_LENGTH = 64;
+
+/**
+ * The multiplier used when generating a new seed.
+ * @type {number}
+ */
+const MULTIPLIER = 0x5D588B656C078965;
+
+/**
+ * The addend used when generating a new seed.
+ * @type {number}
+ */
+const ADDEND = 0x0000000000269EC3;
+
+/**
+ *
+ * @constant
+ * @enum {number}
+ */
+const FORMAT = {
+  BIN: 2,
+  DEC: 10,
+  HEX: 16
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class
@@ -103,6 +132,10 @@ class PRNG {
       if (random < part) { return id; }
     }
     return id;
+  }
+
+  generateFloatingPoint(min, max) {
+    return this.generateUniform() * (max - min) + min;
   }
 
   //////////////////////////////////////////////////////////////////////////////

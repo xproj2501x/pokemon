@@ -1,68 +1,68 @@
 /**
- * Input Manager
+ * Position Component
  * ===
  *
- * @module inputManager
+ * @module positionComponent
  */
 
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
-import Keyboard from './keyboard';
-import Mouse from './mouse';
+import Component from '../../engine/component';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
-const KEY_DOWN = 'keydown';
-const KEY_UP = 'keyup';
+const KEYS = {
+ x: 'x',
+ y: 'y'
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * InputManager
+ * PositionComponent
  * @class
+ * @extends Component
  */
-class InputManager {
+class PositionComponent extends Component {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   * @private
-   * @type {Logger}
-   */
-  _logger;
-
-  /**
-   * @private
-   * @type {MessageService}
-   */
-  _messageService;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
+  /**
+   * @readonly
+   * @return {int}
+   */
+  get x() {
+    return this.state.x;
+  }
 
   /**
-   * InputManager
-   * @constructor
+   * @readonly
+   * @return {int}
    */
-  constructor(messageService) {
-    this._messageService = messageService;
-    document.addEventListener(KEY_DOWN, (event) => this.onInput(event));
+  get y() {
+    return this.state.y;
+  }
+
+  /**
+   * PositionComponent
+   * @constructor
+   * @param {int} id - The identifier for the parent entity.
+   * @param {object} state - The initial state of the component.
+   */
+  constructor(id, state) { // eslint-disable-line id-length
+    super(id, KEYS, state);
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
-  //////////////////////////////////////////////////////////////////////////////
-  onInput(event) {
-    event.preventDefault();
-    this._messageService.send({subject: 'INPUT_EVENT', body: event})
-  }
-  //////////////////////////////////////////////////////////////////////////////
-  // Private Methods
   //////////////////////////////////////////////////////////////////////////////
 
 
@@ -70,16 +70,18 @@ class InputManager {
   // Static Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Static factory method.
+   * Static factory method
    * @static
-   * @return {InputManager}
+   * @param {int} id - The identifier for the parent entity.
+   * @param {object} state - The initial state of the component.
+   * @return {PositionComponent}
    */
-  static create(messageService) {
-    return new InputManager(messageService);
+  static create(id, state) { // eslint-disable-line id-length
+    return new PositionComponent(id, state);
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default InputManager;
+export default PositionComponent;

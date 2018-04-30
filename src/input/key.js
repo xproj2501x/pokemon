@@ -65,9 +65,9 @@ class Key {
    * Key
    * @constructor
    * @param {number} code - The key code for the key.
-   * @param {?KeyboardEvent} - The keyboard event if there was one.
+   * @param {?KeyboardEvent} event - The keyboard event if there was one.
    */
-  constructor(code, event) {
+  constructor(code, event=null) {
     this._code = code;
     if (event) {
       this.update(event);
