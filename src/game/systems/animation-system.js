@@ -1,13 +1,15 @@
 /**
- * System Manager
+ * Animation System
  * ===
  *
- * @module systemManager
+ * @module animationSystem
  */
 
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
+import System from '../../engine/system';
+import {COMPONENT_TYPE} from '../components';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
@@ -17,54 +19,37 @@
 // Class
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * SystemManager
+ * AnimationSystem
  * @class
+ * @extends System
  */
-class SystemManager {
+class AnimationSystem extends System {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   * @private
-   * @type {ComponentManager}
-   */
-  _componentManager;
-
-  /**
-   * Collection of systems registered for the simulation.
-   * @private
-   * @type {Array}
-   */
-  _systems;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
 
   /**
-   * SystemManager
+   * AnimationSystem
    * @constructor
-   * @param {ComponentManager} componentManager - The component manager for the simulation.
-   * @param {Array} systems
    */
-  constructor(componentManager, systems) {
-    this._messageService = messageService;
-    this._componentManager = componentManager;
-    this._systems = systems;
+  constructor(messageService, componentManager) {
+    super(messageService, componentManager);
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Calls the update method for each registered system.
-   * @public
+   * Updates the state
    */
   update() {
-    this._systems.forEach((system) => {
-      system.update();
-    });
+    const ANIMATION_COMPONENTS = this._componentManager.getComponentsOfType(COMPONENT_TYPE.ANIMATION);
+
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -74,26 +59,21 @@ class SystemManager {
   //////////////////////////////////////////////////////////////////////////////
   // Static Methods
   //////////////////////////////////////////////////////////////////////////////
-
   /**
    * Static factory method.
    *
+   * @static
+   * @param {MessageService} messageService - The message service for the simulation.
    * @param {ComponentManager} componentManager - The component manager for the simulation.
-   * @param {Array} systems -
    *
-   * @return {SystemManager} - A new system manager instance.
+   * @return {AnimationSystem} - A new animation system instance.
    */
-  static create(componentManager, systems) {
-    const SYSTEMS = [];
-
-    systems.forEach((system) => {
-      SYSTEMS.push(system.create(componentManager));
-    });
-    return new SystemManager(componentManager, SYSTEMS);
+  static create(messageService, componentManager) {
+    return new AnimationSystem(messageService, componentManager);
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default SystemManager;
+export default AnimationSystem;

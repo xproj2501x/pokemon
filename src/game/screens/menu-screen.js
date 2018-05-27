@@ -1,13 +1,16 @@
 /**
- * System Manager
+ * Menu Screen
  * ===
  *
- * @module systemManager
+ * @module menuScreen
  */
 
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
+import Screen from '../../user-interface/screen';
+import {KEYBOARD} from '../../engine/constants';
+import {SCREEN} from './constants';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
@@ -17,54 +20,56 @@
 // Class
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * SystemManager
+ * MenuScreen
  * @class
+ * @implements Screen
  */
-class SystemManager {
+class MenuScreen extends Screen {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   * @private
-   * @type {ComponentManager}
-   */
-  _componentManager;
-
-  /**
-   * Collection of systems registered for the simulation.
-   * @private
-   * @type {Array}
-   */
-  _systems;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
 
   /**
-   * SystemManager
+   * MenuScreen
    * @constructor
-   * @param {ComponentManager} componentManager - The component manager for the simulation.
-   * @param {Array} systems
    */
-  constructor(componentManager, systems) {
-    this._messageService = messageService;
-    this._componentManager = componentManager;
-    this._systems = systems;
+  constructor() {
+    super(SCREEN.MENU);
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   * Calls the update method for each registered system.
-   * @public
-   */
-  update() {
-    this._systems.forEach((system) => {
-      system.update();
-    });
+  run(event) {
+    this._locked = true;
+    switch (event) {
+      case KEYBOARD.ENTER:
+      case KEYBOARD.SPACE:
+        this._nextState = SCREEN.PLAY;
+        break;
+      case KEYBOARD.KEY_H:
+        break;
+    }
+  }
+
+  enter() {
+    const CONTAINER = document.getElementById('game');
+
+    CONTAINER.innerHTML = `<i>MENU</i>`;
+  }
+
+  exit() {
+    const CONTAINER = document.getElementById('game');
+
+    this._nextState = null;
+    this._locked = false;
+
+    CONTAINER.innerHTML = ``;
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -74,26 +79,17 @@ class SystemManager {
   //////////////////////////////////////////////////////////////////////////////
   // Static Methods
   //////////////////////////////////////////////////////////////////////////////
-
   /**
    * Static factory method.
    *
-   * @param {ComponentManager} componentManager - The component manager for the simulation.
-   * @param {Array} systems -
-   *
-   * @return {SystemManager} - A new system manager instance.
+   * @return {MenuScreen}
    */
-  static create(componentManager, systems) {
-    const SYSTEMS = [];
-
-    systems.forEach((system) => {
-      SYSTEMS.push(system.create(componentManager));
-    });
-    return new SystemManager(componentManager, SYSTEMS);
+  static create() {
+    return new MenuScreen();
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default SystemManager;
+export default MenuScreen;

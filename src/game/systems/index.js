@@ -1,52 +1,40 @@
 /**
- * Components
+ * Systems
  * ===
  *
- * @module game.Components
+ * @module game.Systems
  */
 
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
-import ComponentManager from '../../engine/component-manager';
-import PositionComponent from './position-component';
-import VelocityComponent from './velocity-component';
+import SystemManager from '../../engine/system-manager';
+import MovementSystem from './movement-system';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * Enum for component type
+ * Enum for system type
  * @readonly
  * @enum {int}
  */
-const COMPONENT_TYPE = {
-  POSITION: 0,
-  VELOCITY: 1,
-  HEALTH: 2,
-  BLOCKING: 3,
-  SPRITE: 4,
-  ANIMATION: 5,
+const SYSTEM_TYPE = {
+  MOVEMENT_SYSTEM: 0
 };
 
 /**
  *
  * @type {Array}
  */
-const TEMPLATES = [
-  PositionComponent,
-  VelocityComponent
+const SYSTEMS = [
+  MovementSystem
 ];
 
-/**
- *
- * @return {ComponentManager}
- */
-const COMPONENT_MANAGER_FACTORY = () => {
-  return ComponentManager.create(TEMPLATES);
+const SYSTEM_MANAGER_FACTORY = (entityManager, componentManager) => {
+  return SystemManager.create()
 };
-
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export {COMPONENT_TYPE, COMPONENT_MANAGER_FACTORY};
+export {SYSTEM_TYPE, SYSTEMS};

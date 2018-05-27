@@ -1,8 +1,8 @@
 /**
- * System Manager
+ * Assemblage Manager
  * ===
  *
- * @module systemManager
+ * @module assemblageManager
  */
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -10,21 +10,23 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////
-// Definitions
-////////////////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////////////////
 // Class
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * SystemManager
+ * AssemblageManager
  * @class
  */
-class SystemManager {
+class AssemblageManager {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
+  /**
+   * @private
+   * @type {EntityManager}
+   */
+  _entityManager;
+
   /**
    * @private
    * @type {ComponentManager}
@@ -32,68 +34,77 @@ class SystemManager {
   _componentManager;
 
   /**
-   * Collection of systems registered for the simulation.
    * @private
    * @type {Array}
    */
-  _systems;
+  _templates;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
 
   /**
-   * SystemManager
+   * AssemblageManager
    * @constructor
-   * @param {ComponentManager} componentManager - The component manager for the simulation.
-   * @param {Array} systems
+   * @param {EntityManager} entityManager -
+   * @param {ComponentManager} componentManager -
+   * @param {Array} templates -
    */
-  constructor(componentManager, systems) {
-    this._messageService = messageService;
+  constructor(entityManager, componentManager, templates) {
+    this._entityManager = entityManager;
     this._componentManager = componentManager;
-    this._systems = systems;
+    this._templates = templates;
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Calls the update method for each registered system.
+   * Creates an assemblage of the specified type
+   *
    * @public
+   * @param {int} type - The type of the assemblage.
    */
-  update() {
-    this._systems.forEach((system) => {
-      system.update();
-    });
+  createAssemblage(type, data) {
+    const TEMPLATE = this._getTemplate(type);
+
+    data = data || [];
+    TEMPLATE.create(this._entityManager, this._componentManager, data);
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
   //////////////////////////////////////////////////////////////////////////////
+  /**
+   * @private
+   * @param {int} type - The type of the assemblage template.
+   *
+   * @return {Assemblage} - The constructor template for the assemblage.
+   */
+  _getTemplate(type) {
+    if (!this._templates[type]) throw new Error(`Error: Assemblage template ${type} does not exist.`);
+    return this._templates[type];
+  }
 
   //////////////////////////////////////////////////////////////////////////////
   // Static Methods
   //////////////////////////////////////////////////////////////////////////////
-
   /**
    * Static factory method.
    *
-   * @param {ComponentManager} componentManager - The component manager for the simulation.
-   * @param {Array} systems -
+   * @static
+   * @param {EntityManager} entityManager -
+   * @param {ComponentManager} componentManager -
+   * @param {Array} templates -
    *
-   * @return {SystemManager} - A new system manager instance.
+   * @return {AssemblageManager} - A new assemblage manager instance.
    */
-  static create(componentManager, systems) {
-    const SYSTEMS = [];
-
-    systems.forEach((system) => {
-      SYSTEMS.push(system.create(componentManager));
-    });
-    return new SystemManager(componentManager, SYSTEMS);
+  static create(entityManager, componentManager, templates) {
+    return new AssemblageManager(entityManager, componentManager, templates);
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default SystemManager;
+export default AssemblageManager;

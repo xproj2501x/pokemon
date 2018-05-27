@@ -1,32 +1,26 @@
 /**
- * Components
+ * Assemblages
  * ===
  *
- * @module game.Components
+ * @module game.Assemblages
  */
 
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
-import ComponentManager from '../../engine/component-manager';
-import PositionComponent from './position-component';
-import VelocityComponent from './velocity-component';
+import AssemblageManager from '../../engine/assemblage-manager';
+import PlayerAssemblage from './player-assemblage';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * Enum for component type
+ * Enum for assemblage type
  * @readonly
  * @enum {int}
  */
-const COMPONENT_TYPE = {
-  POSITION: 0,
-  VELOCITY: 1,
-  HEALTH: 2,
-  BLOCKING: 3,
-  SPRITE: 4,
-  ANIMATION: 5,
+const ASSEMBLAGE_TYPE = {
+  PLAYER: 0
 };
 
 /**
@@ -34,19 +28,14 @@ const COMPONENT_TYPE = {
  * @type {Array}
  */
 const TEMPLATES = [
-  PositionComponent,
-  VelocityComponent
+  PlayerAssemblage
 ];
 
-/**
- *
- * @return {ComponentManager}
- */
-const COMPONENT_MANAGER_FACTORY = () => {
-  return ComponentManager.create(TEMPLATES);
+const ASSEMBLAGE_MANAGER_FACTORY = (entityManager, componentManager) => {
+  return AssemblageManager.create(entityManager, componentManager, TEMPLATES);
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export {COMPONENT_TYPE, COMPONENT_MANAGER_FACTORY};
+export {ASSEMBLAGE_TYPE, ASSEMBLAGE_MANAGER_FACTORY};

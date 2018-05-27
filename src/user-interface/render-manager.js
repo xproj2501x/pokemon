@@ -1,8 +1,8 @@
 /**
- * System Manager
+ * Render Manager
  * ===
  *
- * @module systemManager
+ * @module renderManager
  */
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -17,54 +17,38 @@
 // Class
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * SystemManager
+ * RenderManager
  * @class
  */
-class SystemManager {
+class RenderManager {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   * @private
-   * @type {ComponentManager}
-   */
-  _componentManager;
-
-  /**
-   * Collection of systems registered for the simulation.
-   * @private
-   * @type {Array}
-   */
-  _systems;
+  _container;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
 
   /**
-   * SystemManager
+   * RenderManager
    * @constructor
-   * @param {ComponentManager} componentManager - The component manager for the simulation.
-   * @param {Array} systems
+   * @param {HTMLElement} container -
    */
-  constructor(componentManager, systems) {
-    this._messageService = messageService;
-    this._componentManager = componentManager;
-    this._systems = systems;
+  constructor(container) {
+    this._container = container;
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   * Calls the update method for each registered system.
-   * @public
-   */
-  update() {
-    this._systems.forEach((system) => {
-      system.update();
-    });
+  refresh() {
+
+  }
+
+  render(sprites) {
+
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -74,26 +58,20 @@ class SystemManager {
   //////////////////////////////////////////////////////////////////////////////
   // Static Methods
   //////////////////////////////////////////////////////////////////////////////
-
   /**
-   * Static factory method.
+   * Static factory method
    *
-   * @param {ComponentManager} componentManager - The component manager for the simulation.
-   * @param {Array} systems -
+   * @static
+   * @param {HTMLElement} container - The parent element of the canvas.
    *
-   * @return {SystemManager} - A new system manager instance.
+   * @retrun {RenderManager} - A new render manager instance.
    */
-  static create(componentManager, systems) {
-    const SYSTEMS = [];
-
-    systems.forEach((system) => {
-      SYSTEMS.push(system.create(componentManager));
-    });
-    return new SystemManager(componentManager, SYSTEMS);
+  static create(container) {
+    return new RenderManager(container);
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default SystemManager;
+export default RenderManager;

@@ -56,11 +56,14 @@ class LogService {
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Registers a new logger with the service
-   * @param {string} context - The context of the instance registering with the logger
-   * @return {Logger}
+   * Registers a new logger with the service.
+   * @public
+   *
+   * @param {string} context - The context of the instance registering with the logger.
+   *
+   * @return {Logger} - A new logger instance.
    */
-  register(context) {
+  registerLogger(context) {
     const LOGGER = Logger.create(context, this._log);
 
     this._loggers.push(LOGGER);
@@ -74,11 +77,15 @@ class LogService {
   // Static Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Static factory method
-   * @return {LogService}
+   * Static factory method.
+   * @static
+   *
+   * @param {int} level - The minimum level for log messages.
+   *
+   * @return {LogService} - A new log service instance.
    */
-  static create() {
-    const LOG = Log.create();
+  static create(level) {
+    const LOG = Log.create(level);
     return new LogService(LOG);
   }
 }

@@ -19,8 +19,9 @@ import Log from './log';
  */
 const LEVEL = {
   LOG: 'LOG',
-  WARN: 'WARN',
   INFO: 'INFO',
+  DEBUG: 'DEBUG',
+  WARN: 'WARN',
   ERROR: 'ERROR'
 };
 
@@ -57,6 +58,7 @@ class Logger {
   /**
    * Logger
    * @constructor
+   *
    * @param {string} context - the name of the constructor for the calling class
    * @param {Log} log
    */
@@ -69,62 +71,70 @@ class Logger {
   // Public Methods
   ////////////////////////////////////////////////////////////////////////////////
   /**
-   * Writes a log message to the log
-   * @param {string} message - the message to be written
+   * Writes a log message to the log.
+   * @public
+   *
+   * @param {string} message - The message to be written.
    */
   log(message) {
-    this._write(LEVEL.LOG, message);
+    this._log.write(this._context, LEVEL.LOG, message);
   }
 
   /**
-   * Writes a warning message to the log
-   * @param {string} message - the message to be written
+   * Writes a debug message to the log.
+   * @public
+   *
+   * @param {string} message - The message to be written.
+   */
+  debug(message) {
+    this._log.write(this._context, LEVEL.DEBUG, message);
+  }
+
+  /**
+   * Writes a warning message to the log.
+   * @public
+   *
+   * @param {string} message - The message to be written.
    */
   warn(message) {
-    this._write(LEVEL.WARN, message);
+    this._log.write(this._context, LEVEL.WARN, message);
   }
 
   /**
-   * Writes an info message to the log
-   * @param {string} message - the message to be written
+   * Writes an info message to the log.
+   * @public
+   *
+   * @param {string} message - The message to be written.
    */
   info(message) {
-    this._write(LEVEL.INFO, message);
+    this._log.write(this._context, LEVEL.INFO, message);
   }
 
   /**
-   * Writes an error message to the log
-   * @param {string} message - the message to be written
+   * Writes an error message to the log.
+   * @public
+   *
+   * @param {string} message - The message to be written.
    */
   error(message) {
-    this._write(LEVEL.ERROR, message);
+    this._log.write(this._context, LEVEL.ERROR, message);
   }
 
   ////////////////////////////////////////////////////////////////////////////////
   // Private Methods
   ////////////////////////////////////////////////////////////////////////////////
-  /**
-   * Writes a message to the log
-   * @param {string} level - the level of the message
-   * @param {string} message - the message to be written
-   */
-  _write(level, message) {
-    if (typeof message === 'object') {
-      this._log.write(`[${this._context}] ${level}:`);
-      this._log.write(JSON.stringify(message));
-    } else {
-      this._log.write(`[${this._context}] ${level}: ${message}`);
-    }
-  }
 
   ////////////////////////////////////////////////////////////////////////////////
   // Static Methods
   ////////////////////////////////////////////////////////////////////////////////
   /**
-   * Static factory method
-   * @param {string} context - the name of the constructor for the calling class
-   * @param {Log} log -
-   * @return {Logger}
+   * Static factory method.
+   * @static
+   *
+   * @param {string} context - The name of the constructor for the calling class.
+   * @param {Log} log - The log for application.
+   *
+   * @return {Logger} - A new logger instance.
    */
   static create(context, log) {
     return new Logger(context, log);

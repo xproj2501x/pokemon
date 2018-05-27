@@ -33,6 +33,9 @@ class ComponentManager {
 
   /**
    * A collection of component templates.
+   *
+   * @private
+   * @type {Array}
    */
   _templates;
 
@@ -43,9 +46,11 @@ class ComponentManager {
   /**
    * ComponentManager
    * @constructor
+   * @param {Array} templates - A collection of component templates.
    */
-  constructor() {
+  constructor(templates) {
     this._components = new Array(COMPONENT_LIMIT).fill(null);
+    this._templates = templates;
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -60,13 +65,15 @@ class ComponentManager {
    * @param {object} state - The initial state for the component.
    */
   createComponent(type, entity, state) {
+    const TEMPLATE = this._getTempalte(type);
+
     if (!this._components[type]) {
       this._components[type] = new Array(ENTITY_LIMIT).fill(null);
     }
     if (this.hasComponent(type, entity)) {
       throw new Error(`Error: Component type ${type} is already attached to entity id ${entity}.`)
     }
-    this._components[type][entity] = Component.create(entity, state);
+    this._components[type][entity] = TEMPLATE.create(entity, state);
   }
 
   /**
@@ -97,7 +104,7 @@ class ComponentManager {
   }
 
   /**
-   * Destroys a component of the parent entity and specified type.
+   * Destroys a component with the parent entity and specified type.
    *
    * @public
    * @param {int} type - The type of the component.
@@ -111,7 +118,7 @@ class ComponentManager {
   }
 
   /**
-   * Updates a component of the parent entity and specified type with the new state.
+   * Updates a component with the parent entity and specified type with the new state.
    *
    * @public
    * @param {int} type - The type of the component.
@@ -142,15 +149,34 @@ class ComponentManager {
   }
 
   //////////////////////////////////////////////////////////////////////////////
+  // Private Methods
+  //////////////////////////////////////////////////////////////////////////////
+  /**
+   * Gets a component template of the specified type.
+   *
+   * @private
+   * @param {int} type - The type of the component template.
+   *
+   * @return {Component} The component template.
+   */
+  _getTempalte(type) {
+    if (!this._templates[type]) throw new Error(`Error: Component template ${type} does not exist.`);
+    return this._templates[type];
+  }
+
+  //////////////////////////////////////////////////////////////////////////////
   // Static Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
    * Static factory method
+   *
    * @static
+   * @param {Array} templates - A collection of component templates
+   *
    * @return {ComponentManager}
    */
-  static create() {
-    return new ComponentManager();
+  static create(templates) {
+    return new ComponentManager(templates);
   }
 }
 

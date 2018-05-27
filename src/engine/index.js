@@ -56,6 +56,11 @@ class Engine {
    */
   _lastTick;
 
+  /**
+   * @private
+   */
+  _frameId;
+
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
@@ -63,11 +68,15 @@ class Engine {
   /**
    * Engine
    * @constructor
+   *
+   * @param {LogService} logService - The log service for the simulation.
+   * @param {MessageService} messageService - The message service for the simulation.
    */
-  constructor(messageService) {
-    this._messageService = messageService;
+  constructor(logService, messageService) {
     this._isRunning = false;
     this._time = 0;
+    this._logger = logService.registerLogger('Engine');
+    this._messageService = messageService;
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -75,11 +84,23 @@ class Engine {
   //////////////////////////////////////////////////////////////////////////////
   /**
    * Starts the engine for the simulation.
+   * @public
    */
   start() {
     this._isRunning = true;
     this._lastTick = Date.now();
-    this._tick();
+    this._logger.info(`Engine started`);
+    this._frameId = requestAnimationFrame((raf) => {
+      this._tick(raf);
+    });
+  }
+
+  /**
+   * Stops the engine.
+   */
+  stop() {
+    this._isRunning = false;
+    cancelAnimationFrame(this._frameId);
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -89,24 +110,30 @@ class Engine {
    *
    * @private
    */
-  _tick() {
-    while (this._isRunning) {
-      let delta = 0;
+  _tick(raf) {
+    // Needs to call the render loop and draw the next frame every time
+    // If there is not input then the update loop needs to handle only animation / display systems
+    // If there is input then all systems should update
+    if (this._isRunning) {
       const CURRENT_TIME = Date.now();
+      let delta = CURRENT_TIME - this._lastTick;
 
-      delta = CURRENT_TIME - this._lastTick;
       delta = delta > MAX_FRAME_SKIP ? MAX_FRAME_SKIP : delta;
-      while (delta >= FRAME_DURATION) {
+      if (delta >= FRAME_DURATION) {
         this._update(delta);
-        this._time += FRAME_DURATION;
-        delta -= FRAME_DURATION;
+        this._render(delta);
+        this._lastTick = CURRENT_TIME;
       }
-      this._render(delta / FRAME_DURATION);
+      this._frameId = requestAnimationFrame((raf) => {
+        this._tick(raf);
+      });
     }
   }
 
   _update(delta) {
-
+    while (delta >= FRAME_DURATION) {
+      delta -= FRAME_DURATION;
+    }
   }
 
   _render(interpolation) {
@@ -119,11 +146,14 @@ class Engine {
   /**
    * Static factory method.
    * @static
-   * @return {Engine}
+   *
+   * @param {LogService} logService - The log service for the simulation.
+   * @param {MessageService} messageService -
+   *
+   * @return {Engine} - A new engine instance.
    */
-  static create(messageService) {
-
-    return new Engine(messageService);
+  static create(logService, messageService) {
+    return new Engine(logService, messageService);
   }
 }
 

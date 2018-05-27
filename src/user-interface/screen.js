@@ -1,8 +1,8 @@
 /**
- * System Manager
+ * Screen
  * ===
  *
- * @module systemManager
+ * @module screen
  */
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -17,54 +17,50 @@
 // Class
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * SystemManager
+ * Screen
  * @class
  */
-class SystemManager {
+class Screen {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
   /**
    * @private
-   * @type {ComponentManager}
+   * @type {string}
    */
-  _componentManager;
-
-  /**
-   * Collection of systems registered for the simulation.
-   * @private
-   * @type {Array}
-   */
-  _systems;
+  _name;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
 
   /**
-   * SystemManager
+   * Screen
    * @constructor
-   * @param {ComponentManager} componentManager - The component manager for the simulation.
-   * @param {Array} systems
+   * @param {string} name - The name of the screen.
    */
-  constructor(componentManager, systems) {
-    this._messageService = messageService;
-    this._componentManager = componentManager;
-    this._systems = systems;
+  constructor(name) {
+    this._name = name;
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   * Calls the update method for each registered system.
-   * @public
-   */
-  update() {
-    this._systems.forEach((system) => {
-      system.update();
-    });
+  enter() {
+
+  }
+
+  exit() {
+
+  }
+
+  handleInput() {
+
+  }
+
+  render() {
+
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -72,28 +68,12 @@ class SystemManager {
   //////////////////////////////////////////////////////////////////////////////
 
   //////////////////////////////////////////////////////////////////////////////
-  // Static Methods
+  // Private Methods
   //////////////////////////////////////////////////////////////////////////////
 
-  /**
-   * Static factory method.
-   *
-   * @param {ComponentManager} componentManager - The component manager for the simulation.
-   * @param {Array} systems -
-   *
-   * @return {SystemManager} - A new system manager instance.
-   */
-  static create(componentManager, systems) {
-    const SYSTEMS = [];
-
-    systems.forEach((system) => {
-      SYSTEMS.push(system.create(componentManager));
-    });
-    return new SystemManager(componentManager, SYSTEMS);
-  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default SystemManager;
+export default Screen;

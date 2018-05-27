@@ -35,6 +35,17 @@ const COMPONENT_LIMIT = 64;
 
 /**
  *
+ * @enum {int}
+ */
+const MESSAGE = {
+  CREATE_ENTITY: 0,
+  DESTROY_ENTITY: 1,
+  CREATE_COMPONENT: 2,
+  DESTROY_COMPONENT: 3
+};
+
+/**
+ *
  * @enum {number}
  */
 const KEYBOARD = {
@@ -142,4 +153,4 @@ const KEYBOARD = {
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export {MILLISECONDS, FPS, FRAME_DURATION, MAX_FRAME_SKIP, ENTITY_LIMIT, COMPONENT_LIMIT, KEYBOARD};
+export {MILLISECONDS, FPS, FRAME_DURATION, MAX_FRAME_SKIP, ENTITY_LIMIT, COMPONENT_LIMIT, MESSAGE, KEYBOARD};

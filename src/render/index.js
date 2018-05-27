@@ -9,10 +9,12 @@
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
 
-
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
+const SCREEN_WIDTH = 80;
+const SCREEN_HEIGHT = 60;
+const UNIT = 10;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class
@@ -26,7 +28,7 @@ class RenderManager {
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
-  _canvas;
+  _container;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
@@ -35,52 +37,30 @@ class RenderManager {
   /**
    * RenderManager
    * @constructor
+   * @param {HTMLElement} container - The container element for the canvas.
    */
-  constructor(canvas) {
-    this._canvas = canvas;
+  constructor(container) {
+    this._container = container;
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
-  render(sprites) {
-    const CONTEXT = this._canvas.getContext('2d');
+  render(sprite) {
+    const CANVAS = document.createElement('canvas');
+    const CONTEXT = CANVAS.getContext('2d');
 
+    CANVAS.height = SCREEN_HEIGHT * UNIT;
+    CANVAS.width = SCREEN_WIDTH * UNIT;
     CONTEXT.save();
-    for (let idx = 0; idx < 513; idx++) {
-      for (let jdx = 0; jdx < 513; jdx++) {
-        const TILE = sprites[idx + (jdx * 513)];
-
-        switch(TILE) {
-          case 1 << 0:
-            CONTEXT.fillStyle = '#0000CD';
-            break;
-          case 1 << 1:
-            CONTEXT.fillStyle = '#4169E1';
-            break;
-          case 1 << 2:
-            CONTEXT.fillStyle = '#DEB887';
-            break;
-          case 1 << 3:
-            CONTEXT.fillStyle = '#606030';
-            break;
-          case 1 << 4:
-            CONTEXT.fillStyle = '#EF7347';
-            break;
-          case 1 << 5:
-            CONTEXT.fillStyle = '#809080';
-            break;
-          case 1 << 6:
-            CONTEXT.fillStyle = '#595959';
-            break;
-          case 1 << 7:
-            CONTEXT.fillStyle = '#FFFFFF';
-            break;
-        }
-        CONTEXT.fillRect(idx * 3, jdx * 3, 3, 3);
-      }
-    }
+    CONTEXT.fillStyle = 'rgb(255, 0, 0)';
+    CONTEXT.rect(sprite.x * UNIT, sprite.y * UNIT, 10, 10);
+    CONTEXT.fill();
     CONTEXT.restore();
+    if (this._container.firstChild) {
+      this._container.removeChild(this._container.firstChild);
+    }
+    this._container.append(CANVAS);
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -92,15 +72,12 @@ class RenderManager {
   //////////////////////////////////////////////////////////////////////////////
   /**
    * Static factory method
-   * @param {HTMLElement} container - The parent element of the canvas.
+   * @param {string} containerId - The id for the container element.
    */
-  static create(container) {
-    const CANVAS = document.createElement('canvas');
+  static create(containerId) {
+    const CONTAINER = document.getElementById(containerId);
 
-    CANVAS.height = 1539;
-    CANVAS.width = 1539;
-    container.appendChild(CANVAS);
-    return new RenderManager(CANVAS);
+    return new RenderManager(CONTAINER);
   }
 }
 
