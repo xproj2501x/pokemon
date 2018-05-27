@@ -1,99 +1,74 @@
 /**
- * System Manager
+ * Animation Component
  * ===
  *
- * @module systemManager
+ * @module animationComponent
  */
 
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
+import Component from '../../engine/component';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
+const KEYS = {
+  x: 'x',
+  y: 'y'
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * SystemManager
+ * AnimationComponent
  * @class
+ * @extends Component
  */
-class SystemManager {
+class AnimationComponent extends Component {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   * @private
-   * @type {ComponentManager}
-   */
-  _componentManager;
-
-  /**
-   * Collection of systems registered for the simulation.
-   * @private
-   * @type {Array}
-   */
-  _systems;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
 
   /**
-   * SystemManager
+   * AnimationComponent
    * @constructor
-   * @param {ComponentManager} componentManager - The component manager for the simulation.
-   * @param {Array} systems
+   * @param {int} id - The identifier for the parent entity.
+   * @param {object} state - The initial state of the component.
    */
-  constructor(componentManager, systems) {
-    this._messageService = messageService;
-    this._componentManager = componentManager;
-    this._systems = systems;
+  constructor(id, state) { // eslint-disable-line id-length
+    super(id, KEYS, state);
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   * Calls the update method for each registered system.
-   * @public
-   */
-  update() {
-    this._systems.forEach((system) => {
-      system.update();
-    });
-  }
 
-  //////////////////////////////////////////////////////////////////////////////
-  // Private Methods
-  //////////////////////////////////////////////////////////////////////////////
 
   //////////////////////////////////////////////////////////////////////////////
   // Static Methods
   //////////////////////////////////////////////////////////////////////////////
-
   /**
-   * Static factory method.
+   * Static factory method
    *
-   * @param {ComponentManager} componentManager - The component manager for the simulation.
-   * @param {Array} systems -
+   * @static
+   * @param {int} id - The identifier for the parent entity.
+   * @param {object} state - The initial state of the component.
    *
-   * @return {SystemManager} - A new system manager instance.
+   * @return {AnimationComponent} - A new health component instance.
    */
-  static create(componentManager, systems) {
-    const SYSTEMS = [];
-
-    systems.forEach((system) => {
-      SYSTEMS.push(system.create(componentManager));
-    });
-    return new SystemManager(componentManager, SYSTEMS);
+  static create(id, state) { // eslint-disable-line id-length
+    return new AnimationComponent(id, state);
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default SystemManager;
+export default AnimationComponent;

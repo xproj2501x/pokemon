@@ -1,8 +1,8 @@
 /**
- * System Manager
+ * Screen Manager
  * ===
  *
- * @module systemManager
+ * @module screenManager
  */
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -17,83 +17,60 @@
 // Class
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * SystemManager
+ * ScreenManager
  * @class
  */
-class SystemManager {
+class ScreenManager {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
   /**
    * @private
-   * @type {ComponentManager}
+   * @type {object}
    */
-  _componentManager;
+  _screens;
 
   /**
-   * Collection of systems registered for the simulation.
    * @private
-   * @type {Array}
+   * @type {Screen}
    */
-  _systems;
+  _currentScreen;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
 
   /**
-   * SystemManager
+   * ScreenManager
    * @constructor
-   * @param {ComponentManager} componentManager - The component manager for the simulation.
-   * @param {Array} systems
    */
-  constructor(componentManager, systems) {
-    this._messageService = messageService;
-    this._componentManager = componentManager;
-    this._systems = systems;
+  constructor() {
+
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   * Calls the update method for each registered system.
-   * @public
-   */
-  update() {
-    this._systems.forEach((system) => {
-      system.update();
-    });
+  handleInput(input) {
+
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
   //////////////////////////////////////////////////////////////////////////////
 
+
   //////////////////////////////////////////////////////////////////////////////
-  // Static Methods
+  // Private Methods
   //////////////////////////////////////////////////////////////////////////////
 
-  /**
-   * Static factory method.
-   *
-   * @param {ComponentManager} componentManager - The component manager for the simulation.
-   * @param {Array} systems -
-   *
-   * @return {SystemManager} - A new system manager instance.
-   */
-  static create(componentManager, systems) {
-    const SYSTEMS = [];
-
-    systems.forEach((system) => {
-      SYSTEMS.push(system.create(componentManager));
-    });
-    return new SystemManager(componentManager, SYSTEMS);
+  static create() {
+    return new ScreenManager();
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default SystemManager;
+export default ScreenManager;

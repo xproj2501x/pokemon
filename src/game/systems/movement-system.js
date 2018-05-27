@@ -28,7 +28,6 @@ class MovementSystem extends System {
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
-  _componentManager;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
@@ -38,8 +37,8 @@ class MovementSystem extends System {
    * MovementSystem
    * @constructor
    */
-  constructor() {
-    super();
+  constructor(componentManager) {
+    super(componentManager);
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -52,15 +51,48 @@ class MovementSystem extends System {
     const VELOCITY_COMPONENTS = this._componentManager.getComponentsOfType(COMPONENT_TYPE.VELOCITY);
     const POSITION_COMPONENTS = this._componentManager.getComponentsOfType(COMPONENT_TYPE.POSITION);
 
-    for (const VELOCITY in VELOCITY_COMPONENTS) {
-      const OLD_POSITION = POSITION_COMPONENTS[VELOCITY.id];
-      const NEW_POSITION = {x: OLD_POSITION.x + VELOCITY.dx, y: OLD_POSITION.y + VELOCITY.dy};
-    }
+    VELOCITY_COMPONENTS.forEach((velocity) => {
+      const OLD_POSITION = POSITION_COMPONENTS[velocity.id];
+      const NEW_POSITION = {x: OLD_POSITION.x + velocity.dx, y: OLD_POSITION.y + velocity.dy};
+      const MATCHES = POSITION_COMPONENTS.filter((position) => {
+        return position.x === NEW_POSITION.x && position.y === NEW_POSITION.y;
+      });
+
+      if (MATCHES) {
+        MATCHES.forEach((match) => {
+          if (this._componentManager.hasComponent(COMPONENT_TYPE.BLOCKING, match.id)) {
+            this._componentManager.destroyComponent(COMPONENT_TYPE.VELOCITY, velocity.id);
+          }
+          if (this._componentManager.hasComponent(COMPONENT_TYPE.HEALTH, match.id)) {
+            this._componentManager.destroyComponent(COMPONENT_TYPE.VELOCITY, velocity.id);
+            console.log('combat');
+          }
+        });
+      } else {
+        this._componentManager.updateComponent(COMPONENT_TYPE.POSITION, velocity.id, NEW_POSITION);
+        this._componentManager.destroyComponent(COMPONENT_TYPE.VELOCITY, velocity.id);
+      }
+    });
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
   //////////////////////////////////////////////////////////////////////////////
+
+  //////////////////////////////////////////////////////////////////////////////
+  // Static Methods
+  //////////////////////////////////////////////////////////////////////////////
+  /**
+   * Static factory method.
+   *
+   * @static
+   * @param {ComponentManager} componentManager - The component manager for the simulation.
+   *
+   * @return {MovementSystem} - A new movement system instance.
+   */
+  static create(componentManager) {
+    return new MovementSystem(componentManager);
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -1,13 +1,14 @@
 /**
- * System Manager
+ * User Interface
  * ===
  *
- * @module systemManager
+ * @module userInterface
  */
 
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
+import ScreenManager from './screen-manager';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
@@ -17,83 +18,76 @@
 // Class
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * SystemManager
+ * UserInterface
  * @class
  */
-class SystemManager {
+class UserInterface {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
   /**
    * @private
-   * @type {ComponentManager}
+   * @type {boolean}
    */
-  _componentManager;
+  _locked;
 
   /**
-   * Collection of systems registered for the simulation.
    * @private
-   * @type {Array}
+   * @type {HTMLElement}
    */
-  _systems;
+  _container;
+
+  /**
+   * @private
+   * @type {ScreenManager}
+   */
+  _screenManager;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
 
   /**
-   * SystemManager
+   * UserInterface
    * @constructor
-   * @param {ComponentManager} componentManager - The component manager for the simulation.
-   * @param {Array} systems
+   * @param {HTMLElement} container -
    */
-  constructor(componentManager, systems) {
-    this._messageService = messageService;
-    this._componentManager = componentManager;
-    this._systems = systems;
+  constructor(container) {
+    this._locked = false;
+    this._container = container;
+    this._screenManager = null;
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   * Calls the update method for each registered system.
-   * @public
-   */
-  update() {
-    this._systems.forEach((system) => {
-      system.update();
-    });
-  }
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
   //////////////////////////////////////////////////////////////////////////////
+  _handleInput(event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
 
   //////////////////////////////////////////////////////////////////////////////
   // Static Methods
   //////////////////////////////////////////////////////////////////////////////
-
   /**
    * Static factory method.
-   *
-   * @param {ComponentManager} componentManager - The component manager for the simulation.
-   * @param {Array} systems -
-   *
-   * @return {SystemManager} - A new system manager instance.
+   * @static
+   * @param {string} containerId - The id of the container element for the user interface.
+   * @return {UserInterface}
    */
-  static create(componentManager, systems) {
-    const SYSTEMS = [];
+  static create(containerId) {
+    const CONTAINER = document.getElementById(containerId);
 
-    systems.forEach((system) => {
-      SYSTEMS.push(system.create(componentManager));
-    });
-    return new SystemManager(componentManager, SYSTEMS);
+    return new UserInterface(CONTAINER);
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default SystemManager;
+export default UserInterface;

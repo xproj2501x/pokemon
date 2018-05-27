@@ -1,71 +1,58 @@
 /**
- * System Manager
+ * Player Assemblage
  * ===
  *
- * @module systemManager
+ * @module playerAssemblage
  */
 
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
+import Assemblage from '../../engine/assemblage';
+import {COMPONENT_TYPE} from '../components';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
+const DEFAULTS = [
+  {
+    type: COMPONENT_TYPE.HEALTH,
+    state: {
+      x: 0,
+      y: 0
+    }
+  }
+];
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * SystemManager
+ * PlayerAssemblage
  * @class
+ * @extends Assemblage
  */
-class SystemManager {
+class PlayerAssemblage extends Assemblage {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   * @private
-   * @type {ComponentManager}
-   */
-  _componentManager;
-
-  /**
-   * Collection of systems registered for the simulation.
-   * @private
-   * @type {Array}
-   */
-  _systems;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
 
   /**
-   * SystemManager
+   * PlayerAssemblage
    * @constructor
-   * @param {ComponentManager} componentManager - The component manager for the simulation.
-   * @param {Array} systems
    */
-  constructor(componentManager, systems) {
-    this._messageService = messageService;
-    this._componentManager = componentManager;
-    this._systems = systems;
+  constructor(entityManager, componentManager) {
+    super(entityManager, componentManager, DEFAULTS);
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   * Calls the update method for each registered system.
-   * @public
-   */
-  update() {
-    this._systems.forEach((system) => {
-      system.update();
-    });
-  }
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
@@ -74,26 +61,14 @@ class SystemManager {
   //////////////////////////////////////////////////////////////////////////////
   // Static Methods
   //////////////////////////////////////////////////////////////////////////////
-
-  /**
-   * Static factory method.
-   *
-   * @param {ComponentManager} componentManager - The component manager for the simulation.
-   * @param {Array} systems -
-   *
-   * @return {SystemManager} - A new system manager instance.
-   */
-  static create(componentManager, systems) {
-    const SYSTEMS = [];
-
-    systems.forEach((system) => {
-      SYSTEMS.push(system.create(componentManager));
-    });
-    return new SystemManager(componentManager, SYSTEMS);
+  static create(entityManager, componentManager, data) {
+    const ASSEMBLAGE = new PlayerAssemblage(entityManager, componentManager);
+    ASSEMBLAGE.build(data);
   }
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default SystemManager;
+export default PlayerAssemblage;

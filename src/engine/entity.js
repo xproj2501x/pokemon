@@ -106,7 +106,7 @@ class Entity {
    * @return {Entity} - A new entity instance.
    */
   static create(id) { // eslint-disable-line id-length
-    if (!id) throw new Error(`Error: entity id cannot be null`);
+    if (!id && id !== 0) throw new Error(`Error: entity id cannot be null`);
     return new Entity(id);
   }
 }

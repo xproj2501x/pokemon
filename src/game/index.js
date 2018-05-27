@@ -8,18 +8,17 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
-import LogService from '../common/services/log';
-import MessageService from '../common/services/message';
-import Engine from '../engine';
-import StateManager from '../engine/state-manager';
-import InputManager from '../input';
-import {STATE} from './states/constants';
-import MenuState from './states/menu-state';
-import PlayState from './states/play-state';
+import RenderManager from '../render';
+import {KEYBOARD} from '../engine/constants';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
+const SCREEN_WIDTH = 80;
+const SCREEN_HEIGHT = 60;
+const UNIT = 10;
+const FPS = 20;
+const CONTAINER_ID = 'game';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class
@@ -33,17 +32,13 @@ class Game {
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
-  _logger;
-  _messageService;
   /**
-   * The engine for the simulation.
    * @private
-   * @type {Engine}
+   * @type {boolean}
    */
-  _engine;
-
-  _stateManager;
-  _inputManager;
+  _debug;
+  _renderManager;
+  _player;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
@@ -53,11 +48,10 @@ class Game {
    * Game
    * @constructor
    */
-  constructor() {
-    this._messageService = MessageService.create();
-    this._engine = Engine.create(this._messageService);
-    this._inputManager = InputManager.create(this._messageService)
-    this._init();
+  constructor(debug) {
+    this._debug = debug;
+    this._renderManager = RenderManager.create(CONTAINER_ID);
+    document.addEventListener('keydown', (event) => this._handleInput(event));
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -67,19 +61,36 @@ class Game {
    * Starts the simulation.
    */
   start() {
-
+    this._player = {
+      x: Math.floor(SCREEN_WIDTH / 2),
+      y: Math.floor(SCREEN_HEIGHT / 2)
+    };
+    this._renderManager.render(this._player);
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
   //////////////////////////////////////////////////////////////////////////////
-  _init() {
-    const STATES = {
-      MENU: MenuState.create(),
-      PLAY: PlayState.create()
+  _handleInput(event) {
+    switch (event.keyCode) {
+      case KEYBOARD.UP_ARROW:
+      case KEYBOARD.KEY_W:
+        this._player.y -= 1;
+        break;
+      case KEYBOARD.DOWN_ARROW:
+      case KEYBOARD.KEY_S:
+        this._player.y += 1;
+        break;
+      case KEYBOARD.LEFT_ARROW:
+      case KEYBOARD.KEY_A:
+        this._player.x -= 1;
+        break;
+      case KEYBOARD.RIGHT_ARROW:
+      case KEYBOARD.KEY_D:
+        this._player.x += 1;
+        break;
     }
-
-    this._stateManager = StateManager.create(this._messageService, STATES, STATE.MENU)
+    this._renderManager.render(this._player);
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -87,11 +98,14 @@ class Game {
   //////////////////////////////////////////////////////////////////////////////
   /**
    * Static factory method.
+   *
    * @static
+   * @param {boolean} debug -
+   *
    * @return {Game}
    */
-  static create() {
-    return new Game();
+  static create(debug) {
+    return new Game(debug);
   }
 }
 

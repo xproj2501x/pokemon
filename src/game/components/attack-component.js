@@ -1,99 +1,91 @@
 /**
- * System Manager
+ * Attack Component
  * ===
  *
- * @module systemManager
+ * @module attackComponent
  */
 
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
+import Component from '../../engine/component';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
+const KEYS = {
+  attacker: 'attacker',
+  target: 'target'
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * SystemManager
+ * AttackComponent
  * @class
+ * @extends Component
  */
-class SystemManager {
+class AttackComponent extends Component {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   * @private
-   * @type {ComponentManager}
-   */
-  _componentManager;
-
-  /**
-   * Collection of systems registered for the simulation.
-   * @private
-   * @type {Array}
-   */
-  _systems;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
+  /**
+   * Get _state.attacker
+   * @readonly
+   * @return {int}
+   */
+  get attacker() {
+    return this.state.attacker;
+  }
 
   /**
-   * SystemManager
-   * @constructor
-   * @param {ComponentManager} componentManager - The component manager for the simulation.
-   * @param {Array} systems
+   * Get state.defender
+   * @readonly
+   * @return {int}
    */
-  constructor(componentManager, systems) {
-    this._messageService = messageService;
-    this._componentManager = componentManager;
-    this._systems = systems;
+  get defender() {
+    return this.state.defender;
+  }
+
+  /**
+   * AttackComponent
+   * @constructor
+   * @param {int} id - The identifier for the parent entity.
+   * @param {object} state - The initial state of the component.
+   */
+  constructor(id, state) { // eslint-disable-line id-length
+    super(id, KEYS, state);
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   * Calls the update method for each registered system.
-   * @public
-   */
-  update() {
-    this._systems.forEach((system) => {
-      system.update();
-    });
-  }
 
-  //////////////////////////////////////////////////////////////////////////////
-  // Private Methods
-  //////////////////////////////////////////////////////////////////////////////
 
   //////////////////////////////////////////////////////////////////////////////
   // Static Methods
   //////////////////////////////////////////////////////////////////////////////
-
   /**
-   * Static factory method.
+   * Static factory method
    *
-   * @param {ComponentManager} componentManager - The component manager for the simulation.
-   * @param {Array} systems -
+   * @static
+   * @param {int} id - The identifier for the parent entity.
+   * @param {object} state - The initial state of the component.
    *
-   * @return {SystemManager} - A new system manager instance.
+   * @return {AttackComponent} - A new health component instance.
    */
-  static create(componentManager, systems) {
-    const SYSTEMS = [];
-
-    systems.forEach((system) => {
-      SYSTEMS.push(system.create(componentManager));
-    });
-    return new SystemManager(componentManager, SYSTEMS);
+  static create(id, state) { // eslint-disable-line id-length
+    return new AttackComponent(id, state);
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default SystemManager;
+export default AttackComponent;

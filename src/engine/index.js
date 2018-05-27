@@ -26,17 +26,6 @@ class Engine {
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   * @private
-   * @type {Logger}
-   */
-  _logger;
-
-  /**
-   * @private
-   * @type {MessageService}
-   */
-  _messageService;
 
   /**
    * @private
@@ -64,8 +53,7 @@ class Engine {
    * Engine
    * @constructor
    */
-  constructor(messageService) {
-    this._messageService = messageService;
+  constructor() {
     this._isRunning = false;
     this._time = 0;
   }
@@ -121,9 +109,9 @@ class Engine {
    * @static
    * @return {Engine}
    */
-  static create(messageService) {
+  static create() {
 
-    return new Engine(messageService);
+    return new Engine();
   }
 }
 
