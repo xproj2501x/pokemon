@@ -8,10 +8,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
+<<<<<<< HEAD
 import LogService from '../common/services/log';
 import MessageService from '../common/services/message';
 import Engine from '../engine';
 
+=======
+>>>>>>> e07eb619a86d3609c917ede7149b4a47e15f5df7
 import RenderManager from '../render';
 import {KEYBOARD} from '../engine/constants';
 
@@ -52,10 +55,6 @@ class Game {
    */
   _messageService;
 
-  /**
-   * @private
-   * @type {Engine}
-   */
   _engine;
 
   /**
@@ -77,7 +76,6 @@ class Game {
    */
   constructor(debug) {
     this._debug = debug;
-
     this._renderManager = RenderManager.create(CONTAINER_ID);
     document.addEventListener('keydown', (event) => this._handleInput(event));
   }
