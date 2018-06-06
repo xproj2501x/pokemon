@@ -9,7 +9,7 @@
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
 import Entity from './entity';
-import {ENTITY_LIMIT} from './constants';
+import {ENTITY_LIMIT, MESSAGE} from './constants';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
@@ -27,18 +27,6 @@ class EntityManager {
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   * @private
-   * @type {Logger}
-   */
-  _logger;
-
-  /**
-   * @private
-   * @type {MessageService}
-   */
-  _messageService;
-
   /**
    * @private
    * @type {int}
@@ -59,12 +47,8 @@ class EntityManager {
   /**
    * EntityManager
    * @constructor
-   * @param {LogService} logService
-   * @param {MessageService} messageService
    */
-  constructor(logService, messageService) {
-    this._logger = logService.register(this.constructor.name);
-    this._messageService = messageService;
+  constructor() {
     this._nextId = 0;
     this._entities = new Array(ENTITY_LIMIT).fill(null);
   }
@@ -150,13 +134,13 @@ class EntityManager {
   //////////////////////////////////////////////////////////////////////////////
   /**
    * Static factory method
+   *
    * @static
-   * @param {LogService} logService -
-   * @param {MessageService} messageService -
+   *
    * @return {EntityManager}
    */
-  static create(logService, messageService) {
-    return new EntityManager(logService, messageService);
+  static create() {
+    return new EntityManager();
   }
 }
 

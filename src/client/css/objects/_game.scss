@@ -1,48 +1,8 @@
 .o-game {
   border: solid 1px $black;
   height: 600px;
-  margin: 6.4rem auto;
   overflow: hidden;
+  margin: 6.4rem auto 0;
   position: relative;
   width: 800px;
-
-  & > .o-party-bar {
-    border: solid 1px $black;
-    height: 64px;
-    left: 2.4rem;
-    position: absolute;
-    top: 2.4rem;
-    width: 540px;
-    z-index: 1;
-  }
-
-  & > .o-menu-bar {
-    border: solid 1px $black;
-    height: 228px;
-    position: absolute;
-    right: 2.4rem;
-    top: 18.6rem;
-    width: 64px;
-    z-index: 1;
-  }
-
-  & > .o-mini-map {
-    border: solid 1px $black;
-    height: 150px;
-    position: absolute;
-    right: 2.4rem;
-    top: 2.4rem;
-    width: 200px;
-    z-index: 1;
-  }
-
-  & > .o-chat-box {
-    border: solid 1px $black;
-    bottom: 2.4rem;
-    height: 150px;
-    left: 2.4rem;
-    position: absolute;
-    width: 752px;
-    z-index: 1;
-  }
 }

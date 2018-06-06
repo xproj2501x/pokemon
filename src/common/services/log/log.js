@@ -12,7 +12,24 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
+/**
+ *
+ * @type {string}
+ */
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ssZ';
+
+/**
+ *
+ * @enum {int}
+ */
+const LOG_LEVEL = {
+  ERROR: 0,
+  WARN: 1,
+  DEBUG: 2,
+  INFO: 3,
+  LOG: 4,
+  SILENT: 5
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class
@@ -28,9 +45,15 @@ class Log {
   //////////////////////////////////////////////////////////////////////////////
   /**
    * @private
+   * @type {int}
+   */
+  _level;
+
+  /**
+   * @private
    * @type {Array}
    */
-  _log;
+  _data;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
@@ -40,26 +63,41 @@ class Log {
    * Log
    * @constructor
    */
-  constructor() {
-    this._log = [];
+  constructor(level) {
+    this._level = level;
+    this._data = [];
   }
 
   /**
-   * Writes a message to the log
-   * @param {object} message - the message to be written
+   * Writes a message to the log.
+   * @public
+   *
+   * @param {string} context - The name of the class logging the message.
+   * @param {string} level - The level of the log message.
+   * @param {object} message - The message to be written.
    */
-  write(message) {
-    this._log.push(message);
+  write(context, level, message) {
+    if (LOG_LEVEL[level] < this._level) return;
+    let log = `[${context}] [${level}]: `;
+
+    if (typeof message === 'object') {
+      log += `${JSON.stringify(message)}`;
+    } else {
+      log += `${message}`;
+    }
+    this._data.push(log);
+    console.log(log);
   }
   ////////////////////////////////////////////////////////////////////////////////
   // Public Methods
   ////////////////////////////////////////////////////////////////////////////////
 
   /**
-   * Clears the log
+   * Clears the log.
+   * @public
    */
   clear() {
-    this._log = [];
+    this._data = [];
   }
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -67,10 +105,14 @@ class Log {
   ////////////////////////////////////////////////////////////////////////////////
   /**
    * Static factory method
-   * @return {Log}
+   * @static
+   *
+   * @param {int} level - The minimum level for log messages.
+   *
+   * @return {Log} - A new log instance.
    */
-  static create() {
-    return new Log();
+  static create(level) {
+    return new Log(level);
   }
 }
 
