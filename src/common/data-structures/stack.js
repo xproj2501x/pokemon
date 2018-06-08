@@ -54,7 +54,7 @@ class Stack {
   }
 
   peek() {
-    return this._data[0];
+    return this._data[this._data.length - 1];
   }
 
   //////////////////////////////////////////////////////////////////////////////

@@ -47,7 +47,7 @@ class RenderManager {
 
   }
 
-  render(sprites) {
+  render() {
 
   }
 

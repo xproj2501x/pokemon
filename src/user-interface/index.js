@@ -16,6 +16,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Class
 ////////////////////////////////////////////////////////////////////////////////
+import {FRAME_DURATION, MAX_FRAME_SKIP} from '../engine/constants';
+
 /**
  * UserInterface
  * @class
@@ -29,7 +31,26 @@ class UserInterface {
    * @private
    * @type {boolean}
    */
-  _locked;
+  _isLocked;
+
+
+  /**
+   * @private
+   * @type {boolean}
+   */
+  _isRunning;
+
+  /**
+   * @private
+   * @type {number}
+   */
+  _delta;
+
+  /**
+   * @private
+   * @type {boolean}
+   */
+  _isDirty;
 
   /**
    * @private
@@ -37,9 +58,11 @@ class UserInterface {
    */
   _container;
 
+  /**
+   * @private
+   * @type {Array}
+   */
   _screens;
-
-  _currentScreen;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
@@ -51,24 +74,62 @@ class UserInterface {
    * @param {HTMLElement} container -
    */
   constructor(container) {
-    this._locked = false;
+    this._isLocked = false;
     this._container = container;
-    this._screenManager = null;
+    this._screens = [];
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
   start() {
+    this._isRunning = true;
+    this._lastTick = window.performance.now();
+    this._delta = 0;
+    window.requestAnimationFrame(() => this._tick());
+  }
 
+  handleInput(event) {
+    this._isLocked = true;
+    event.preventDefault();
+    event.stopPropagation();
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
   //////////////////////////////////////////////////////////////////////////////
-  _handleInput(event) {
-    event.preventDefault();
-    event.stopPropagation();
+  _tick() {
+    if (this._isRunning) {
+      const CURRENT_TIME = window.performance.now();
+
+      this._delta += CURRENT_TIME - this._lastTick;
+      this._delta = this._delta > MAX_FRAME_SKIP ? MAX_FRAME_SKIP : this._delta;
+      if (this._delta >= FRAME_DURATION) {
+        this._update();
+        this._render();
+        this._lastTick = CURRENT_TIME;
+      }
+      window.requestAnimationFrame(() => this._tick());
+    }
+  }
+
+  _update() {
+    while (this._delta >= FRAME_DURATION) {
+      this._delta -= FRAME_DURATION;
+    }
+  }
+
+  _render() {
+    const INTERPOLATION = this._delta / FRAME_DURATION;
+
+    for (let idx = 0; idx < this._screens.length; idx++) {
+      const SCREEN = this._screens[idx];
+
+      SCREEN.update();
+    }
+    if (this._isDirty) {
+
+    }
   }
 
   //////////////////////////////////////////////////////////////////////////////

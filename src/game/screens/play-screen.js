@@ -52,8 +52,16 @@ class PlayScreen extends Screen {
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
-  run(event) {
-    switch(event) {
+  enter() {
+
+  }
+
+  exit() {
+
+  }
+
+  handleInput(input) {
+    switch(input) {
       // Sub-screen commands
       case KEYBOARD.KEY_C:
         this._toggleSubScreen(SUB_SCREEN.CHARACTER);
@@ -107,24 +115,11 @@ class PlayScreen extends Screen {
     }
   }
 
-  enter() {
-    const CONTAINER = document.getElementById('game');
-    const MAP_LAYER = document.createElement('canvas');
-    const STATIONARY_LAYER = document.createElement('canvas');
-    const MOBILE_LAYER = document.createElement('canvas');
-    const USER_INTERFACE_LAYER = document.createElement('canvas');
+  update() {
+
   }
 
-  exit() {
-    const CONTAINER = document.getElementById('game');
-
-    this._nextState = null;
-    this._locked = false;
-
-    CONTAINER.innerHTML = ``;
-  }
-
-  render() {
+  render(context) {
 
   }
 
@@ -133,6 +128,18 @@ class PlayScreen extends Screen {
   //////////////////////////////////////////////////////////////////////////////
   _toggleSubScreen(screen) {
     console.log(screen);
+  }
+
+  _drawMap() {
+
+  }
+
+  _drawBar() {
+
+  }
+
+  _drawLog() {
+
   }
 
   //////////////////////////////////////////////////////////////////////////////
