@@ -135,7 +135,21 @@ const KEYBOARD = {
   SINGLE_QUOTE: 222
 };
 
+const MESSAGE = {
+  PUSH_SCREEN: 'PUSH_SCREEN',
+  POP_SCREEN: 'POP_SCREEN',
+  RENDER: 'RENDER'
+};
+
+const INPUT_EVENT = {
+  KEY_DOWN: 'keydown',
+  KEY_UP: 'keyup',
+  MOUSE_DOWN: 'mousedown',
+  MOUSE_UP: 'mouseup',
+  MOUSE_SCROLL: 'mousescroll'
+};
+
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export {MILLISECONDS, FPS, FRAME_DURATION, MAX_FRAME_SKIP, KEYBOARD};
+export {MILLISECONDS, FPS, FRAME_DURATION, MAX_FRAME_SKIP, KEYBOARD, INPUT_EVENT, MESSAGE};

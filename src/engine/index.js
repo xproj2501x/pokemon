@@ -79,8 +79,8 @@ class Engine {
     this._isRunning = true;
     this._lastTick = Date.now();
     this._logger.info(`Engine started`);
-    this._frameId = requestAnimationFrame((raf) => {
-      this._tick(raf);
+    this._frameId = requestAnimationFrame(() => {
+      this._tick();
     });
   }
 
@@ -99,12 +99,12 @@ class Engine {
    *
    * @private
    */
-  _tick(raf) {
+  _tick() {
     // Needs to call the render loop and draw the next frame every time
     // If there is not input then the update loop needs to handle only animation / display systems
     // If there is input then all systems should update
     if (this._isRunning) {
-      const CURRENT_TIME = Date.now();
+      const CURRENT_TIME = window.performance.now();
       let delta = CURRENT_TIME - this._lastTick;
 
       delta = delta > MAX_FRAME_SKIP ? MAX_FRAME_SKIP : delta;
@@ -113,8 +113,8 @@ class Engine {
         this._render(delta);
         this._lastTick = CURRENT_TIME;
       }
-      this._frameId = requestAnimationFrame((raf) => {
-        this._tick(raf);
+      this._frameId = requestAnimationFrame(() => {
+        this._tick();
       });
     }
   }

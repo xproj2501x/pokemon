@@ -9,6 +9,7 @@
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
 import Entity from './entity';
+import EntityLimitExceededError from './errors';
 import {ENTITY_LIMIT, MESSAGE} from './constants';
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -63,7 +64,7 @@ class EntityManager {
    * @return {int} The identity of the entity.
    */
   createEntity() {
-    if (this._nextId > ENTITY_LIMIT) throw new Error(`Error: Entity limit ${ENTITY_LIMIT} exceeded.`);
+    if (this._nextId > ENTITY_LIMIT) throw new EntityLimitExceededError(`Error: Entity limit ${ENTITY_LIMIT} exceeded.`);
     const ENTITY = Entity.create(this._nextId);
 
     this._entities[this._nextId] = ENTITY;

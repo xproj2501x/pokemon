@@ -25,6 +25,35 @@ class Display {
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
+  /**
+   * @private
+   * @type {HTMLElement}
+   */
+  _container;
+
+  /**
+   * @private
+   * @type {HTMLElement}
+   */
+  _canvas;
+
+  /**
+   * @private
+   * @type {}
+   */
+  _context;
+
+  /**
+   * @private
+   * @type {number}
+   */
+  _width;
+
+  /**
+   * @private
+   * @type {number}
+   */
+  _height;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
@@ -41,6 +70,14 @@ class Display {
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
+  clear() {
+    this._context.clearRect(0, 0, this._width, this._height);
+  }
+
+  refresh() {
+    this._height = this._canvas.height = this._container.clientHeight;
+    this._width = this._canvas.width = this._container.clientWidth;
+  }
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods

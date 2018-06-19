@@ -15,13 +15,6 @@ import {SCREEN} from './constants';
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
-const SUB_SCREEN = {
-  CHARACTER: 1,
-  HELP: 2,
-  INVENTORY: 3,
-  MAP: 4,
-  QUESTS: 5
-};
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class
@@ -46,7 +39,7 @@ class PlayScreen extends Screen {
    * @constructor
    */
   constructor() {
-    super(SCREEN.PLAY);
+    super();
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -64,42 +57,41 @@ class PlayScreen extends Screen {
     switch(input) {
       // Sub-screen commands
       case KEYBOARD.KEY_C:
-        this._toggleSubScreen(SUB_SCREEN.CHARACTER);
+        console.log('character');
         break;
       case KEYBOARD.KEY_H:
-        this._toggleSubScreen(SUB_SCREEN.HELP);
+        console.log('help');
         break;
       case KEYBOARD.KEY_I:
-        this._toggleSubScreen(SUB_SCREEN.INVENTORY);
+        console.log('inventory');
         break;
       case KEYBOARD.KEY_Q:
-        this._toggleSubScreen(SUB_SCREEN.QUESTS);
+        console.log('quests');
         break;
       case KEYBOARD.KEY_M:
-        this._toggleSubScreen(SUB_SCREEN.MAP);
+        console.log('map');
+        break;
+      case KEYBOARD.KEY_J:
+        console.log('journal');
         break;
       case KEYBOARD.ESCAPE:
-        this._toggleSubScreen();
+        console.log('escape');
         break;
       // Movement
       case KEYBOARD.UP_ARROW:
       case KEYBOARD.KEY_W:
-        // Move up
         console.log('up');
         break;
       case KEYBOARD.LEFT_ARROW:
       case KEYBOARD.KEY_A:
-        // Move up
         console.log('left');
         break;
       case KEYBOARD.RIGHT_ARROW:
       case KEYBOARD.KEY_D:
-        // Move up
         console.log('right');
         break;
       case KEYBOARD.DOWN_ARROW:
       case KEYBOARD.KEY_S:
-        // Move up
         console.log('down');
         break;
       // Hot keys
@@ -111,6 +103,33 @@ class PlayScreen extends Screen {
         break;
       case KEYBOARD.KEY_3:
         console.log('3');
+        break;
+      case KEYBOARD.KEY_4:
+        console.log('4');
+        break;
+      case KEYBOARD.KEY_5:
+        console.log('5');
+        break;
+      case KEYBOARD.KEY_6:
+        console.log('6');
+        break;
+      case KEYBOARD.KEY_7:
+        console.log('7');
+        break;
+      case KEYBOARD.KEY_8:
+        console.log('8');
+        break;
+      case KEYBOARD.KEY_9:
+        console.log('9');
+        break;
+      case KEYBOARD.KEY_0:
+        console.log('0');
+        break;
+      case KEYBOARD.DASH:
+        console.log('-');
+        break;
+      case KEYBOARD.EQUALS:
+        console.log('=');
         break;
     }
   }
@@ -126,21 +145,6 @@ class PlayScreen extends Screen {
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
   //////////////////////////////////////////////////////////////////////////////
-  _toggleSubScreen(screen) {
-    console.log(screen);
-  }
-
-  _drawMap() {
-
-  }
-
-  _drawBar() {
-
-  }
-
-  _drawLog() {
-
-  }
 
   //////////////////////////////////////////////////////////////////////////////
   // Static Methods

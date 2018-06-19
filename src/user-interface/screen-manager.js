@@ -1,91 +1,122 @@
 /**
- * Attack Component
+ * Screen Manager
  * ===
  *
- * @module attackComponent
+ * @module screenManager
  */
 
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
-import Component from '../../engine/component';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
-const KEYS = {
-  attacker: 'attacker',
-  target: 'target'
-};
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * AttackComponent
+ * ScreenManager
  * @class
- * @extends Component
  */
-class AttackComponent extends Component {
+class ScreenManager {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
+  /**
+   * @private
+   * @type {HTMLElement}
+   */
+  _container;
+
+  /**
+   * @private
+   * @type {Array}
+   */
+  _screens;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   * Get _state.attacker
-   * @readonly
-   * @return {int}
-   */
-  get attacker() {
-    return this.state.attacker;
-  }
 
   /**
-   * Get state.defender
-   * @readonly
-   * @return {int}
-   */
-  get defender() {
-    return this.state.defender;
-  }
-
-  /**
-   * AttackComponent
+   * Screen
    * @constructor
-   * @param {int} id - The identifier for the parent entity.
-   * @param {object} state - The initial state of the component.
    */
-  constructor(id, state) { // eslint-disable-line id-length
-    super(id, KEYS, state);
+  constructor(container) {
+    this._container = container;
+    this._screens = [];
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
+  /**
+   *
+   * @public
+   * @param input
+   */
+  handleInput(input) {
+    const SCREEN = this._screens[this._screens.length - 1];
 
+    SCREEN.handleInput(input);
+  }
+
+  /**
+   *
+   * @public
+   * @param screen
+   */
+  pushScreen(screen) {
+
+  }
+
+  /**
+   *
+   * @public
+   */
+  popScreen() {
+
+  }
+
+  /**
+   * @public
+   */
+  render() {
+    for (let idx = 0; idx < this._screens.length; idx++) {
+      const SCREEN = this._screens[idx];
+
+    }
+  }
+
+  //////////////////////////////////////////////////////////////////////////////
+  // Private Methods
+  //////////////////////////////////////////////////////////////////////////////
+
+  //////////////////////////////////////////////////////////////////////////////
+  // Private Methods
+  //////////////////////////////////////////////////////////////////////////////
 
   //////////////////////////////////////////////////////////////////////////////
   // Static Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Static factory method
-   *
+   * Static factory method.
    * @static
-   * @param {int} id - The identifier for the parent entity.
-   * @param {object} state - The initial state of the component.
+   * @param {string} containerId - The id for the container element.
    *
-   * @return {AttackComponent} - A new health component instance.
+   * @return {ScreenManager} - A new screen manager instance.
    */
-  static create(id, state) { // eslint-disable-line id-length
-    return new AttackComponent(id, state);
+  static createInstance(containerId) {
+    const CONTAINER = document.getElementById(containerId);
+
+    return new ScreenManager(CONTAINER);
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default AttackComponent;
+export default ScreenManager;

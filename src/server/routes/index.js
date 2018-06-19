@@ -3,6 +3,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 import {Router} from 'express';
 import POKEDEX_ROUTER from './pokedex';
+import ACCOUNTS_ROUTER from './accounts';
+import TOKEN_ROUTER from './token';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
@@ -10,6 +12,8 @@ import POKEDEX_ROUTER from './pokedex';
 const ROUTER = Router();
 
 ROUTER.use('/pokedex', POKEDEX_ROUTER);
+ROUTER.use('/accounts', ACCOUNTS_ROUTER);
+ROUTER.use('/token', TOKEN_ROUTER);
 ROUTER.get('*', (req, res) => {
   res.sendStatus(404);
 });

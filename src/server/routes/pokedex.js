@@ -4,6 +4,7 @@
 import {Router} from 'express';
 import {BASE_STATS} from '../../data';
 import {SPECIES} from '../../strings';
+
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
@@ -21,7 +22,11 @@ POKEDEX_ROUTER.route('/')
 
 POKEDEX_ROUTER.route('/:id')
   .get((req, res) => {
-    res.json({message: 'pokedex/:id route'});
+    const ID = req.params.id;
+    const OUT = {};
+
+    OUT[SPECIES[ID]] = BASE_STATS[ID];
+    res.json(OUT);
   });
 
 ////////////////////////////////////////////////////////////////////////////////

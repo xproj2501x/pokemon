@@ -1,95 +1,127 @@
 /**
- * Pokemon Base Data
+ * A Star Graph Node
  * ===
  *
- * @module pokemonBaseData
+ * @module aStarGraphNode
  */
+
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
-import Stats from './stats';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
-const SIZE = 28;
-
-const KEYS = {
-  BASE_STATS: 0x00,
-  TYPE_1: 0x01,
-  TYPE_2: 0x02,
-  CATCH_RATE: 0x03,
-  XP_YIELD: 0x04,
-  EFFORT_YIELDS: 0x05,
-  ITEM_1: 0x06,
-  ITEM_2: 0x07,
-  GENDER: 0x08,
-  EGG_CYCLES: 0x09,
-  BASE_FRIENDSHIP: 0x0A,
-  LEVEL_UP_TYPE: 0x0B,
-  EGG_GROUP_1: 0x0C,
-  EGG_GROUP_2: 0x0D,
-  ABILITY_1: 0x0E,
-  ABILITY_2: 0x0F,
-  ABILITY_HIDDEN: 0x10,
-  COLOR: 0x11
-};
+const MULTIPLIER = 1.41421;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class
 ////////////////////////////////////////////////////////////////////////////////
+
 /**
- * PokemonBaseData
+ * AStarGraphNode
  * @class
  */
-class PokemonBaseData {
-
+class AStarGraphNode {
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
-
-  _index;
-
-  /**
-   * @private
-   * @type {DataModel}
-   */
-  _data;
+  _x;
+  _y;
+  _weight;
+  _heuristic;
+  _score;
+  _closed;
+  _visited;
+  _parent;
+  _f;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   * @readonly
-   * @return {Stats}
-   */
-  get baseStatistics() {
-    return Stats.create(this._data[KEYS.BASE_STATS]);
+  get x() {
+    return this._x;
+  }
+
+  get y() {
+    return this._y;
+  }
+
+  get weight() {
+    return this._weight;
+  }
+
+  get score() {
+    return this._score;
+  }
+
+  set score(value) {
+    this._score = value;
+  }
+
+  get heuristic() {
+    return this._heuristic;
+  }
+
+  set heuristic(value) {
+    this._heuristic = value;
+  }
+
+  get closed() {
+    return this._closed;
+  }
+
+  set closed(value) {
+    this._closed = value;
+  }
+
+  get visited() {
+    return this._visited;
+  }
+
+  set visited(value) {
+    this._visited = value;
+  }
+
+  get parent() {
+    return this._parent;
+  }
+
+  set parent(value) {
+    this._parent = value;
+  }
+
+  get f() {
+    return this._f;
+  }
+
+  set f(value) {
+    this._f = value;
   }
 
   /**
-   * @readonly
-   * @return {Stats}
-   */
-  get effortYields() {
-    return Stats.create(this._data[KEYS.EFFORT_YIELDS]);
-  }
-
-  /**
+   * GraphNode
    * @constructor
-   * @param {DataModel} data -
    */
-  constructor(data) {
-    this._data = data;
+  constructor(x, y, weight) {
+    this._x = x;
+    this._y = y;
+    this._weight = weight;
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
+  getCost(neighbor) {
+    if (neighbor && neighbor.x !== this.x && neighbor.y !== this.y) {
+      return this.weight * MULTIPLIER;
+    }
+    return this.weight;
+  }
 
-  //////////////////////////////////////////////////////////////////////////////
-  // Private Methods
-  //////////////////////////////////////////////////////////////////////////////
+  toString() {
+    return `[x: ${this.x} y: ${this.y}]`;
+  }
 
   //////////////////////////////////////////////////////////////////////////////
   // Static Methods
@@ -97,14 +129,17 @@ class PokemonBaseData {
   /**
    * Static factory method
    * @static
-   * @return {PokemonBaseData}
+   * @param {int} key
+   * @param {object} data
+   *
+   * @return {AStarGraphNode}
    */
-  static create() {
-
+  static createInstance(x, y, weight) {
+    return new AStarGraphNode(x, y, weight);
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default PokemonBaseData;
+export default AStarGraphNode;

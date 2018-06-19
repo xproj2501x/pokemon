@@ -162,7 +162,7 @@ class World {
    * @param {?object} size - The dimensions for the world.
    * @return {World}
    */
-  static create(id=null, size=null) {
+  static createInstance(id=null, size=null) {
     id = id || UUID.create();
     size = size || DEFAULT_SIZE;
 

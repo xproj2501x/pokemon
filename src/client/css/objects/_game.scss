@@ -1,8 +1,8 @@
 .o-game {
   border: solid 1px $black;
-  height: 600px;
+  height: 60rem;
   overflow: hidden;
-  margin: 6.4rem auto 0;
+  margin: 0 $gutter;
   position: relative;
-  width: 800px;
+  width: 80rem;
 }

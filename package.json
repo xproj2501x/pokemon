@@ -8,7 +8,7 @@
   },
   "scripts": {
     "build": "set NODE_ENV=dev && webpack --progress --colors --profile --watch",
-    "lint": "eslint --ignore-path .eslintignore --max-warnings 100 --format compact src/server/**/*.js",
+    "lint": "eslint --ignore-path .eslintignore --max-warnings 100 --format compact src/**/*.js",
     "start": "babel-node index.js",
     "test": "mocha --require babel-core/register test/**/**/*.test.js"
   },

@@ -64,19 +64,20 @@ class Key {
   /**
    * Key
    * @constructor
-   * @param {number} code - The key code for the key.
-   * @param {?KeyboardEvent} event - The keyboard event if there was one.
+   * @param {KeyboardEvent} event - The keyboard event.
    */
-  constructor(code, event=null) {
-    this._code = code;
-    if (event) {
-      this.update(event);
-    }
+  constructor(event) {
+    this._code = event.keyCode;
+    this.update(event);
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
+  /**
+   *
+   * @param {KeyboardEvent} event - The keyboard event.
+   */
   update(event) {
     event.preventDefault();
     if (this._code !== event.keyCode) throw new Error('Error: Invalid key code for event');
@@ -98,13 +99,6 @@ class Key {
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
   //////////////////////////////////////////////////////////////////////////////
-  _onKeyDown() {
-
-  }
-
-  onKeyUp() {
-
-  }
   
   _reset() {
     this._isDown = false;
@@ -119,10 +113,12 @@ class Key {
   /**
    * Static factory method.
    * @static
+   * @param {KeyboardEvent} event - The keyboard event.
+   *
    * @return {Key}
    */
-  static create() {
-    return new Key();
+  static create(event) {
+    return new Key(event);
   }
 }
 

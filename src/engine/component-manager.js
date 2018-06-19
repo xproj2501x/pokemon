@@ -65,7 +65,7 @@ class ComponentManager {
    * @param {object} state - The initial state for the component.
    */
   createComponent(type, entity, state) {
-    const TEMPLATE = this._getTempalte(type);
+    const TEMPLATE = this._getTemplate(type);
 
     if (!this._components[type]) {
       this._components[type] = new Array(ENTITY_LIMIT).fill(null);
@@ -159,7 +159,7 @@ class ComponentManager {
    *
    * @return {Component} The component template.
    */
-  _getTempalte(type) {
+  _getTemplate(type) {
     if (!this._templates[type]) throw new Error(`Error: Component template ${type} does not exist.`);
     return this._templates[type];
   }

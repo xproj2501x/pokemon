@@ -207,7 +207,7 @@ class DiamondSquareHeightMap {
    * @static
    * @return {DiamondSquareHeightMap}
    */
-  static create() {
+  static createInstance() {
     return new DiamondSquareHeightMap();
   }
 }

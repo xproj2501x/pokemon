@@ -24,7 +24,7 @@ const DIRECTION = {
   NORTH_WEST: [-1, -1]
 };
 
-const RIVER_THRESHOLD = 0.02;
+const RIVER_THRESHOLD = 0.5;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class
@@ -57,6 +57,7 @@ class ErosionGenerator {
    */
   _world;
 
+  _waterMap;
   _waterPath;
   _waterFlow;
   _riverSources;
@@ -83,6 +84,7 @@ class ErosionGenerator {
     if (!world.precipitation) throw Error(`World ${world.id} does not contain a layer for precipitation`);
     if (world.erosion) throw Error(`World ${world.id} already contains a layer for erosion`);
     this._world = world;
+    this._waterMap = new Array(Math.pow(this._world.size, 2)).fill(0);
     this._findWaterFlow();
     this._generateRiverSources();
     this._generateRiverFlow();
@@ -92,14 +94,15 @@ class ErosionGenerator {
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
   //////////////////////////////////////////////////////////////////////////////
+
   _findWaterFlow() {
-    this._waterPath = [];
+    this._waterFlow = [];
 
     for (let idx = 0; idx < this._world.size; idx++) {
       for (let jdx = 0; jdx < this._world.size; jdx++) {
         const PATH = this._findPath(idx, jdx);
 
-        this._waterPath[idx + (jdx * this._world.size)] = PATH ? PATH : [0, 0];
+        this._waterFlow[idx + (jdx * this._world.size)] = PATH ? PATH : [0, 0];
       }
     }
   }
@@ -123,19 +126,19 @@ class ErosionGenerator {
   }
 
   _generateRiverSources() {
-    this._waterFlow = [];
+    this._waterPath = [];
     this._riverSources = [];
 
     for (let idx = 0; idx < this._world.size; idx++) {
       for (let jdx = 0; jdx < this._world.size; jdx++) {
         const RAIN_FALL = this._world.precipitation.getRawValue(idx, jdx);
 
-        this._waterFlow[idx + (jdx * this._world.size)] = RAIN_FALL;
-        if (this._waterPath[[idx + (jdx * this._world.size)]] === [0, 0]) continue;
+        // this._waterPath[idx + (jdx * this._world.size)] = RAIN_FALL;
+        if (this._waterFlow[[idx + (jdx * this._world.size)]] === [0, 0]) continue;
         const ELEVATION = this._world.elevation.getValue(idx, jdx);
 
-        if ((ELEVATION === 'MOUNTAIN') || (ELEVATION === 'ALPINE') || (ELEVATION === 'SNOW_CAP')) {
-          if (RAIN_FALL >= RIVER_THRESHOLD) this._riverSources.push([idx, jdx]);
+        if ((ELEVATION >= 5) && (RAIN_FALL >= RIVER_THRESHOLD)) {
+          this._riverSources.push([idx, jdx]);
         }
       }
     }
@@ -150,20 +153,21 @@ class ErosionGenerator {
 
       while (current !== null) {
         RIVER.push(current);
-        const DIR = this._waterPath[current[0] + (current[1] + this._world.size)];
+        const DIR = this._waterFlow[current[0] + (current[1] * this._world.size)];
 
         if (DIR === [0, 0]) {
           current = null;
           break;
         }
-        let next = [current[0] + DIR[0], current[1] + DIR[1]];
-        const ELEVATION = this._world.elevation.getValue(next[0], next[1]);
-
-        if ((ELEVATION === 'DEEP_WATER') || (ELEVATION === 'SHALLOW_WATER')) {
-          current = null;
-          break;
-        }
-        current = next;
+        let next = [(current[0] + DIR[0]), (current[1] + DIR[1])];
+        current = null;
+        // const ELEVATION = this._world.elevation.getValue(next[0], next[1]);
+        //
+        // if (ELEVATION < 2) {
+        //   current = null;
+        //   break;
+        // }
+        // current = next;
       }
       RIVERS.push(RIVER);
     }

@@ -29,6 +29,11 @@ class MenuScreen extends Screen {
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
+  /**
+   * @private
+   * @type {number}
+   */
+  _selectedCharacter;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
@@ -40,19 +45,28 @@ class MenuScreen extends Screen {
    */
   constructor() {
     super(SCREEN.MENU);
+    this._selectedCharacter = 0;
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
-  run(event) {
-    this._locked = true;
+  handleInput(event) {
     switch (event) {
-      case KEYBOARD.ENTER:
-      case KEYBOARD.SPACE:
-        this._nextState = SCREEN.PLAY;
+      case KEYBOARD.UP_ARROW:
+      case KEYBOARD.KEY_W:
         break;
-      case KEYBOARD.KEY_H:
+      case KEYBOARD.DOWN_ARROW:
+      case KEYBOARD.KEY_S:
+        break;
+      case KEYBOARD.ENTER:
+        // Select character
+        break;
+      case KEYBOARD.KEY_N:
+        // New character
+        break;
+      case KEYBOARD.KEY_D:
+        // Delete character
         break;
     }
   }

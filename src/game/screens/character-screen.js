@@ -1,13 +1,16 @@
 /**
- * Sprite Cache
+ * Play Screen
  * ===
  *
- * @module spriteCache
+ * @module playScreen
  */
 
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
+import Screen from '../../user-interface/screen';
+import {KEYBOARD} from '../../engine/constants';
+import {SCREEN} from './constants';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
@@ -17,10 +20,11 @@
 // Class
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * SpriteCache
+ * PlayScreen
  * @class
+ * @extends Screen
  */
-class SpriteCache {
+class PlayScreen extends Screen {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
@@ -31,16 +35,58 @@ class SpriteCache {
   //////////////////////////////////////////////////////////////////////////////
 
   /**
-   * SpriteCache
+   * PlayScreen
    * @constructor
    */
   constructor() {
-
+    super(SCREEN.PLAY);
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
+  enter() {
+
+  }
+
+  exit() {
+
+  }
+
+  handleInput(input) {
+    switch(input) {
+      // Sub-screen commands
+      case KEYBOARD.KEY_C:
+        console.log('character');
+        break;
+      case KEYBOARD.KEY_H:
+        console.log('help');
+        break;
+      case KEYBOARD.KEY_I:
+        console.log('inventory');
+        break;
+      case KEYBOARD.KEY_Q:
+        console.log('quests');
+        break;
+      case KEYBOARD.KEY_M:
+        console.log('map');
+        break;
+      case KEYBOARD.KEY_J:
+        console.log('journal');
+        break;
+      case KEYBOARD.ESCAPE:
+        console.log('escape');
+        break;
+    }
+  }
+
+  update() {
+
+  }
+
+  render(context) {
+
+  }
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
@@ -51,15 +97,14 @@ class SpriteCache {
   //////////////////////////////////////////////////////////////////////////////
   /**
    * Static factory method.
-   *
-   * @static
+   * @return {PlayScreen}
    */
   static create() {
-    return new SpriteCache();
+    return new PlayScreen();
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default SpriteCache;
+export default PlayScreen;

@@ -14,8 +14,12 @@ import Component from '../../engine/component';
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
 const KEYS = {
-  x: 'x',
-  y: 'y'
+  fps: 'int',
+  sequences: 'object',
+  sequenceIndex: 'string',
+  currentFrame: 'int',
+  delta: 'int',
+  sheet: 'string'
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -35,6 +39,21 @@ class AnimationComponent extends Component {
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
+  get fps() {
+    return this.state.fps;
+  }
+
+  get currentSequence() {
+    return this.state.sequences[this.state.sequenceIndex];
+  }
+
+  get currentFrame() {
+    return this.state.currentFrame;
+  }
+
+  get delta() {
+    return this.state.delta;
+  }
 
   /**
    * AnimationComponent

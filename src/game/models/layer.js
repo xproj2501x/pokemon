@@ -78,10 +78,16 @@ class Layer {
 
     for(let idx = 0; idx < this._thresholds.length; idx++) {
       if (RAW_VALUE <= this._thresholds[idx]) {
-        return this._keys[idx];
+        // return this._keys[idx];
+        return idx;
       }
     }
   }
+
+  containsCoordinate(x, y) {
+    return 
+  }
+
   //////////////////////////////////////////////////////////////////////////////
   // Static Methods
   //////////////////////////////////////////////////////////////////////////////

@@ -78,7 +78,7 @@ class Log {
    */
   write(context, level, message) {
     if (LOG_LEVEL[level] < this._level) return;
-    let log = `[${context}] [${level}]: `;
+    let log = `[${level}][${Date.now()}][${context}]: `;
 
     if (typeof message === 'object') {
       log += `${JSON.stringify(message)}`;

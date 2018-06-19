@@ -12,11 +12,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
+const CONSTRUCTOR = 'UserInterface';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class
 ////////////////////////////////////////////////////////////////////////////////
-import {FRAME_DURATION, MAX_FRAME_SKIP} from '../engine/constants';
+import {FRAME_DURATION, MAX_FRAME_SKIP, MESSAGE} from '../engine/constants';
 
 /**
  * UserInterface
@@ -29,10 +30,21 @@ class UserInterface {
   //////////////////////////////////////////////////////////////////////////////
   /**
    * @private
-   * @type {boolean}
+   * @type {Logger}
    */
-  _isLocked;
+  _logger;
 
+  /**
+   * @private
+   * @type {MessageService}
+   */
+  _messageService;
+
+  /**
+   * @private
+   * @type {HTMLElement}
+   */
+  _container;
 
   /**
    * @private
@@ -46,24 +58,6 @@ class UserInterface {
    */
   _delta;
 
-  /**
-   * @private
-   * @type {boolean}
-   */
-  _isDirty;
-
-  /**
-   * @private
-   * @type {HTMLElement}
-   */
-  _container;
-
-  /**
-   * @private
-   * @type {Array}
-   */
-  _screens;
-
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
@@ -71,12 +65,15 @@ class UserInterface {
   /**
    * UserInterface
    * @constructor
-   * @param {HTMLElement} container -
+   *
+   * @param {LogService} logService - The log service for the simulation.
+   * @param {MessageService} messageService - The message service for the simulation.
+   * @param {HTMLElement} container - The HTML element container for the user interface.
    */
-  constructor(container) {
-    this._isLocked = false;
+  constructor(logService, messageService, container) {
+    this._logger = logService.registerLogger(CONSTRUCTOR);
+    this._messageService = messageService;
     this._container = container;
-    this._screens = [];
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -86,13 +83,8 @@ class UserInterface {
     this._isRunning = true;
     this._lastTick = window.performance.now();
     this._delta = 0;
+    this._logger.log('User Interface started.');
     window.requestAnimationFrame(() => this._tick());
-  }
-
-  handleInput(event) {
-    this._isLocked = true;
-    event.preventDefault();
-    event.stopPropagation();
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -122,14 +114,6 @@ class UserInterface {
   _render() {
     const INTERPOLATION = this._delta / FRAME_DURATION;
 
-    for (let idx = 0; idx < this._screens.length; idx++) {
-      const SCREEN = this._screens[idx];
-
-      SCREEN.update();
-    }
-    if (this._isDirty) {
-
-    }
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -138,13 +122,16 @@ class UserInterface {
   /**
    * Static factory method.
    * @static
+   *
+   * @param {LogService} logService - The log service for the simulation.
+   * @param {MessageService} messageService - The message service for the simulation.
    * @param {string} containerId - The id of the container element for the user interface.
    * @return {UserInterface}
    */
-  static create(containerId) {
+  static create(logService, messageService, containerId) {
     const CONTAINER = document.getElementById(containerId);
 
-    return new UserInterface(CONTAINER);
+    return new UserInterface(logService, messageService, CONTAINER);
   }
 }
 

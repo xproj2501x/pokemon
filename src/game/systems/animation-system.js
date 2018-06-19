@@ -9,6 +9,7 @@
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
 import System from '../../engine/system';
+import {MILLISECONDS} from '../../engine/constants';
 import {COMPONENT_TYPE} from '../components';
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -47,9 +48,26 @@ class AnimationSystem extends System {
   /**
    * Updates the state
    */
-  update() {
-    const ANIMATION_COMPONENTS = this._componentManager.getComponentsOfType(COMPONENT_TYPE.ANIMATION);
+  update(delta) {
+    const COMPONENTS = this._componentManager.getComponentsOfType(COMPONENT_TYPE.ANIMATION);
 
+    COMPONENTS.forEach((component) => {
+      const STATE = component.state;
+      const SPEED = (MILLISECONDS / STATE.fps);
+
+      STATE.delta += delta;
+      while (STATE.delta >= SPEED) {
+        const SEQUENCE = STATE.currentSequence;
+
+        if (STATE.currentFrame >= SEQUENCE.length - 1) {
+            STATE.currentFrame += 1;
+        } else {
+          STATE.currentFrame = 0;
+        }
+        STATE.delta -= SPEED;
+      }
+      component.update(STATE);
+    });
   }
 
   //////////////////////////////////////////////////////////////////////////////

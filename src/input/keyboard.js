@@ -8,6 +8,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
+import Key from './key';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
@@ -36,6 +37,13 @@ class Keyboard {
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
+  /**
+   * @readonly
+   * @return {Array}
+   */
+  get keys() {
+    return this._keys;
+  }
 
   /**
    * Keyboard
@@ -43,24 +51,24 @@ class Keyboard {
    */
   constructor() {
     this._keys = [];
-    document.addEventListener(KEY_DOWN, (event) => this.onKeyDown(event));
-    document.addEventListener(KEY_UP, (event) => this.onKeyUp(event));
+    document.addEventListener(KEY_DOWN, (event) => this.onKey(event));
+    document.addEventListener(KEY_UP, (event) => this.onKey(event));
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
-  onKeyDown(event) {
+  onKey(event) {
     event.preventDefault();
     const KEY_CODE = event.keyCode;
 
     if (this._keys[KEY_CODE]) {
+      const KEY = this._keys[KEY_CODE];
 
+      KEY.update(event);
+    } else {
+      this._keys[KEY_CODE] = Key.create(event);
     }
-  }
-
-  onKeyUp(event) {
-    event.preventDefault();
   }
 
   //////////////////////////////////////////////////////////////////////////////

@@ -19,7 +19,7 @@ import World from '../models/world';
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
-
+const SIZE = 513;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class
@@ -59,7 +59,7 @@ class WorldGenerator {
    */
   constructor() {
     this._prng = PRNG.create();
-    this._diamondSquareHeightMap = DiamondSquareHeightMap.create();
+    this._diamondSquareHeightMap = DiamondSquareHeightMap.createInstance();
     this._elevationGenerator = ElevationGenerator.create(this._prng, this._diamondSquareHeightMap);
     this._precipitationGenerator = PrecipitationGenerator.create(this._prng, this._diamondSquareHeightMap);
     this._temperatureGenerator = TemperatureGenerator.create(this._prng, this._diamondSquareHeightMap);
@@ -73,13 +73,13 @@ class WorldGenerator {
    * @public
    * @param {number} size - The size of the world to be generated.
    */
-  generate(size) {
-    const WORLD = World.create(null, 17);
+  generate(size=SIZE) {
+    const WORLD = World.createInstance(null, size);
 
     WORLD.elevation = this._elevationGenerator.execute(WORLD);
     WORLD.precipitation = this._precipitationGenerator.execute(WORLD);
     WORLD.temperature = this._temperatureGenerator.execute(WORLD);
-    // WORLD.erosion = this._erosionGenerator.execute(WORLD);
+    WORLD.erosion = this._erosionGenerator.execute(WORLD);
     return WORLD;
   }
 
@@ -94,7 +94,7 @@ class WorldGenerator {
    * Static factory method
    * @return {WorldGenerator}
    */
-  static create() {
+  static createInstance() {
     return new WorldGenerator();
   }
 }
