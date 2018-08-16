@@ -15,24 +15,19 @@ class BSP2 {
 
 
   generate(container, iterations) {
-
-
     if(iterations > 0) {
       let split = this._split(container);
       if (split) {
         if (split[0]) {
-          // node.left = this.generate(split[0], iterations - 1);
           this.generate(split[0], iterations - 1);
         }
         if (split[1]) {
-          // node.right = this.generate(split[1], iterations - 1);
           this.generate(split[1], iterations - 1);
         }
       }
     } else {
       this._partitions.push(container);
     }
-
   }
 
   _split(container) {

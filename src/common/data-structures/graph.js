@@ -79,14 +79,14 @@ class Graph {
    * @return {boolean}
    */
   hasNode(key) {
-    return key in this._nodes;
+    return !!this._nodes[key];
   }
 
   /**
    *
    * @param {int} key
    */
-  getNode(key) {
+  findNode(key) {
     if (!this.hasNode(key)) throw Error(`Node ${key} does not exist in the graph`);
     return this._nodes[key];
   }
@@ -143,9 +143,10 @@ class Graph {
   /**
    * Static factory method
    * @static
-   * @return {Graph}
+   *
+   * @return {Graph} A new graph instance.
    */
-  static create() {
+  static createInstance() {
     return new Graph();
   }
 }

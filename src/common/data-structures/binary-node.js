@@ -56,6 +56,7 @@ class BinaryNode {
   //////////////////////////////////////////////////////////////////////////////
   /**
    * @readonly
+   *
    * @return {number}
    */
   get key() {
@@ -64,6 +65,7 @@ class BinaryNode {
 
   /**
    * @readonly
+   *
    * @return {object}
    */
   get data() {
@@ -72,6 +74,7 @@ class BinaryNode {
 
   /**
    * @readonly
+   *
    * @return {BinaryNode}
    */
   get leftChild() {
@@ -80,6 +83,10 @@ class BinaryNode {
 
   set leftChild(node) {
     this._leftChild = node;
+  }
+
+  get rightChild() {
+    return this._rightChild;
   }
 
   set rightChild(node) {
@@ -134,9 +141,10 @@ class BinaryNode {
    * @static
    * @param {int} key -
    * @param {object} data -
-   * @return {BinaryNode}
+   *
+   * @return {BinaryNode} A new binary node instance.
    */
-  static create(key, data) {
+  static createInstance(key, data) {
     return new BinaryNode(key, data);
   }
 }

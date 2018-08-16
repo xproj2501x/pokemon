@@ -2,38 +2,31 @@
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
 import {expect} from 'chai';
-import Queue from '../../../src/common/data-structures/queue';
+import Stack from '../../../src/common/data-structures/binary-node';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
 
+
 ////////////////////////////////////////////////////////////////////////////////
 // Test
 ////////////////////////////////////////////////////////////////////////////////
-describe('Queue', () => {
+describe('Binary Node', () => {
 
   describe('#ctor', () => {
 
   });
 
-  describe('#enqueue', () => {
+  describe('#insertNode', () => {
 
   });
 
-  describe('#dequeue', () => {
+  describe('#findNode', () => {
 
   });
 
-  describe('#peek', () => {
-
-  });
-
-  describe('#clear', () => {
-
-  });
-
-  describe('#createInstance', () => {
+  describe('#removeNode', () => {
 
   });
 });

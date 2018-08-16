@@ -43,37 +43,95 @@ class BinaryTree {
   //////////////////////////////////////////////////////////////////////////////
   /**
    * Inserts a new node into the binary tree.
-   * @param {int} key -
+   * @public
+   * @param {number} key -
    * @param {object} data -
    */
-  insert(key, data) {
-    const NEW_NODE = BinaryNode.create(key, data);
+  insertNode(key, data) {
+    const NEW_NODE = BinaryNode.createInstance(key, data);
 
     if (!this._root) {
       this._root = NEW_NODE;
     } else {
-      return -1;
+      this._insertNode(this._root, NEW_NODE);
     }
+    this._size++;
   }
 
   /**
    *
-   * @param {int} key -
-   * @param {BinaryNode} currentNode -
+   * @public
+   * @param {number} key -
+   *
    * @return {BinaryNode}
    */
-  find(key, currentNode = null) {
-    currentNode = currentNode || this._root;
-    if (key === currentNode.key) {
-      return currentNode;
-    } else if (key > currentNode.key) {
-      return this.find(key, currentNode.leftChild);
+  findNode(key) {
+    if (this._root) {
+      return this._findNode(key, this._root);
     } else {
-      return this.find(key, currentNode.rightChild);
+      return null;
     }
   }
 
-  remove(key) {
+  /**
+   * @public
+   * @param {number} key
+   */
+  removeNode(key) {
+    if (this._size > 1) {
+      const NODE = this._findNode(key, this._root);
+
+      if (NODE) {
+        this._removeNode(NODE);
+      } else {
+        throw new Error(``);
+      }
+    } else if (this._size === 1 && this._root.key === key) {
+      this._root = null;
+    } else {
+      throw new Error(``);
+    }
+    this._size--;
+  }
+
+  //////////////////////////////////////////////////////////////////////////////
+  // Private Methods
+  //////////////////////////////////////////////////////////////////////////////
+  /**
+   *
+   * @private
+   * @param {BinaryNode} currentNode -
+   * @param {BinaryNode} newNode -
+   */
+  _insertNode(currentNode, newNode) {
+    if (newNode.key < currentNode.key) {
+      if (currentNode.leftChild) {
+        this._insertNode(currentNode.leftChild, newNode);
+      } else {
+        currentNode.leftChild = newNode;
+      }
+    } else {
+      if (currentNode.rightChild) {
+        this._insertNode(currentNode.rightChild, newNode);
+      } else {
+        currentNode.rightChild = newNode;
+      }
+    }
+  }
+
+  _findNode(key, currentNode) {
+    if (!currentNode) {
+      return null;
+    } else if (currentNode.key === key) {
+      return currentNode;
+    } else if (key < currentNode.key) {
+      return self._findNode(key, currentNode.leftChild);
+    } else {
+      return self._findNode(key, currentNode.rightChild);
+    }
+  }
+
+  _removeNode(node) {
 
   }
 
@@ -83,9 +141,10 @@ class BinaryTree {
   /**
    * Static factory method
    * @static
-   * @return {BinaryTree}
+   *
+   * @return {BinaryTree} A new binary tree instance.
    */
-  static create() {
+  static createInstance() {
     return new BinaryTree();
   }
 }

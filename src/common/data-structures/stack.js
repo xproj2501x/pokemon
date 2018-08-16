@@ -30,6 +30,11 @@ class Stack {
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
+  /**
+   * @readonly
+   *
+   * @return {number}
+   */
   get length() {
     return this._data.length;
   }
@@ -45,16 +50,40 @@ class Stack {
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
-  push(data) {
-    this._data.push(data);
+  /**
+   * Pushes an element onto the top of the stack.
+   * @public
+   * @param {object} element - The element to be pushed.
+   */
+  push(element) {
+    this._data.push(element);
   }
 
+  /**
+   * Pops the last element from the top of the stack.
+   * @public
+   *
+   * @return {object}
+   */
   pop() {
     return this._data.pop();
   }
 
+  /**
+   * Returns the element from the top of the stack without removing it.
+   *
+   * @return {object}
+   */
   peek() {
     return this._data[this._data.length - 1];
+  }
+
+  /**
+   * Resets the stack.
+   * @public
+   */
+  clear() {
+    this._data = [];
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -62,9 +91,11 @@ class Stack {
   //////////////////////////////////////////////////////////////////////////////
   /**
    * Static factory method
-   * @return {Stack}
+   * @static
+   *
+   * @return {Stack} A new stack instance.
    */
-  static create() {
+  static createInstance() {
     return new Stack();
   }
 }
