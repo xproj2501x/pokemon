@@ -71,6 +71,7 @@ class DiamondSquareHeightMap {
     this._setCell(0, this._size - 1, this._seed);
     this._build();
     return scaleArray(this._map);
+    // return this._map;
   }
 
   //////////////////////////////////////////////////////////////////////////////

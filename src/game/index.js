@@ -12,7 +12,6 @@ import LogService from '../common/services/log';
 import MessageService from '../common/services/message';
 import UserInterface from '../user-interface';
 import WorldGenerator from './generators/world-generator';
-import BSP2 from '../common/algorithms/bsp2';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
@@ -93,21 +92,19 @@ class Game {
    * @public
    */
   start() {
-    const BSP = new BSP2();
     const WORLD = this._worldGenerator.generate();
     const CONTAINER = document.getElementById('game');
     const CANVAS = document.createElement('canvas');
     const ELEVATION = WORLD.elevation;
     const CONTEXT = CANVAS.getContext('2d');
 
-    CANVAS.height = CANVAS.width = 129 * 3;
+    CANVAS.height = CANVAS.width = 513 * 3;
     CONTAINER.append(CANVAS);
 
-    console.log(BSP.build(3, 513, 513));
     console.log(WORLD);
     CONTEXT.save();
-    for (let idx = 0; idx < 129; idx++) {
-      for (let jdx = 0; jdx < 129; jdx++) {
+    for (let idx = 0; idx < 513; idx++) {
+      for (let jdx = 0; jdx < 513; jdx++) {
         const TILE = ELEVATION.getValue(idx, jdx);
 
         switch(TILE) {

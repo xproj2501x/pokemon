@@ -110,7 +110,7 @@ class PRNGSystem extends System {
     const RESULT = MULTIPLIER * parseInt(this._seed, FORMAT.BIN) + ADDEND;
     const RESULT_BIN = RESULT.toString(FORMAT.BIN);
 
-    this._seed = RESULT_BIN.substr(0, RESULT_BIN.length - MAX_LENGTH);;
+    this._seed = RESULT_BIN.substr(0, RESULT_BIN.length - MAX_LENGTH);
   }
 
   //////////////////////////////////////////////////////////////////////////////

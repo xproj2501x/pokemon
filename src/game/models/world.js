@@ -127,8 +127,7 @@ class World {
    * World
    * @constructor
    * @param {string} id - The identifier for the  world.
-   * @param {number} width - The width of the world to generate;
-   * @param {number} height - The height of the world to generate;
+   * @param {number} size - The size of the world to generate;
    */
   constructor(id, size) {
     this._id = id;
@@ -159,7 +158,7 @@ class World {
    * Static factory method
    * @static
    * @param {?string} id - The identifier for the  world.
-   * @param {?object} size - The dimensions for the world.
+   * @param {?number} size - The dimensions for the world.
    * @return {World}
    */
   static createInstance(id=null, size=null) {
