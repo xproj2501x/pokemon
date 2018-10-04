@@ -25,13 +25,17 @@ class System {
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
+  /**
+   * @private
+   * @type {Logger}
+   */
   _logger;
 
   /**
-   * @protected
-   * @type {ComponentManager}
+   * @private
+   * @type {MessageService}
    */
-  _componentManager;
+  _messageService;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
@@ -40,9 +44,12 @@ class System {
   /**
    * System
    * @constructor
+   * @param {LogService} logService - The log service for the application.
+   * @param {MessageService} messageService - The message service for the application
    */
-  constructor(componentManager) {
-    this._componentManager = componentManager;
+  constructor(logService, messageService) {
+    this._logger = logService.registerLogger(this.constructor.name);
+    this._messageService = messageService;
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -50,7 +57,6 @@ class System {
   //////////////////////////////////////////////////////////////////////////////
   /**
    * Runs the update routine for the system
-   *
    * @abstract
    */
   update() {

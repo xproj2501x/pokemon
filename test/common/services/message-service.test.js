@@ -30,7 +30,7 @@ describe('MessageService', () => {
 
   });
 
-  describe('#create', () => {
+  describe('#createInstance', () => {
 
   });
 });

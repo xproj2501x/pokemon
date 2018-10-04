@@ -26,9 +26,9 @@ class MessageService {
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * A collection of message topics and their subscribers.
+   * A collection of message subjects and their subscribers.
    * @private
-   * @type {object}
+   * @type {Array}
    */
   _subscriptions;
 
@@ -41,15 +41,15 @@ class MessageService {
    * @constructor
    */
   constructor() {
-    this._subscriptions = {};
+    this._subscriptions = [];
   }
 
   ////////////////////////////////////////////////////////////////////////////////
   // Public Methods
   ////////////////////////////////////////////////////////////////////////////////
   /**
-   * Adds a subscriber for a subject
-   * @param {string} subject - The subject of the message.
+   * Adds a subscriber to a subject.
+   * @param {number} subject - The subject of the message.
    * @param {function} subscriber - The subscriber to be added.
    */
   subscribe(subject, subscriber) {
@@ -60,8 +60,8 @@ class MessageService {
   }
 
   /**
-   * Removes a subscriber for a subject
-   * @param {string} subject - The subject of the message.
+   * Removes a subscriber from a subject.
+   * @param {number} subject - The subject of the message.
    * @param {function} subscriber - The subscriber to be removed.
    */
   unsubscribe(subject, subscriber) {
@@ -72,11 +72,12 @@ class MessageService {
   }
 
   /**
-   * Sends a message to all registered subscribers
+   * Sends a message to all registered subscribers.
+   * @param {number} subject - The subject of the message.
    * @param {object} message - The message to be sent.
    */
-  send(message) {
-    const SUBSCRIBERS = this._subscriptions[message.subject] || [];
+  send(subject, message) {
+    const SUBSCRIBERS = this._subscriptions[subject] || [];
 
     SUBSCRIBERS.forEach((subscriber) => {
       subscriber(message);
@@ -92,10 +93,11 @@ class MessageService {
   // Static Methods
   ////////////////////////////////////////////////////////////////////////////////
   /**
-   * Static factory method
-   * @return {MessageService}
+   * Static factory method.
+   *
+   * @return {MessageService} A new message service instance.
    */
-  static create() {
+  static createInstance() {
     return new MessageService();
   }
 }

@@ -1,10 +1,9 @@
 /**
- * System Manager
+ * Evolution
  * ===
  *
- * @module systemManager
+ * @module evolution
  */
-
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
@@ -12,67 +11,47 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
+/**
+ * The size of the data structure in bytes
+ * @type {number}
+ */
+const SIZE = 8;
+
+const KEYS = {
+  METHOD: 0x00,       // 2 Bytes
+  PARAMETER: 0x02,    // 2 Bytes
+  TARGET: 0x04,       // 2 Bytes
+  PADDING: 0x06,      // 2 Bytes
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * SystemManager
+ * Evolution
  * @class
  */
-class SystemManager {
+class Evolution {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   * @private
-   * @type {Logger}
-   */
-  _logger;
 
-  /**
-   * @private
-   * @type {MessageService}
-   */
-  _messageService;
-
-  /**
-   * Collection of systems registered for the simulation.
-   * @private
-   * @type {Array}
-   */
-  _systems;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
-
   /**
-   * SystemManager
    * @constructor
-   * @param {LogService} logService - The log service for the application.
-   * @param {MessageService} messageService - The message service for the application.
-   * @param {Array} systems
+   * @param {DataModel} data -
    */
-  constructor(logService, messageService, systems) {
-    this._logger = logService.registerLogger(this.constructor.name);
-    this._messageService = messageService;
-    this._systems = systems;
+  constructor(data) {
+    this._data = data;
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   * Calls the update method for each registered system.
-   * @public
-   */
-  update() {
-    this._systems.forEach((system) => {
-      system.update();
-    });
-  }
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
@@ -81,26 +60,18 @@ class SystemManager {
   //////////////////////////////////////////////////////////////////////////////
   // Static Methods
   //////////////////////////////////////////////////////////////////////////////
-
   /**
-   * Static factory method.
-   * @param {LogService} logService - The log service for the application.
-   * @param {MessageService} messageService - The message service for the application.
-   * @param {Array} systems -
+   * Static factory method
+   * @static
    *
-   * @return {SystemManager} - A new system manager instance.
+   * @return {Evolution}
    */
-  static createInstance(logService, messageService, systems) {
-    const SYSTEMS = [];
+  static createInstance() {
 
-    systems.forEach((system) => {
-      SYSTEMS.push(system.createInstance());
-    });
-    return new SystemManager(logService, messageService, SYSTEMS);
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default SystemManager;
+export default Evolution;

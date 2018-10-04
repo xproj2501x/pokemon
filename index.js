@@ -3,6 +3,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 import express from 'express';
 import ROUTES from './src/server/routes';
+import * as path from 'path';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
@@ -10,11 +11,12 @@ import ROUTES from './src/server/routes';
 const APP = express();
 const HTTP = require('http').Server(APP);
 const IO = require('socket.io')(HTTP);
+const PORT = 3000;
 
-APP.use(express.static(__dirname + '/dist'));
+APP.use(express.static(path.resolve(__dirname + '/dist')));
 APP.use('/api', ROUTES);
 APP.get('/*', (req, res) => {
-  res.sendFile(__dirname + '/dist/index.html');
+  res.sendFile(path.resolve(__dirname + '/dist/index.html'));
 });
 IO.on('connection', (socket) => {
   console.log('user connected');
@@ -25,6 +27,6 @@ IO.on('connection', (socket) => {
     console.log('user disconnected');
   })
 });
-HTTP.listen(3000, () => {
-  console.log('listening on *:3000');
+HTTP.listen(PORT, () => {
+  console.log(`listening on *:${PORT}`);
 });

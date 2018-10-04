@@ -71,12 +71,11 @@ class Log {
   /**
    * Writes a message to the log.
    * @public
-   *
    * @param {string} context - The name of the class logging the message.
    * @param {string} level - The level of the log message.
    * @param {object} message - The message to be written.
    */
-  write(context, level, message) {
+  writeMessage(context, level, message) {
     if (LOG_LEVEL[level] < this._level) return;
     let log = `[${level}][${Date.now()}][${context}]: `;
 
@@ -96,7 +95,7 @@ class Log {
    * Clears the log.
    * @public
    */
-  clear() {
+  clearLog() {
     this._data = [];
   }
 
@@ -104,14 +103,13 @@ class Log {
   // Private Methods
   ////////////////////////////////////////////////////////////////////////////////
   /**
-   * Static factory method
+   * Static factory method.
    * @static
-   *
    * @param {int} level - The minimum level for log messages.
    *
-   * @return {Log} - A new log instance.
+   * @return {Log} A new log instance.
    */
-  static create(level) {
+  static createInstance(level) {
     return new Log(level);
   }
 }

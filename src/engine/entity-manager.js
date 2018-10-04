@@ -9,8 +9,8 @@
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
 import Entity from './entity';
-import EntityLimitExceededError from './errors';
-import {ENTITY_LIMIT, MESSAGE} from './constants';
+import {EntityLimitExceeded, EntityNotFound} from './errors';
+import {ENTITY_LIMIT, COMMAND, EVENT} from './constants';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
@@ -28,6 +28,18 @@ class EntityManager {
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
+  /**
+   * @private
+   * @type {Logger}
+   */
+  _logger;
+
+  /**
+   * @private
+   * @type {MessageService}
+   */
+  _messageService;
+
   /**
    * @private
    * @type {int}
@@ -48,23 +60,35 @@ class EntityManager {
   /**
    * EntityManager
    * @constructor
+   * @param {LogService} logService - The log service for the application.
+   * @param {MessageService} messageService - The message service for the application.
    */
-  constructor() {
+  constructor(logService, messageService) {
+    this._logger = logService.registerLogger(this.constructor.name);
+    this._messageService = messageService;
     this._nextId = 0;
     this._entities = new Array(ENTITY_LIMIT).fill(null);
+    this._messageService.subscribe(COMMAND.CREATE_ENTITY, (message) => {});
+    this._messageService.subscribe(COMMAND.DESTROY_ENTITY, (message) => {});
+    this._messageService.subscribe(EVENT.COMPONENT_CREATED, (message) => {});
+    this._messageService.subscribe(EVENT.COMPONENT_DESTROYED, (message) => {});
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
+
+  //////////////////////////////////////////////////////////////////////////////
+  // Private Methods
+  //////////////////////////////////////////////////////////////////////////////
   /**
-   * Creates a new entity and returns its identity.
-   *
+   * Creates a new entity.
    * @public
-   * @return {int} The identity of the entity.
+   *
+   * @return {number} The id of the new entity.
    */
   createEntity() {
-    if (this._nextId > ENTITY_LIMIT) throw new EntityLimitExceededError(`Error: Entity limit ${ENTITY_LIMIT} exceeded.`);
+    if (this._nextId > ENTITY_LIMIT) throw new EntityLimitExceeded(`Error: Entity limit ${ENTITY_LIMIT} exceeded.`);
     const ENTITY = Entity.create(this._nextId);
 
     this._entities[this._nextId] = ENTITY;
@@ -74,74 +98,62 @@ class EntityManager {
 
   /**
    * Destroys the entity with the the specified identity.
-   *
    * @public
-   * @param {int} id - The identity of the entity.
+   * @param {number} entityId - The id of the entity.
    */
-  destroyEntity(id) {
-    if (!this.hasEntity(id)) throw new Error(`Error: Entity id ${id} does not exist.`);
-    this._entities[id] = null;
-  }
-
-  /**
-   *
-   * @public
-   * @param {int} id - The identity of the entity.
-   *
-   * @return {boolean}
-   */
-  hasEntity(id) {
-    return this._entities[id] !== null;
-  }
-
-  /**
-   *
-   * @public
-   * @param {int} id - The identity of the entity.
-   *
-   * @return {Entity}
-   */
-  getEntity(id) {
-    if (!this.hasEntity(id)) throw new Error(`Error: Entity id ${id} does not exist.`);
-    return this._entities[id];
+  destroyEntity(entityId) {
+    this._getEntity(entityId);
+    this._entities[entityId] = null;
+    this._messageService.send(EVENT.ENTITY_DESTROYED, {});
   }
 
   /**
    * Attaches a component to the specified entity.
-   *
-   * @param {int} id - The identity of the entity.
-   * @param {int} component - The type of the component to be attached.
+   * @param {number} entityId - The id of the entity.
+   * @param {number} componentType - The type id of the component to be attached.
    */
-  attachComponent(id, component) {
-    const ENTITY = this.getEntity(id);
+  attachComponentToEntity(entityId, componentType) {
+    const ENTITY = this._getEntity(entityId);
 
-    ENTITY.attachComponent(component);
+    ENTITY.attachComponent(componentType);
   }
 
   /**
    * Detaches a component from the specified entity.
-   *
-   * @param {int} id - The identity of the entity.
-   * @param {int} component - The type of the component to be detached.
+   * @param {number} entityId - The id of the entity.
+   * @param {number} componentType - The type id of the component to be detached.
    */
-  detachComponent(id, component) {
-    const ENTITY = this.getEntity(id);
+  detachComponentFromEntity(entityId, componentType) {
+    const ENTITY = this._getEntity(entityId);
 
-    ENTITY.detachComponent(component);
+    ENTITY.detachComponent(componentType);
+  }
+
+  /**
+   *
+   * @public
+   * @param {number} entityId - The identity of the entity.
+   *
+   * @return {Entity}
+   */
+  _getEntity(entityId) {
+    if (!this._entities[entityId]) throw new EntityNotFound(`Error: Entity id ${entityId} not found.`);
+    return this._entities[entityId];
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Static Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Static factory method
-   *
+   * Static factory method.
    * @static
+   * @param {LogService} logService - The log service for the application.
+   * @param {MessageService} messageService - The message service for the application.
    *
-   * @return {EntityManager}
+   * @return {EntityManager} A new entity manager instance.
    */
-  static create() {
-    return new EntityManager();
+  static create(logService, messageService) {
+    return new EntityManager(logService, messageService);
   }
 }
 

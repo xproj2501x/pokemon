@@ -53,8 +53,7 @@ class Entity {
   /**
    * Entity
    * @constructor
-   *
-   * @param {int} id - The identifier for the entity.
+   * @param {number} id - The identifier for the entity.
    */
   constructor(id) { // eslint-disable-line id-length
     this._id = id;
@@ -66,44 +65,33 @@ class Entity {
   //////////////////////////////////////////////////////////////////////////////
   /**
    * Attaches a component to the entity.
-   *
-   * @param {int} type - The component type.
+   * @param {number} componentType - The type id of the component.
    */
-  attachComponent(type) {
-    if (this.hasComponent(type)) throw new Error(`Component type ${type} already attached to game object ${this.id}`);
-    this._components[type] = true;
+  attachComponent(componentType) {
+    if (this._components[componentType]) throw new Error(
+      `Error: Component type ${componentType} already attached to entity ${this.id}`);
+    this._components[componentType] = true;
   }
 
   /**
    * Detaches a component from the entity.
-   *
-   * @param {int} type - The component type.
+   * @param {number} componentType - The type id of the component.
    */
-  detachComponent(type) {
-    if (!this.hasComponent(type)) throw new Error(`Component type ${type} not attached to game object ${this.id}`);
-    this._components[type] = false;
+  detachComponent(componentType) {
+    if (!this._components[componentType]) throw new Error(
+      `Error: Component type ${componentType} not attached to entity ${this.id}`);
+    this._components[componentType] = false;
   }
 
-  /**
-   * Checks to see if the component type is attached to the entity.
-   *
-   * @param {int} type - The component type.
-   *
-   * @return {boolean}
-   */
-  hasComponent(type) {
-    return this._components[type];
-  }
   //////////////////////////////////////////////////////////////////////////////
   // Static Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
    * Static factory method.
-   *
    * @static
-   * @param {int} id - The identifier for the entity.
+   * @param {number} id - The identifier for the entity.
    *
-   * @return {Entity} - A new entity instance.
+   * @return {Entity} A new entity instance.
    */
   static create(id) { // eslint-disable-line id-length
     if (!id && id !== 0) throw new Error(`Error: entity id cannot be null`);

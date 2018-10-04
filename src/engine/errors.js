@@ -14,13 +14,20 @@ import ExtendableError from '../common/utilities/extendable-error';
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * EntityLimitExceededError
+ * EntityLimitExceeded
  * @class
  * @extends ExtendableError
  */
-class EntityLimitExceedError extends ExtendableError { }
+class EntityLimitExceeded extends ExtendableError { }
+
+/**
+ * EntityNotFound
+ * @class
+ * @extends ExtendableError
+ */
+class EntityNotFound extends ExtendableError {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export {EntityLimitExceedError};
+export {EntityLimitExceeded, EntityNotFound};

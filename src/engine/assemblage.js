@@ -21,8 +21,6 @@ class Assemblage {
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
-  _entityManager;
-  _componentManager;
   _defaults;
 
   //////////////////////////////////////////////////////////////////////////////
@@ -32,32 +30,14 @@ class Assemblage {
   /**
    * Assemblage
    * @constructor
-   * @param {EntityManager} entityManager -
-   * @param {ComponentManager} componentManager -
-   * @param {Array} defaults -
    */
   constructor(entityManager, componentManager, defaults) {
-    this._entityManager = entityManager;
-    this._componentManager = componentManager;
     this._defaults = defaults;
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
-  build(data) {
-    const ENTITY = this._entityManager.createEntity();
-
-    this._defaults.forEach((component) => {
-      const CONFIGURATION = data.find((config) => {
-        return config.type === component.type;
-      });
-      const STATE = Object.assign({}, component.state, CONFIGURATION.state);
-
-      this._componentManager.createComponent(component.type, ENTITY, STATE);
-      this._entityManager.attachComponent(ENTITY, component.type);
-    });
-  }
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods

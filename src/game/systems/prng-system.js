@@ -90,6 +90,7 @@ class PRNGSystem extends System {
 
   /**
    * Generates a 32 bit pseudo random number and advances the seed one step.
+   *
    * @return {string}
    */
   getLinearValue() {
@@ -119,10 +120,11 @@ class PRNGSystem extends System {
   /**
    * Static factory method
    * @static
-   * @param {number} time - a timestamp passed used to generate the initial seed.
+   * @param {number} time - A timestamp used to generate the initial seed.
+   *
    * @return {PRNGSystem}
    */
-  static create(time) {
+  static createInstance(time) {
     const INITIAL_SEED = (Date.now() - time).toString(FORMAT.BIN);
 
     return new PRNGSystem(INITIAL_SEED);

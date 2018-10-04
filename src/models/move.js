@@ -11,16 +11,23 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
+/**
+ * The size of the data structure in bytes
+ * @type {number}
+ */
+const SIZE = 12;
+
 const KEYS = {
-  EFFECT: 0x00,
-  BASE_POWER: 0x01,
-  TYPE: 0x02,
-  ACCURACY: 0x03,
-  PP: 0x04,
-  EFFECT_ACCURACY: 0x05,
-  AFFECTS_WHOM: 0x06,
-  PRIORITY: 0x07,
-  FLAGS: 0x08
+  EFFECT: 0x00,           // 1 Byte
+  BASE_POWER: 0x01,       // 1 Byte
+  TYPE: 0x02,             // 1 Byte
+  ACCURACY: 0x03,         // 1 Byte
+  PP: 0x04,               // 1 Byte
+  EFFECT_ACCURACY: 0x05,  // 1 Byte
+  AFFECTS_WHOM: 0x06,     // 1 Byte
+  PRIORITY: 0x07,         // 1 Byte
+  FLAGS: 0x08,            // 1 Byte
+  PADDING: 0X09           // 3 Bytes
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -67,7 +74,7 @@ class Move {
    * @static
    * @return {Move}
    */
-  static create(data) {
+  static createInstance(data) {
     return new Move(data);
   }
 }

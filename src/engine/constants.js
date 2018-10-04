@@ -37,11 +37,22 @@ const COMPONENT_LIMIT = 64;
  *
  * @enum {int}
  */
-const MESSAGE = {
-  CREATE_ENTITY: 0,
-  DESTROY_ENTITY: 1,
-  CREATE_COMPONENT: 2,
-  DESTROY_COMPONENT: 3
+const COMMAND = {
+  CREATE_COMPONENT: 0,
+  CREATE_ENTITY: 1,
+  CREATE_ASSEMBLAGE: 2,
+  DESTROY_COMPONENT: 3,
+  DESTROY_ENTITY: 4,
+  UPDATE_COMPONENT: 5
+};
+
+const EVENT = {
+  ASSEMBLAGE_CREATED: 0,
+  COMPONENT_CREATED: 1,
+  COMPONENT_DESTROYED: 2,
+  COMPONENT_UPDATED: 3,
+  ENTITY_CREATED: 4,
+  ENTITY_DESTROYED: 5
 };
 
 /**
@@ -153,4 +164,4 @@ const KEYBOARD = {
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export {MILLISECONDS, FPS, FRAME_DURATION, MAX_FRAME_SKIP, ENTITY_LIMIT, COMPONENT_LIMIT, MESSAGE, KEYBOARD};
+export {COMMAND, EVENT, MILLISECONDS, FPS, FRAME_DURATION, MAX_FRAME_SKIP, ENTITY_LIMIT, COMPONENT_LIMIT, KEYBOARD};

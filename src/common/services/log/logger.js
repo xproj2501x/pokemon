@@ -73,51 +73,46 @@ class Logger {
   /**
    * Writes a log message to the log.
    * @public
-   *
    * @param {string} message - The message to be written.
    */
-  log(message) {
-    this._log.write(this._context, LEVEL.LOG, message);
+  writeLogMessage(message) {
+    this._log.writeMessage(this._context, LEVEL.LOG, message);
   }
 
   /**
    * Writes a debug message to the log.
    * @public
-   *
    * @param {string} message - The message to be written.
    */
-  debug(message) {
-    this._log.write(this._context, LEVEL.DEBUG, message);
+  writeDebugMessage(message) {
+    this._log.writeMessage(this._context, LEVEL.DEBUG, message);
   }
 
   /**
    * Writes a warning message to the log.
    * @public
-   *
    * @param {string} message - The message to be written.
    */
-  warn(message) {
-    this._log.write(this._context, LEVEL.WARN, message);
+  writeWarningMessage(message) {
+    this._log.writeMessage(this._context, LEVEL.WARN, message);
   }
 
   /**
    * Writes an info message to the log.
    * @public
-   *
    * @param {string} message - The message to be written.
    */
-  info(message) {
-    this._log.write(this._context, LEVEL.INFO, message);
+  writeInfoMessage(message) {
+    this._log.writeMessage(this._context, LEVEL.INFO, message);
   }
 
   /**
    * Writes an error message to the log.
    * @public
-   *
    * @param {string} message - The message to be written.
    */
-  error(message) {
-    this._log.write(this._context, LEVEL.ERROR, message);
+  writeErrorMessage(message) {
+    this._log.writeMessage(this._context, LEVEL.ERROR, message);
   }
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -130,13 +125,12 @@ class Logger {
   /**
    * Static factory method.
    * @static
-   *
    * @param {string} context - The name of the constructor for the calling class.
    * @param {Log} log - The log for application.
    *
    * @return {Logger} - A new logger instance.
    */
-  static create(context, log) {
+  static createInstance(context, log) {
     return new Logger(context, log);
   }
 }

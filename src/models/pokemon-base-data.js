@@ -7,32 +7,42 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
-import Stats from './stats';
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
+/**
+ * The size of the data structure in bytes
+ * @type {number}
+ */
 const SIZE = 28;
 
 const KEYS = {
-  BASE_STATS: 0x00,
-  TYPE_1: 0x01,
-  TYPE_2: 0x02,
-  CATCH_RATE: 0x03,
-  XP_YIELD: 0x04,
-  EFFORT_YIELDS: 0x05,
-  ITEM_1: 0x06,
-  ITEM_2: 0x07,
-  GENDER: 0x08,
-  EGG_CYCLES: 0x09,
-  BASE_FRIENDSHIP: 0x0A,
-  LEVEL_UP_TYPE: 0x0B,
-  EGG_GROUP_1: 0x0C,
-  EGG_GROUP_2: 0x0D,
-  ABILITY_1: 0x0E,
-  ABILITY_2: 0x0F,
-  ABILITY_HIDDEN: 0x10,
-  COLOR: 0x11
+  BASE_HP: 0x00,          // 1 Byte
+  BASE_ATTACK: 0x01,      // 1 Byte
+  BASE_DEFENSE: 0x02,     // 1 Byte
+  BASE_SPEED: 0x03,       // 1 Byte
+  BASE_SP_ATK: 0x04,      // 1 Byte
+  BASE_SP_DEF: 0x05,      // 1 Byte
+  TYPE_1: 0x06,           // 1 Byte
+  TYPE_2: 0x07,           // 1 Byte
+  CATCH_RATE: 0x08,       // 1 Byte
+  BASE_EXP_YIELD: 0x09,   // 2 Bytes
+  EFFORT_YIELD: 0x0B,     // 2 Bytes
+  ITEM_1: 0x0D,           // 2 Bytes
+  ITEM_2: 0x0F,           // 2 Bytes
+  GENDER: 0x11,           // 1 Byte
+  EGG_CYCLES: 0x12,       // 1 Byte
+  BASE_FRIENDSHIP: 0x13,  // 1 Byte
+  LEVEL_UP_TYPE: 0x14,    // 1 Byte
+  EGG_GROUP_1: 0x15,      // 1 Byte
+  EGG_GROUP_2: 0x16,      // 1 Byte
+  ABILITY_1: 0x17,        // 1 Byte
+  ABILITY_2: 0x18,        // 1 Byte
+  ABILITY_HIDDEN: 0x19,   // 1 Byte
+  COLOR: 0x1A,            // 1 Byte
+  PADDING: 0x1B           // 2 Bytes
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -60,22 +70,6 @@ class PokemonBaseData {
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * @readonly
-   * @return {Stats}
-   */
-  get baseStatistics() {
-    return Stats.create(this._data[KEYS.BASE_STATS]);
-  }
-
-  /**
-   * @readonly
-   * @return {Stats}
-   */
-  get effortYields() {
-    return Stats.create(this._data[KEYS.EFFORT_YIELDS]);
-  }
-
-  /**
    * @constructor
    * @param {DataModel} data -
    */
@@ -97,9 +91,10 @@ class PokemonBaseData {
   /**
    * Static factory method
    * @static
+   *
    * @return {PokemonBaseData}
    */
-  static create() {
+  static createInstance() {
 
   }
 }

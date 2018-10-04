@@ -55,7 +55,25 @@ class World {
    * @private
    * @type {number}
    */
-  _size;
+  _seed;
+
+  /**
+   * @private
+   * @type {string}
+   */
+  _name;
+
+  /**
+   * @private
+   * @type {number}
+   */
+  _height;
+
+  /**
+   * @private
+   * @type {number}
+   */
+  _width;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties

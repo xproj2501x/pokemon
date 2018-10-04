@@ -1,16 +1,18 @@
 let path = require('path');
+let ExtractTextPlugin = require('extract-text-webpack-plugin');
+
 
 const PATHS = {
   JS: path.resolve(__dirname, 'src/client/js'),
-  TEST_JS: path.resolve(__dirname, 'test'),
   CSS: path.resolve(__dirname, 'src/client/css'),
   DIST: path.resolve(__dirname, 'dist')
 };
 
 module.exports = {
+  mode: 'development',
   entry: [
-    'babel-polyfill',
-    PATHS.JS + '/index.js',
+    '@babel/polyfill',
+    PATHS.JS + '/index.js'
   ],
   output: {
     path: PATHS.DIST,
@@ -19,26 +21,36 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/i,
-        exclude: [/node_modules/],
-        use: [{
-          loader: 'babel-loader',
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
           options: {
             plugins: [
-              'transform-runtime',
-              'transform-decorators-legacy',
-              'transform-class-properties'
+              '@babel/plugin-proposal-class-properties',
+              '@babel/plugin-transform-regenerator',
+              '@babel/plugin-transform-runtime'
             ],
             presets: [
-              'env'
+              '@babel/env'
             ]
           }
-        }]
+        }
       },
       {
-        test:/\.(s*)css$/,
-        use:['style-loader','css-loader', 'sass-loader']
+        test: /\.scss$/,
+        exclude: /node_modules/,
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            'css-loader',
+            'sass-loader'
+          ]
+        })
       }
     ]
-  }
+  },
+  plugins: [
+    new ExtractTextPlugin('site.css')
+  ]
 };

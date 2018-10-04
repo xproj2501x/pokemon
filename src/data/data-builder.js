@@ -1,8 +1,8 @@
 /**
- * System Manager
+ * Data Builder
  * ===
  *
- * @module systemManager
+ * @module dataBuilder
  */
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -17,62 +17,30 @@
 // Class
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * SystemManager
+ * DataBuilder
  * @class
  */
-class SystemManager {
+class DataBuilder {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   * @private
-   * @type {Logger}
-   */
-  _logger;
-
-  /**
-   * @private
-   * @type {MessageService}
-   */
-  _messageService;
-
-  /**
-   * Collection of systems registered for the simulation.
-   * @private
-   * @type {Array}
-   */
-  _systems;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
 
   /**
-   * SystemManager
+   * DataBuilder
    * @constructor
-   * @param {LogService} logService - The log service for the application.
-   * @param {MessageService} messageService - The message service for the application.
-   * @param {Array} systems
    */
-  constructor(logService, messageService, systems) {
-    this._logger = logService.registerLogger(this.constructor.name);
-    this._messageService = messageService;
-    this._systems = systems;
+  constructor() {
+
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   * Calls the update method for each registered system.
-   * @public
-   */
-  update() {
-    this._systems.forEach((system) => {
-      system.update();
-    });
-  }
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
@@ -81,26 +49,18 @@ class SystemManager {
   //////////////////////////////////////////////////////////////////////////////
   // Static Methods
   //////////////////////////////////////////////////////////////////////////////
-
   /**
-   * Static factory method.
-   * @param {LogService} logService - The log service for the application.
-   * @param {MessageService} messageService - The message service for the application.
-   * @param {Array} systems -
+   * Static factory method
+   * @static
    *
-   * @return {SystemManager} - A new system manager instance.
+   * @return {DataBuilder}
    */
-  static createInstance(logService, messageService, systems) {
-    const SYSTEMS = [];
-
-    systems.forEach((system) => {
-      SYSTEMS.push(system.createInstance());
-    });
-    return new SystemManager(logService, messageService, SYSTEMS);
+  static createInstance() {
+    return new DataBuilder();
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default SystemManager;
+export default DataBuilder;

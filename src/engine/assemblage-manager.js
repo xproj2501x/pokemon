@@ -12,6 +12,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Class
 ////////////////////////////////////////////////////////////////////////////////
+import {COMMAND, EVENT} from './constants';
+
 /**
  * AssemblageManager
  * @class
@@ -23,15 +25,15 @@ class AssemblageManager {
   //////////////////////////////////////////////////////////////////////////////
   /**
    * @private
-   * @type {EntityManager}
+   * @type {Logger}
    */
-  _entityManager;
+  _logger;
 
   /**
    * @private
-   * @type {ComponentManager}
+   * @type {MessageService}
    */
-  _componentManager;
+  _messageService;
 
   /**
    * @private
@@ -46,14 +48,15 @@ class AssemblageManager {
   /**
    * AssemblageManager
    * @constructor
-   * @param {EntityManager} entityManager -
-   * @param {ComponentManager} componentManager -
+   * @param {LogService} logService - The log service for the application.
+   * @param {MessageService} messageService - The message service for the application
    * @param {Array} templates -
    */
-  constructor(entityManager, componentManager, templates) {
-    this._entityManager = entityManager;
-    this._componentManager = componentManager;
+  constructor(logService, messageService, templates) {
+    this._logger = logService.registerLogger(this.constructor.name);
+    this._messageService = messageService;
     this._templates = templates;
+    this._messageService.subscribe(COMMAND.CREATE_ASSEMBLAGE, (message) => {});
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -61,21 +64,20 @@ class AssemblageManager {
   //////////////////////////////////////////////////////////////////////////////
   /**
    * Creates an assemblage of the specified type
-   *
    * @public
-   * @param {int} type - The type of the assemblage.
+   * @param {number} assemblageType - The type of the assemblage.
    */
-  createAssemblage(type, data) {
-    const TEMPLATE = this._getTemplate(type);
+  createAssemblage(assemblageType, data) {
+    const TEMPLATE = this._getTemplate(assemblageType);
 
     data = data || [];
-    TEMPLATE.create(this._entityManager, this._componentManager, data);
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
+   *
    * @private
    * @param {int} type - The type of the assemblage template.
    *
@@ -93,14 +95,14 @@ class AssemblageManager {
    * Static factory method.
    *
    * @static
-   * @param {EntityManager} entityManager -
-   * @param {ComponentManager} componentManager -
+   * @param {LogService} logService - The log service for the application.
+   * @param {MessageService} messageService - The message service for the application
    * @param {Array} templates -
    *
-   * @return {AssemblageManager} - A new assemblage manager instance.
+   * @return {AssemblageManager} A new assemblage manager instance.
    */
-  static create(entityManager, componentManager, templates) {
-    return new AssemblageManager(entityManager, componentManager, templates);
+  static create(logService, messageService, templates) {
+    return new AssemblageManager(logService, messageService, templates);
   }
 }
 

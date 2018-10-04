@@ -9,7 +9,7 @@
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
 import Component from './component';
-import {ENTITY_LIMIT, COMPONENT_LIMIT} from './constants';
+import {ENTITY_LIMIT, COMPONENT_LIMIT, COMMAND, EVENT} from './constants';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class
@@ -23,6 +23,18 @@ class ComponentManager {
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
+  /**
+   * @private
+   * @type {Logger}
+   */
+  _logger;
+
+  /**
+   * @private
+   * @type {MessageService}
+   */
+  _messageService;
+
   /**
    * A collection of components.
    *
@@ -46,11 +58,19 @@ class ComponentManager {
   /**
    * ComponentManager
    * @constructor
+   * @param {LogService} logService - The log service for the application.
+   * @param {MessageService} messageService - The message service for the application.
    * @param {Array} templates - A collection of component templates.
    */
-  constructor(templates) {
+  constructor(logService, messageService, templates) {
+    this._logger = logService.registerLogger(this.constructor.name);
+    this._messageService = messageService;
     this._components = new Array(COMPONENT_LIMIT).fill(null);
     this._templates = templates;
+    this._messageService.subscribe(COMMAND.CREATE_COMPONENT, (message) => this.onCreateComponent(message));
+    this._messageService.subscribe(COMMAND.DESTROY_COMPONENT, (message) => this.onDestroyComponent(message));
+    this._messageService.subscribe(COMMAND.UPDATE_COMPONENT, (message) => this.onUpdateComponent(message));
+    this._messageService.subscribe(EVENT.ENTITY_DESTROYED, (message) => this.onEntityDestroyed(message));
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -58,94 +78,103 @@ class ComponentManager {
   //////////////////////////////////////////////////////////////////////////////
   /**
    * Creates a new component instance of the specified type for the parent entity.
-   *
    * @public
-   * @param {int} type - The type of the component.
-   * @param {int} entity - The identity of the parent entity.
+   * @param {number} componentType - The type id of the component.
+   * @param {number} entityId - The id of the parent entity.
    * @param {object} state - The initial state for the component.
    */
-  createComponent(type, entity, state) {
-    const TEMPLATE = this._getTemplate(type);
+  createComponent(componentType, entityId, state) {
+    const TEMPLATE = this._getTemplate(componentType);
 
-    if (!this._components[type]) {
-      this._components[type] = new Array(ENTITY_LIMIT).fill(null);
+    if (!this._components[componentType]) {
+      this._components[componentType] = new Array(ENTITY_LIMIT).fill(null);
     }
-    if (this.hasComponent(type, entity)) {
-      throw new Error(`Error: Component type ${type} is already attached to entity id ${entity}.`)
+    if (this.hasComponent(componentType, entityId)) {
+      throw new Error(`Error: Component type ${componentType} is already attached to entity id ${entityId}.`)
     }
-    this._components[type][entity] = TEMPLATE.create(entity, state);
+    this._components[componentType][entityId] = TEMPLATE.create(entityId, state);
+    this._messageService.send(EVENT.COMPONENT_CREATED, {});
   }
 
   /**
    * Gets the component of the parent entity and specified type.
-   *
    * @public
-   * @param {int} type - The type of the component.
-   * @param {int} entity - The identity of the parent entity.
+   * @param {number} componentType - The type id of the component.
+   * @param {number} entityId - The id of the parent entity.
    *
    * @return {Component}
    */
-  getComponent(type, entity) {
-    if (!this.hasComponent(type, entity)) {
-      throw new Error(`Error: Component type ${type} is not attached to entity ${entity}.`);
+  getComponent(componentType, entityId) {
+    if (!this.hasComponent(componentType, entityId)) {
+      throw new Error(`Error: Component type ${componentType} is not attached to entity ${entityId}.`);
     }
-    return this._components[type][entity];
-  }
-
-  /**
-   * Gets all components of the specified type.
-   *
-   * @param {int} type - The type of the component.
-   *
-   * @return {Array}
-   */
-  getComponentsOfType(type) {
-    return this._components[type];
+    return this._components[componentType][entityId];
   }
 
   /**
    * Destroys a component with the parent entity and specified type.
-   *
    * @public
-   * @param {int} type - The type of the component.
-   * @param {int} entity - The identity of the parent entity.
+   * @param {number} componentType - The type id of the component.
+   * @param {number} entityId - The id of the parent entity.
    */
-  destroyComponent(type, entity) {
-    if (!this.hasComponent(type, entity)) {
-      throw new Error(`Error: Component type ${type} is not attached to entity ${entity}.`);
+  destroyComponent(componentType, entityId) {
+    if (!this.hasComponent(componentType, entityId)) {
+      throw new Error(`Error: Component type ${componentType} is not attached to entity ${entityId}.`);
     }
-    this._components[type][entity] = null;
+    this._components[componentType][entityId] = null;
   }
 
   /**
    * Updates a component with the parent entity and specified type with the new state.
-   *
    * @public
-   * @param {int} type - The type of the component.
-   * @param {int} entity - The identity of the parent entity.
+   * @param {number} componentType - The type id of the component.
+   * @param {number} entityId - The id of the parent entity.
    * @param {object} state - The new state for the component.
    */
-  updateComponent(type, entity, state) {
-    if (!this.hasComponent(type, entity)) {
-      throw new Error(`Error: Component type ${type} is not attached to entity ${entity}.`);
+  updateComponent(componentType, entityId, state) {
+    if (!this.hasComponent(componentType, entityId)) {
+      throw new Error(`Error: Component type ${componentType} is not attached to entity ${entityId}.`);
     }
-    const COMPONENT = this.getComponent(type, entity);
+    const COMPONENT = this.getComponent(componentType, entityId);
 
     COMPONENT.update(state);
+    this._messageService.send(EVENT.COMPONENT_UPDATED, {});
   }
 
   /**
    *
-   *
    * @public
-   * @param {int} type - The type of the component.
-   * @param {int} entity - The identity of the parent entity.
+   * @param {number} componentType - The type id of the component.
+   * @param {number} entityId - The id of the parent entity.
    *
    * @return {boolean}
    */
-  hasComponent(type, entity) {
-    if (!(type in this._components)) return false;
-    return entity in this._components[type];
+  hasComponent(componentType, entityId) {
+    if (!(componentType in this._components)) return false;
+    return entityId in this._components[componentType];
+  }
+
+  /**
+   * @public
+   * @param {object} message
+   */
+  onCreateComponent(message) {
+
+    this._messageService.send(EVENT.COMPONENT_CREATED, {});
+  }
+
+  onDestroyComponent(message) {
+
+    this._messageService.send(EVENT.COMPONENT_DESTROYED, {});
+  }
+
+  onUpdateComponent(message) {
+
+    this._messageService.send(EVENT.COMPONENT_UPDATED, {});
+  }
+
+  onEntityDestroyed(message) {
+
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -153,30 +182,30 @@ class ComponentManager {
   //////////////////////////////////////////////////////////////////////////////
   /**
    * Gets a component template of the specified type.
-   *
    * @private
-   * @param {int} type - The type of the component template.
+   * @param {number} componentType - The type of the component template.
    *
    * @return {Component} The component template.
    */
-  _getTemplate(type) {
-    if (!this._templates[type]) throw new Error(`Error: Component template ${type} does not exist.`);
-    return this._templates[type];
+  _getTemplate(componentType) {
+    if (!this._templates[componentType]) throw new Error(`Error: Component template ${componentType} does not exist.`);
+    return this._templates[componentType];
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Static Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Static factory method
-   *
+   * Static factory method.
    * @static
+   * @param {LogService} logService - The log service for the application.
+   * @param {MessageService} messageService - The message service for the application.
    * @param {Array} templates - A collection of component templates
    *
-   * @return {ComponentManager}
+   * @return {ComponentManager} A new component manager instance.
    */
-  static create(templates) {
-    return new ComponentManager(templates);
+  static createInstance(logService, messageService, templates) {
+    return new ComponentManager(logService, messageService, templates);
   }
 }
 
