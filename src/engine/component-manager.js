@@ -67,9 +67,9 @@ class ComponentManager {
     this._messageService = messageService;
     this._components = new Array(COMPONENT_LIMIT).fill(null);
     this._templates = templates;
-    this._messageService.subscribe(COMMAND.CREATE_COMPONENT, (message) => this.onCreateComponent(message));
-    this._messageService.subscribe(COMMAND.DESTROY_COMPONENT, (message) => this.onDestroyComponent(message));
-    this._messageService.subscribe(COMMAND.UPDATE_COMPONENT, (message) => this.onUpdateComponent(message));
+    this._messageService.subscribe(COMMAND.CREATE_COMPONENT, (command) => this.onCreateComponent(command));
+    this._messageService.subscribe(COMMAND.DESTROY_COMPONENT, (command) => this.onDestroyComponent(command));
+    this._messageService.subscribe(COMMAND.UPDATE_COMPONENT, (command) => this.onUpdateComponent(command));
     this._messageService.subscribe(EVENT.ENTITY_DESTROYED, (message) => this.onEntityDestroyed(message));
   }
 
@@ -77,13 +77,56 @@ class ComponentManager {
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Creates a new component instance of the specified type for the parent entity.
+   * Message handler for CREATE_COMPONENT command.
    * @public
-   * @param {number} componentType - The type id of the component.
+   * @param {object} command - The CREATE_COMPONENT command message.
+   */
+  onCreateComponent(command) {
+    this._createComponent(command.entityId, command.componentType, command.state);
+
+    this._messageService.send(EVENT.COMPONENT_CREATED, {});
+  }
+
+  /**
+   * Message handler for DESTROY_COMPONENT command.
+   * @public
+   * @param {object} command - The DESTROY_COMPONENT event message.
+   */
+  onDestroyComponent(command) {
+
+    this._messageService.send(EVENT.COMPONENT_DESTROYED, {});
+  }
+
+  /**
+   * Message handler for UPDATE_COMPONENT command.
+   * @public
+   * @param {object} command - The UPDATE_COMPONENT command message.
+   */
+  onUpdateComponent(command) {
+
+    this._messageService.send(EVENT.COMPONENT_UPDATED, {});
+  }
+
+  /**
+   * Message handler for ENTITY_DESTROYED event.
+   * @public
+   * @param {object} event - The ENTITY_DESTROYED event message.
+   */
+  onEntityDestroyed(event) {
+    const ENTITY_ID = event.entityId;
+  }
+
+  //////////////////////////////////////////////////////////////////////////////
+  // Private Methods
+  //////////////////////////////////////////////////////////////////////////////
+  /**
+   * Creates a new component instance of the specified type for the parent entity.
+   * @private
    * @param {number} entityId - The id of the parent entity.
+   * @param {number} componentType - The type id of the component.
    * @param {object} state - The initial state for the component.
    */
-  createComponent(componentType, entityId, state) {
+  _createComponent(entityId, componentType, state) {
     const TEMPLATE = this._getTemplate(componentType);
 
     if (!this._components[componentType]) {
@@ -113,11 +156,11 @@ class ComponentManager {
 
   /**
    * Destroys a component with the parent entity and specified type.
-   * @public
+   * @private
    * @param {number} componentType - The type id of the component.
    * @param {number} entityId - The id of the parent entity.
    */
-  destroyComponent(componentType, entityId) {
+  _destroyComponent(componentType, entityId) {
     if (!this.hasComponent(componentType, entityId)) {
       throw new Error(`Error: Component type ${componentType} is not attached to entity ${entityId}.`);
     }
@@ -126,12 +169,12 @@ class ComponentManager {
 
   /**
    * Updates a component with the parent entity and specified type with the new state.
-   * @public
+   * @private
    * @param {number} componentType - The type id of the component.
    * @param {number} entityId - The id of the parent entity.
    * @param {object} state - The new state for the component.
    */
-  updateComponent(componentType, entityId, state) {
+  _updateComponent(componentType, entityId, state) {
     if (!this.hasComponent(componentType, entityId)) {
       throw new Error(`Error: Component type ${componentType} is not attached to entity ${entityId}.`);
     }
@@ -154,32 +197,6 @@ class ComponentManager {
     return entityId in this._components[componentType];
   }
 
-  /**
-   * @public
-   * @param {object} message
-   */
-  onCreateComponent(message) {
-
-    this._messageService.send(EVENT.COMPONENT_CREATED, {});
-  }
-
-  onDestroyComponent(message) {
-
-    this._messageService.send(EVENT.COMPONENT_DESTROYED, {});
-  }
-
-  onUpdateComponent(message) {
-
-    this._messageService.send(EVENT.COMPONENT_UPDATED, {});
-  }
-
-  onEntityDestroyed(message) {
-
-  }
-
-  //////////////////////////////////////////////////////////////////////////////
-  // Private Methods
-  //////////////////////////////////////////////////////////////////////////////
   /**
    * Gets a component template of the specified type.
    * @private

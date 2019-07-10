@@ -24,7 +24,6 @@ class Entity {
   //////////////////////////////////////////////////////////////////////////////
   /**
    * The identifier for the entity.
-   *
    * @private
    * @type {int}
    */
@@ -32,7 +31,6 @@ class Entity {
 
   /**
    * A collection of components attached to the entity.
-   *
    * @private
    * @type {Array}
    */
@@ -68,8 +66,9 @@ class Entity {
    * @param {number} componentType - The type id of the component.
    */
   attachComponent(componentType) {
-    if (this._components[componentType]) throw new Error(
-      `Error: Component type ${componentType} already attached to entity ${this.id}`);
+    if (this._components[componentType]) {
+      throw new Error(`Error: Component type ${componentType} already attached to entity ${this.id}`);
+    }
     this._components[componentType] = true;
   }
 
@@ -78,8 +77,9 @@ class Entity {
    * @param {number} componentType - The type id of the component.
    */
   detachComponent(componentType) {
-    if (!this._components[componentType]) throw new Error(
-      `Error: Component type ${componentType} not attached to entity ${this.id}`);
+    if (!this._components[componentType]) {
+      throw new Error(`Error: Component type ${componentType} not attached to entity ${this.id}`);
+    }
     this._components[componentType] = false;
   }
 

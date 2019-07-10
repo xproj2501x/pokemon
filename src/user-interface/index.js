@@ -48,6 +48,12 @@ class UserInterface {
 
   /**
    * @private
+   * @type {Array}
+   */
+  _screens;
+
+  /**
+   * @private
    * @type {boolean}
    */
   _isRunning;
@@ -57,6 +63,15 @@ class UserInterface {
    * @type {number}
    */
   _delta;
+
+  /**
+   * @private
+   * @readonly
+   * @type {boolean}
+   */
+  get _isDirty() {
+
+  };
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
@@ -83,13 +98,28 @@ class UserInterface {
     this._isRunning = true;
     this._lastTick = window.performance.now();
     this._delta = 0;
-    this._logger.log('User Interface started.');
+    this._logger.writeLogMessage('User Interface started.');
     window.requestAnimationFrame(() => this._tick());
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
   //////////////////////////////////////////////////////////////////////////////
+  /**
+   * @private
+   * @param {Screen} screen - The screen to add to the top of the stack.
+   */
+  _pushScreen(screen) {
+    screen.activate();
+    this._screens.push(screen);
+  }
+
+  _popScreen() {
+    const SCREEN = this._screens.pop();
+
+    SCREEN.deactivate();
+  }
+
   _tick() {
     if (this._isRunning) {
       const CURRENT_TIME = window.performance.now();
@@ -105,14 +135,26 @@ class UserInterface {
     }
   }
 
+  /**
+   *
+   * @private
+   */
   _update() {
     while (this._delta >= FRAME_DURATION) {
+      this._screens.forEach((screen) => {
+        screen.update();
+      });
       this._delta -= FRAME_DURATION;
     }
   }
 
   _render() {
     const INTERPOLATION = this._delta / FRAME_DURATION;
+    let index;
+
+    for (index = this._screens.length - 1; idx < this._screens.length; idx--) {
+
+    }
 
   }
 
@@ -126,9 +168,10 @@ class UserInterface {
    * @param {LogService} logService - The log service for the simulation.
    * @param {MessageService} messageService - The message service for the simulation.
    * @param {string} containerId - The id of the container element for the user interface.
-   * @return {UserInterface}
+   *
+   * @return {UserInterface} A new user interface instance.
    */
-  static create(logService, messageService, containerId) {
+  static createInstance(logService, messageService, containerId) {
     const CONTAINER = document.getElementById(containerId);
 
     return new UserInterface(logService, messageService, CONTAINER);

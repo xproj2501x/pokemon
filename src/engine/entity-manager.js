@@ -68,26 +68,66 @@ class EntityManager {
     this._messageService = messageService;
     this._nextId = 0;
     this._entities = new Array(ENTITY_LIMIT).fill(null);
-    this._messageService.subscribe(COMMAND.CREATE_ENTITY, (message) => {});
-    this._messageService.subscribe(COMMAND.DESTROY_ENTITY, (message) => {});
-    this._messageService.subscribe(EVENT.COMPONENT_CREATED, (message) => {});
-    this._messageService.subscribe(EVENT.COMPONENT_DESTROYED, (message) => {});
+    this._messageService.subscribe(COMMAND.CREATE_ENTITY, (command) => this.onCreateEntity(command));
+    this._messageService.subscribe(COMMAND.DESTROY_ENTITY, (command) => this.onDestroyEntity(command));
+    this._messageService.subscribe(EVENT.COMPONENT_CREATED, (event) => this.onComponentCreated(event));
+    this._messageService.subscribe(EVENT.COMPONENT_DESTROYED, (event) => this.onComponentDestroyed(event));
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
+  /**
+   * Message handler for CREATE_ENTITY command.
+   * @public
+   * @param {object} command - The CREATE_ENTITY command message.
+   */
+  onCreateEntity(command) {
+    const ENTITY_ID = this._createEntity();
+
+    this._messageService.send(EVENT.ENTITY_CREATED, {entityId: ENTITY_ID});
+  }
+
+  /**
+   * Message handler for DESTROY_ENTITY command.
+   * @public
+   * @param {object} command - The DESTROY_ENTITY command message.
+   */
+  onDestroyEntity(command) {
+    const ENTITY_ID = command.entityId;
+
+    this._destroyEntity(ENTITY_ID);
+    this._messageService.send(EVENT.ENTITY_DESTROYED, {entityId: ENTITY_ID});
+  }
+
+  /**
+   * Message handler for COMPONENT_CREATED event.
+   * @public
+   * @param {object} event - The COMPONENT_CREATED event message.
+   */
+  onComponentCreated(event) {
+    this._attachComponentToEntity(event.entityId, event.componentType);
+  }
+
+  /**
+   * Message handler for COMPONENT_DESTROYED event.
+   * @public
+   * @param {object} event - The COMPONENT_DESTROYED event message.
+   */
+  onComponentDestroyed(event) {
+    this._detachComponentFromEntity(event.entityId, event.componentType);
+  }
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
    * Creates a new entity.
-   * @public
+   * @private
    *
    * @return {number} The id of the new entity.
    */
-  createEntity() {
+  _createEntity() {
     if (this._nextId > ENTITY_LIMIT) throw new EntityLimitExceeded(`Error: Entity limit ${ENTITY_LIMIT} exceeded.`);
     const ENTITY = Entity.create(this._nextId);
 
@@ -98,10 +138,10 @@ class EntityManager {
 
   /**
    * Destroys the entity with the the specified identity.
-   * @public
+   * @private
    * @param {number} entityId - The id of the entity.
    */
-  destroyEntity(entityId) {
+  _destroyEntity(entityId) {
     this._getEntity(entityId);
     this._entities[entityId] = null;
     this._messageService.send(EVENT.ENTITY_DESTROYED, {});
@@ -109,10 +149,11 @@ class EntityManager {
 
   /**
    * Attaches a component to the specified entity.
+   * @private
    * @param {number} entityId - The id of the entity.
    * @param {number} componentType - The type id of the component to be attached.
    */
-  attachComponentToEntity(entityId, componentType) {
+  _attachComponentToEntity(entityId, componentType) {
     const ENTITY = this._getEntity(entityId);
 
     ENTITY.attachComponent(componentType);
@@ -120,18 +161,19 @@ class EntityManager {
 
   /**
    * Detaches a component from the specified entity.
+   * @private
    * @param {number} entityId - The id of the entity.
    * @param {number} componentType - The type id of the component to be detached.
    */
-  detachComponentFromEntity(entityId, componentType) {
+  _detachComponentFromEntity(entityId, componentType) {
     const ENTITY = this._getEntity(entityId);
 
     ENTITY.detachComponent(componentType);
   }
 
   /**
-   *
-   * @public
+   * Gets an entity with a matching id from _entities.
+   * @private
    * @param {number} entityId - The identity of the entity.
    *
    * @return {Entity}

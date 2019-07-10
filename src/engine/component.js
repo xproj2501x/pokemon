@@ -73,7 +73,7 @@ class Component {
     }
     for (const KEY in state) {
       if (!keys.hasOwnProperty(KEY)) {
-        throw new Error(`Error: Key ${KEY} is not valid for the component type.`)
+        throw new Error(`Error: Key ${KEY} is not valid for the component type.`);
       }
     }
     this._id = id;

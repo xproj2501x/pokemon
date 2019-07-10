@@ -8,11 +8,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
+import {AssemblageNotFound} from './errors';
+import {COMMAND, EVENT} from './constants';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class
 ////////////////////////////////////////////////////////////////////////////////
-import {COMMAND, EVENT} from './constants';
+
 
 /**
  * AssemblageManager
@@ -24,18 +26,21 @@ class AssemblageManager {
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
   /**
+   * The logger for the assemblage manager.
    * @private
    * @type {Logger}
    */
   _logger;
 
   /**
+   * The message service for the application.
    * @private
    * @type {MessageService}
    */
   _messageService;
 
   /**
+   * A collection of assemblage constructor templates.
    * @private
    * @type {Array}
    */
@@ -49,8 +54,8 @@ class AssemblageManager {
    * AssemblageManager
    * @constructor
    * @param {LogService} logService - The log service for the application.
-   * @param {MessageService} messageService - The message service for the application
-   * @param {Array} templates -
+   * @param {MessageService} messageService - The message service for the application.
+   * @param {Array} templates - A collection of assemblage constructor templates.
    */
   constructor(logService, messageService, templates) {
     this._logger = logService.registerLogger(this.constructor.name);
@@ -63,28 +68,32 @@ class AssemblageManager {
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Creates an assemblage of the specified type
+   * Build an assemblage of the specified type.
    * @public
-   * @param {number} assemblageType - The type of the assemblage.
+   * @param {number} assemblageType - The type of assemblage to be created.
+   * @param {object} data - The initial data for the new assemblage.
    */
-  createAssemblage(assemblageType, data) {
+  buildAssemblage(assemblageType, data) {
     const TEMPLATE = this._getTemplate(assemblageType);
 
     data = data || [];
+    this._messageService.subscribe(EVENT.ENTITY_CREATED, (message) => {});
+    this._messageService.subscribe(EVENT.COMPONENT_CREATED, (message) => {});
+
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   *
+   * Gets an assemblage template from the collection.
    * @private
    * @param {int} type - The type of the assemblage template.
    *
    * @return {Assemblage} - The constructor template for the assemblage.
    */
   _getTemplate(type) {
-    if (!this._templates[type]) throw new Error(`Error: Assemblage template ${type} does not exist.`);
+    if (!this._templates[type]) throw new AssemblageNotFound(`Error: Assemblage template ${type} not found.`);
     return this._templates[type];
   }
 

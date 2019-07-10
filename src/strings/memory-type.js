@@ -1,0 +1,85 @@
+////////////////////////////////////////////////////////////////////////////////
+// Definitions
+////////////////////////////////////////////////////////////////////////////////
+/**
+ * Strings for memory types
+ * @readonly
+ * @type {Array}
+ */
+const MEMORY_TYPE = [
+  "The Pokémon seems to have a good memory, but it doesn’t seem to be able to remember...",
+  "{0} met {1} at... {2}. {1} threw a Poké Ball at it, and they started to travel together. ${INTENSITY} that ${FEELING}.",
+  "{0} hatched from an Egg and saw {1} for the first time at... {2}. ${INTENSITY} that ${FEELING}.",
+  "{0} met {1} at... {2}. ${INTENSITY} that ${FEELING}.",
+  "{0} became {1}’s friend when it arrived via Link Trade at... {2}. ${INTENSITY} that ${FEELING}.",
+  "{0} went to a Pokémon Center with {1} to buy {2}. ${INTENSITY} that ${FEELING}.",
+  "{0} went to the Pokémon Center in {2} with {1} and had its tired body healed there. ${INTENSITY} that ${FEELING}.",
+  "{0} went fishing with {1}, and they caught {2}. ${INTENSITY} that ${FEELING}.",
+  "{0} went fishing with {1}, but the hooked Pokémon got away! ${INTENSITY} that ${FEELING}.",
+  "{0} saw {1} paying attention to {2}. ${INTENSITY} that ${FEELING}.",
+  "{0} got treats from {1}. ${INTENSITY} that ${FEELING}.",
+  "{0} went clothes shopping with {1}. ${INTENSITY} that ${FEELING}.",
+  "{0} learned {2} from {1}. ${INTENSITY} that ${FEELING}.",
+  "{0} helped {1} hatch {2} from an Egg. ${INTENSITY} that ${FEELING}.",
+  "{0} was with {1} when (he/she) caught {2}. ${INTENSITY} that ${FEELING}.",
+  "{1} used {2} when {0} was in trouble. ${INTENSITY} that ${FEELING}.",
+  "{0} used {2} at {1}’s instruction, but it had no effect. ${INTENSITY} that ${FEELING}.",
+  "{0} battled at {1}’s side and defeated {2}. ${INTENSITY} that ${FEELING}.",
+  "{0} was defeated by {2} and {1} ran away. ${INTENSITY} that ${FEELING}.",
+  "{0} was raised by {1} and evolved at {2}. ${INTENSITY} that ${FEELING}.",
+  "{0} surfed across the water, carrying {1} on its back. ${INTENSITY} that ${FEELING}.",
+  "{0} saw {2} carrying {1} on its back. ${INTENSITY} that ${FEELING}.",
+  "{0} battled at {1}’s side and defeated a Gym Leader. ${INTENSITY} that ${FEELING}.",
+  "When ${TRAINER} challenged the Battle Maison, ${NICKNAME} got so nervous. ${INTENSITY} that ${FEELING}.",
+  "{0} flew, carrying {1} on its back, to {2}. ${INTENSITY} that ${FEELING}.",
+  "{0} and {1} were surprised when {2} jumped out! ${INTENSITY} that ${FEELING}.",
+  "{0} saw {1} using {2}. ${INTENSITY} that ${FEELING}.",
+  "{0} battled at {1}’s side and defeated the Champion. ${INTENSITY} that ${FEELING}.",
+  "{0} was with {1} when (he/she) completed (his/her) Pokédex. ${INTENSITY} that ${FEELING}.",
+  "{0} encountered {2} when it was with {1}. ${INTENSITY} that ${FEELING}.",
+  "{0} battled at {1}’s side and defeated a Battle Chatelaine. ${INTENSITY} that ${FEELING}.",
+  "{0} searched for hidden items with {1} using the Dowsing Machine at... {2}. ${INTENSITY} that ${FEELING}.",
+  "{0} rode a Bicycle with {1} at... {2}. ${INTENSITY} that ${FEELING}.",
+  "{0} checked a destination with {1} using the Town Map at... {2}. ${INTENSITY} that ${FEELING}.",
+  "{0} planted {2} with {1} and imagined a big harvest. ${INTENSITY} that ${FEELING}.",
+  "{0} proudly used Strength at {1}’s instruction in... {2}. ${INTENSITY} that ${FEELING}.",
+  "{0} proudly used Cut at {1}’s instruction in... {2}. ${INTENSITY} that ${FEELING}.",
+  "{0} shattered rocks to its heart’s content at {1}’s instruction in... {2}. ${INTENSITY} that ${FEELING}.",
+  "{0} used Waterfall while carrying {1} on its back in... {2}. ${INTENSITY} that ${FEELING}.",
+  "{0} saw {1} secretly picking up something in... {2}. ${INTENSITY} that ${FEELING}.",
+  "{1} had {0} hold items like {2} to help it along. ${INTENSITY} that ${FEELING}.",
+  "{0} headed for Victory Road with {1}. ${INTENSITY} that ${FEELING}.",
+  "{0} checked the sign with {1} at... {2}. ${INTENSITY} that ${FEELING}.",
+  "{0} was impressed by the speed of the train it took with {1}. ${INTENSITY} that ${FEELING}.",
+  "{0} encountered {2} with {1} using the Poké Radar. ${INTENSITY} that ${FEELING}.",
+  "When {2} jumped out, {0} was surprised and ran away with {1}. ${INTENSITY} that ${FEELING}.",
+  "{0} got a high score at the Battle Institute where it challenged with {1}. ${INTENSITY} that ${FEELING}.",
+  "{0} was stared at by the Judge intensely when it met him with {1}. ${INTENSITY} that ${FEELING}.",
+  "The Move Deleter that ${NAME} met through ${TRAINER} made it forget ${MOVE}. ${INTENSITY} that ${FEELING}.",
+  "{0} was able to remember {2} at {1}’s instruction. ${INTENSITY} that ${FEELING}.",
+  "{0} was taken to Pokémon Day Care by {1} and left with {2}. ${INTENSITY} that ${FEELING}.",
+  "{0} was excited when {1} won with (his/her) Loto Ticket and won prizes like {2}. ${INTENSITY} that ${FEELING}.",
+  "{0} was with {1} when (he/she) used a Repel at... {2}. ${INTENSITY} that ${FEELING}.",
+  "{0} had a very hard training session with {1}. ${INTENSITY} that ${FEELING}.",
+  "{0} took an elevator with {1}. ${INTENSITY} that ${FEELING}.",
+  "{0} was taken to the Name Rater by {1} and given a fateful name. ${INTENSITY} that ${FEELING}.",
+  "{0} was with {1} when (he/she) went to a boutique and tried on clothes, but (he/she) left the boutique without buying anything. ${INTENSITY} that ${FEELING}.",
+  "{0} went to a nice restaurant with {1} and ate until it got totally full. ${INTENSITY} that ${FEELING}.",
+  "{0} was taken to a nice lady by {1} and pampered. ${INTENSITY} that ${FEELING}.",
+  "{0} checked a trash can with {1} at... {2}. ${INTENSITY} that ${FEELING}.",
+  "{0} fought hard until it had to use Struggle when it battled at {1}’s side against {2}. ${INTENSITY} that ${FEELING}.",
+  "{0} looked down at the world from a tall tower where it went with {1}. ${INTENSITY} that ${FEELING}.",
+  "{0} saw itself in a mirror in a mirror cave that it went to with {1}. ${INTENSITY} that ${FEELING}.",
+  "{0} almost got lost when it explored a forest with {1}. ${INTENSITY} that ${FEELING}.",
+  "{0} went to a factory with {1} and saw a lot of machines that looked very complicated. ${INTENSITY} that ${FEELING}.",
+  "{0} was with {1} when (he/she) built a Secret Base. ${INTENSITY} that ${FEELING}.",
+  "{0} participated in a contest with {1} and impressed many people. ${INTENSITY} that ${FEELING}.",
+  "{0} participated in a contest with {1} and won the title. ${INTENSITY} that ${FEELING}.",
+  "{0} soared through the sky with {1} and went to many different places. ${INTENSITY} that ${FEELING}.",
+  "{1} asked {0} to dive. Down it went, deep into the ocean, to explore the bottom of the sea. ${INTENSITY} that ${FEELING}."
+];
+
+////////////////////////////////////////////////////////////////////////////////
+// Exports
+////////////////////////////////////////////////////////////////////////////////
+export default MEMORY_TYPE;

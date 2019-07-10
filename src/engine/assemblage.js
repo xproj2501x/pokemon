@@ -31,8 +31,8 @@ class Assemblage {
    * Assemblage
    * @constructor
    */
-  constructor(entityManager, componentManager, defaults) {
-    this._defaults = defaults;
+  constructor() {
+
   }
 
   //////////////////////////////////////////////////////////////////////////////

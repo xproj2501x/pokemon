@@ -1,13 +1,14 @@
 /**
- * State Manager
+ * Attack System
  * ===
  *
- * @module stateManager
+ * @module AttackSystem
  */
 
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
+import System from '../../engine/system';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
@@ -17,113 +18,96 @@
 // Class
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * StateManager
+ * AttackSystem
  * @class
+ * @implements System
  */
-class StateManager {
+class AttackSystem extends System {
 
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   * @private
-   * @type {Logger}
-   */
-  _logger;
-
-  /**
-   * @private
-   * @type {MessageService}
-   */
-  _messageService;
-
-  /**
-   * @private
-   * @type {Array}
-   */
-  _states;
-
-  /**
-   * @private
-   * @type {State}
-   */
-  _currentState;
-
-  /**
-   * @private
-   * @type {string}
-   */
-  _previousState;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
   //////////////////////////////////////////////////////////////////////////////
 
   /**
-   * StateManager
+   * AttackSystem
    * @constructor
-   * @param {MessageService} messageService -
-   * @param {Array} states - A collection of states for the simulation.
-   * @param {string} initialState - The name of the initial state.
    */
-  constructor(messageService, states, initialState) {
-    this._messageService = messageService;
-    this._states = states;
-    this._currentState = this._states[initialState];
-    this._init();
+  constructor() {
+    super();
+
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   *
-   * @param {object} message
+   * Updates the state
    */
-  update(message) {
-    const KEY_CODE = message.body.keyCode;
+  update() {
 
-    if (this._currentState.locked) return;
-    this._currentState.run(KEY_CODE);
-    if (this._currentState.nextState) {
-      const NEXT_STATE = this._states[this._currentState.nextState];
+  }
 
-      this._changeState(NEXT_STATE);
+  //////////////////////////////////////////////////////////////////////////////
+  // Private Methods
+  //////////////////////////////////////////////////////////////////////////////
+  /**
+   * Calculates the damage of an attack
+   * @private
+   * @param {} attacker -
+   * @param {} move -
+   * @param {Array} targets -
+   */
+  _calculateDamage(attacker, move, targets) {
+    const ATTACK_VALUE = this._calculateAttackValue(attacker, move.category);
+
+    targets.forEach((target) => {
+      const DEFENSE_VALUE = this._calculateDefenseValue(target, move.category);
+      const FIRST = ((2 * attacker.level) / 5) + 2;
+      const SECOND = (FIRST * move.power * (ATTACK_VALUE / DEFENSE_VALUE));
+      const THIRD = SECOND / 50 + 2;
+    });
+  }
+
+  /**
+   *
+   * @param pokemon
+   * @param moveCategory
+   * @private
+   */
+  _calculateAttackValue(pokemon, moveCategory) {
+    if (moveCategory === 'physical') {
+      return pokemon.stats.attack;
+    } else if (moveCategory === 'special') {
+      return pokemon.stats.specialAttack;
+    }
+  }
+
+  _calculateDefenseValue(pokemon, moveCategory) {
+    if (moveCategory === 'physical') {
+      return pokemon.stats.defense;
+    } else if (moveCategory === 'special') {
+      return pokemon.stats.specialDefense;
     }
   }
 
   //////////////////////////////////////////////////////////////////////////////
-  // Private Methods
-  //////////////////////////////////////////////////////////////////////////////
-  _init() {
-    this._messageService.subscribe('INPUT_EVENT', (message) => this.update(message));
-    this._currentState.enter();
-  }
-
-  /**
-   *
-   * @param {State} nextState
-   * @private
-   */
-  _changeState(nextState) {
-    this._currentState.exit();
-    this._currentState = nextState;
-    this._currentState.enter();
-  }
-
-  //////////////////////////////////////////////////////////////////////////////
-  // Private Methods
+  // Static Methods
   //////////////////////////////////////////////////////////////////////////////
   /**
-   * Static factory method.
-   * @return {StateManager}
+   * Static factory method
+   * @static
+   * @return {AttackSystem}
    */
-  static create(messageService, states, initialState) {
-    return new StateManager(messageService, states, initialState);
+  static create() {
+    return new AttackSystem();
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default StateManager;
+export default AttackSystem;

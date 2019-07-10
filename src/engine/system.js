@@ -25,17 +25,6 @@ class System {
   //////////////////////////////////////////////////////////////////////////////
   // Private Properties
   //////////////////////////////////////////////////////////////////////////////
-  /**
-   * @private
-   * @type {Logger}
-   */
-  _logger;
-
-  /**
-   * @private
-   * @type {MessageService}
-   */
-  _messageService;
 
   //////////////////////////////////////////////////////////////////////////////
   // Public Properties
@@ -44,12 +33,9 @@ class System {
   /**
    * System
    * @constructor
-   * @param {LogService} logService - The log service for the application.
-   * @param {MessageService} messageService - The message service for the application
    */
-  constructor(logService, messageService) {
-    this._logger = logService.registerLogger(this.constructor.name);
-    this._messageService = messageService;
+  constructor() {
+
   }
 
   //////////////////////////////////////////////////////////////////////////////

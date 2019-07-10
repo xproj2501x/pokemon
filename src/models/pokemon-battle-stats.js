@@ -19,6 +19,7 @@ import Pokemon from './pokemon';
 const SIZE = 260;
 
 const KEYS = {
+  // 3
   // UNENCRYPTED BYTES                // 8 BYTES
   ENCRYPTION_KEY: 0x000,              // 4 BYTES
   SANITY_PLACEHOLDER: 0x004,          // 2 BYTES
@@ -26,6 +27,7 @@ const KEYS = {
 
   // ENCRYPTED BYTES
 
+  // 32 - 2
   // BLOCK A                          // 56 BYTES
   NATIONAL_POKEDEX_ID: 0x008,         // 2 BYTES
   HELD_ITEM: 0x00A,                   // 2 BYTES
@@ -35,7 +37,7 @@ const KEYS = {
   ABILITY: 0x014,                     // 1 BYTES
   ABILITY_NUMBER: 0x015,              // 1 BYTES
   HITS_ON_TRAINING_BAG: 0x016,        // 2 BYTES
-  PERSONALITY_ID: 0x018,              // 4 BYTES
+  PERSONALITY_VALUE: 0x018,           // 4 BYTES
   NATURE: 0x01C,                      // 1 BYTES
   FLAGS: 0x01D,                       // 1 BYTES
   HP_EV: 0x01E,                       // 1 BYTES
@@ -60,6 +62,7 @@ const KEYS = {
   SUPER_TRAINING_FLAGS: 0x03A,        // 1 BYTES
   UNUSED_2: 0x03B,                    // 5 BYTES
 
+  // 18 - 2
   // BLOCK B                          // 56 BYTES
   NICKNAME: 0x040,                    // 24 BYTES
   NULL_TERMINATOR_1: 0x058,           // 2 BYTES
@@ -80,6 +83,7 @@ const KEYS = {
   UNUSED_3: 0x073,                    // 1 BYTES
   INDIVIDUAL_VALUES: 0x074,           // 4 BYTES
 
+  // 22 - 6
   // BLOCK C                          // 56 BYTES
   LATEST_NOT_OT_HANDLER: 0x075,       // 24 BYTES
   NULL_TERMINATOR_2: 0x090,           // 2 BYTES
@@ -104,6 +108,7 @@ const KEYS = {
   FULLNESS: 0x0AE,                    // 1 BYTES
   ENJOYMENT: 0x0AF,                   // 1 BYTES
 
+  // 22 - 3
   // BLOCK D                          // 56 BYTES
   OT_NAME: 0x0AB,                     // 24 BYTES
   NULL_TERMINATOR_3: 0x0C8,           // 2 BYTES
@@ -128,6 +133,7 @@ const KEYS = {
   OT_LANGUAGE_ID: 0x0E3,              // 1 BYTES
   UNUSED_10: 0x0E4,                   // 4 BYTES
 
+  // 15 - 6
   // BATTLE STATS
   CONDITION_FLAGS: 0x0E8,             // 1 BYTE
   UNUSED_11: 0x0E9,                   // 1 BYTE

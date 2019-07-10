@@ -14,6 +14,20 @@ import ExtendableError from '../common/utilities/extendable-error';
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
 /**
+ * AssemblageNotFound
+ * @class
+ * @extends ExtendableError
+ */
+class AssemblageNotFound extends ExtendableError {}
+
+/**
+ * ComponentNotFound
+ * @class
+ * @extends ExtendableError
+ */
+class ComponentNotFound extends ExtendableError {}
+
+/**
  * EntityLimitExceeded
  * @class
  * @extends ExtendableError
@@ -30,4 +44,4 @@ class EntityNotFound extends ExtendableError {}
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export {EntityLimitExceeded, EntityNotFound};
+export {AssemblageNotFound, ComponentNotFound, EntityLimitExceeded, EntityNotFound};

@@ -86,7 +86,7 @@ class Vector2 {
    * @return {Vector2}
    */
   add(vector) {
-    return Vector2.create(this._x + vector.x, this._y + vector.y);
+    return Vector2.createInstance(this._x + vector.x, this._y + vector.y);
   }
 
   /**
@@ -95,25 +95,25 @@ class Vector2 {
    * @return {Vector2}
    */
   subtract(vector) {
-    return Vector2.create(this._x - vector.x, this._y - vector.y);
+    return Vector2.createInstance(this._x - vector.x, this._y - vector.y);
   }
 
   /**
    *
-   * @param {Vector2} vector - The vector to multiply.
+   * @param {number} scalar - The scalar to multiply.
    * @return {Vector2}
    */
-  multiply(vector) {
-    return Vector2.create(this._x * vector.x, this._y * vector.y);
+  multiply(scalar) {
+    return Vector2.create(this._x * scalar, this._y * scalar);
   }
 
   /**
    *
-   * @param vector
+   * @param {number} scalar - The scalar to divide.
    * @return {Vector2}
    */
-  divide(vector) {
-    return Vector2.create(this._x / vector.x, this._y / vector.y);
+  divide(scalar) {
+    return Vector2.createInstance(this._x / scalar, this._y / scalar);
   }
 
   /**
@@ -121,7 +121,7 @@ class Vector2 {
    * @return {Vector2}
    */
   copy() {
-    return Vector2.create(this._x, this._y);
+    return Vector2.createInstance(this._x, this._y);
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -132,9 +132,10 @@ class Vector2 {
    * @static
    * @param {number} x - The x coordinate for the vector.
    * @param {number} y - The y coordinate for the vector.
+   *
    * @return {Vector2}
    */
-  static create(x, y) {
+  static createInstance(x, y) {
     return new Vector2(x, y);
   }
 }
