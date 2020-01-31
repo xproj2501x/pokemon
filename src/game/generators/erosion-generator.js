@@ -24,7 +24,7 @@ const DIRECTION = {
   NORTH_WEST: [-1, -1]
 };
 
-const RIVER_THRESHOLD = 0.5;
+const RIVER_THRESHOLD = 0.02;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class

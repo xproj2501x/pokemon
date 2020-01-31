@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 ////////////////////////////////////////////////////////////////////////////////
-import {TYPE, ITEM, GROWTH, EGG_GROUP, ABILITY, BODY_COLOR} from '../enums/index'
+import {TYPE, ITEM, GROWTH, EGG_GROUP, ABILITY, BODY_COLOR} from '../enums/index';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
@@ -11253,7 +11253,7 @@ const BASE_STATS = [
       spDef: 0
     },
     item1: ITEM.NONE,
-    item2: ITEM.ITEM.STICKY_BARB,
+    item2: ITEM.STICKY_BARB,
     gender: 127,
     eggCycles: 20,
     baseFriendship: 35,
@@ -11287,7 +11287,7 @@ const BASE_STATS = [
       spDef: 0
     },
     item1: ITEM.NONE,
-    item2: ITEM.ITEM.STICKY_BARB,
+    item2: ITEM.STICKY_BARB,
     gender: 127,
     eggCycles: 20,
     baseFriendship: 35,

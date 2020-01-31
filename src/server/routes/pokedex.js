@@ -11,22 +11,22 @@ import {SPECIES} from '../../strings';
 const POKEDEX_ROUTER = Router();
 
 POKEDEX_ROUTER.route('/')
-  .get((req, res) => {
+  .get((request, response) => {
     let out = {};
 
     for (let index in BASE_STATS) {
       out[SPECIES[index]] = BASE_STATS[index];
     }
-    res.json({data: out});
+    response.json({data: out});
   });
 
 POKEDEX_ROUTER.route('/:id')
-  .get((req, res) => {
-    const ID = req.params.id;
+  .get((request, response) => {
+    const ID = request.params.id;
     const OUT = {};
 
     OUT[SPECIES[ID]] = BASE_STATS[ID];
-    res.json(OUT);
+    response.json(OUT);
   });
 
 ////////////////////////////////////////////////////////////////////////////////
