@@ -2,7 +2,7 @@
  * Base Stats DTO
  * ===
  *
- * @module BaseStatsDto
+ * @module PokemonBaseDataDto
  */
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -13,7 +13,7 @@ import mongoose from 'mongoose';
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
-const BaseStatsSchema = new mongoose.Schema({
+const PokemonBaseDataSchema = new mongoose.Schema({
   id: {
     type: Number,
     required: true,
@@ -24,7 +24,15 @@ const BaseStatsSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
-  abilities: {
+  type: {
+    type: Array,
+    required: true
+  },
+  catchRate: {
+    type: Number,
+    required: true
+  },
+  attributes: {
     hitPoints: {
       type: Number,
       required: true
@@ -75,10 +83,42 @@ const BaseStatsSchema = new mongoose.Schema({
       type: Number,
       required: true
     }
+  },
+  experienceYield: {
+    type: Number,
+    required: true
+  },
+  items: {
+    type: Array,
+    required: true
+  },
+  gender: {
+    type: Number,
+    required: true
+  },
+  eggCycles: {
+    type: Number,
+    required: true
+  },
+  friendship: {
+    type: Number,
+    required: true
+  },
+  growthType: {
+    type: Number,
+    required: true
+  },
+  eggGroups: {
+    type: Array,
+    required: true
+  },
+  abilities: {
+    type: Array,
+    required: true
   }
 });
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
-export default mongoose.model('BaseStatsDto', BaseStatsSchema);
+export default mongoose.model('PokemonBaseDataDto', PokemonBaseDataSchema, 'PokemonBaseData');
